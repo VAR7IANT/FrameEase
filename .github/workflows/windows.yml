@@ -67,6 +67,32 @@ jobs:
           if (Test-Path smoke-out/smoke-report.txt) { Get-Content smoke-out/smoke-report.txt } else { Write-Host "no report was written" }
           if ($p.ExitCode -ne 0) { exit 1 }
 
+      # The runner's display clamps windows to about 1180x749, so the larger sizes are captured by a second,
+      # NON-GATING pass on Qt's offscreen platform with the software scene graph. Layout and geometry are valid there;
+      # pixels are not representative (that renderer has no shader effects and ignores some scroll clipping).
+      - name: Smoke test at 1366x768 and 1600x900 (offscreen, non-gating)
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          New-Item -ItemType Directory -Force dist/platforms | Out-Null
+          Copy-Item "$env:QT_ROOT_DIR/plugins/platforms/qoffscreen.dll" dist/platforms/
+          $env:QT_QPA_PLATFORM = "offscreen"
+          $env:QSG_RHI_BACKEND = "software"
+          $p = Start-Process -FilePath "$PWD/dist/FrameEase.exe" -ArgumentList "--smoke-test","--out","$PWD/smoke-out-offscreen" -PassThru
+          if (-not $p.WaitForExit(300000)) { $p.Kill(); Write-Error "offscreen smoke test timed out"; exit 1 }
+          Write-Host "exit code: $($p.ExitCode)"
+          if (Test-Path smoke-out-offscreen/smoke-report.txt) { Get-Content smoke-out-offscreen/smoke-report.txt }
+          Remove-Item -Recurse -Force dist/platforms/qoffscreen.dll
+          if ($p.ExitCode -ne 0) { exit 1 }
+
+      - name: Upload offscreen evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-test-evidence-offscreen
+          path: smoke-out-offscreen/
+          if-no-files-found: ignore
+
       - name: Upload smoke-test evidence
         if: always()
         uses: actions/upload-artifact@v4
