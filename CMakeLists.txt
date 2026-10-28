@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 
-# Qt 6.5+ is required (MultiEffect lives in QtQuick.Effects, part of the Quick module).
-find_package(Qt6 6.5 REQUIRED COMPONENTS Quick QuickControls2 Shapes)
+# Qt 6.5+. QtQuick.Shapes / QtQuick.Effects are QML-only plugins in the Quick module (no CMake component).
+find_package(Qt6 6.5 REQUIRED COMPONENTS Quick QuickControls2)
 qt_standard_project_setup(REQUIRES 6.5)
 
 # Theme is a QML singleton: it must be flagged *before* the module is created.
@@ -47,7 +47,7 @@ qt_add_qml_module(FrameEase
         qml/edit/TimelineClip.qml
 )
 
-target_link_libraries(FrameEase PRIVATE Qt6::Quick Qt6::QuickControls2 Qt6::Shapes)
+target_link_libraries(FrameEase PRIVATE Qt6::Quick Qt6::QuickControls2)
 
 # Startup smoke test: loads FrameEase/Main, visits Edit/Color/Audio/Text, fails on any QML warning or blank frame.
 # Needs a display session (a real Windows desktop or the CI runner), so it is a plain exe flag rather than a unit test.
