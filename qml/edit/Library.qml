@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import FrameEase
 
 // Media bin: search, filters, thumbnail grid. Mock data only; the grid binds to MockProject.media.
 Rectangle {
@@ -28,7 +29,7 @@ Rectangle {
             radius: Theme.radiusM; color: "#0F1114"; border.color: search.activeFocus ? Theme.paper : Theme.line; border.width: search.activeFocus ? 2 : 1
             Row {
                 anchors.fill: parent; anchors.leftMargin: 10; spacing: 8
-                FEIcon { anchors.verticalCenter: parent.verticalCenter; path: "M11 11m-6 0a6 6 0 1012 0 6 6 0 10-12 0M20 20l-4.5-4.5"; color: Theme.tx3 }
+                FEIcon { anchors.verticalCenter: parent.verticalCenter; path: "M11 11m-6 0a 6 6 0 1 0 12 0 6 6 0 1 0 -12 0M20 20l-4.5-4.5"; color: Theme.tx3 }
                 TextField {
                     id: search
                     width: parent.width - 40; height: parent.height

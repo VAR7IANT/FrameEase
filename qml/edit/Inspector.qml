@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import FrameEase
 
 // Contextual inspector. Simple mode shows the handful of controls most edits need;
 // Pro reveals numeric entry and ease curves. Sections collapse independently.

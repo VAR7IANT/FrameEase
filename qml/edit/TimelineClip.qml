@@ -1,10 +1,11 @@
 import QtQuick
 import QtQuick.Shapes
+import FrameEase
 
 // One clip on the timeline. Pure presentation + pointer intent; the Timeline owns the editing rules
 // (snapping, clamping, ripple) and answers these signals by writing to the model.
 Item {
-    id: clip
+    id: cl
 
     // Model roles (injected by the Repeater delegate)
     required property int index
@@ -52,33 +53,33 @@ Item {
         anchors.fill: parent
         radius: Theme.radiusS
         clip: true
-        color: Theme.clipColors[clip.kind]
+        color: Theme.clipColors[cl.kind]
         gradient: Gradient {
-            GradientStop { position: 0; color: clip.palette ? clip.palette.top : Qt.lighter(Theme.clipColors[clip.kind], 1.12) }
-            GradientStop { position: 0.55; color: clip.palette ? clip.palette.mid : Theme.clipColors[clip.kind] }
-            GradientStop { position: 1; color: clip.palette ? clip.palette.hor : Qt.darker(Theme.clipColors[clip.kind], 1.15) }
+            GradientStop { position: 0; color: cl.palette ? cl.palette.top : Qt.lighter(Theme.clipColors[cl.kind], 1.12) }
+            GradientStop { position: 0.55; color: cl.palette ? cl.palette.mid : Theme.clipColors[cl.kind] }
+            GradientStop { position: 1; color: cl.palette ? cl.palette.hor : Qt.darker(Theme.clipColors[cl.kind], 1.15) }
         }
 
         // Filmstrip frame separators + bottom shade for video
         Repeater {
-            model: clip.palette ? Math.floor(clip.width / (clip.height * 1.6)) : 0
-            Rectangle { x: (index + 1) * clip.height * 1.6 - 1; width: 1; height: parent.height; color: "#80000000" }
+            model: cl.palette ? Math.floor(cl.width / (cl.height * 1.6)) : 0
+            Rectangle { x: (index + 1) * cl.height * 1.6 - 1; width: 1; height: parent.height; color: "#80000000" }
         }
         Rectangle {
-            visible: clip.palette !== null
+            visible: cl.palette !== null
             anchors.bottom: parent.bottom; width: parent.width; height: parent.height * 0.6
             gradient: Gradient { GradientStop { position: 0; color: "transparent" } GradientStop { position: 1; color: "#A0060809" } }
         }
 
         // Waveform for audio kinds (path built once per size change)
         Shape {
-            visible: clip.isAudio
+            visible: cl.isAudio
             anchors.fill: parent
             ShapePath {
                 strokeColor: "#B3FFFFFF"
-                strokeWidth: Math.max(1.2, clip.pps / 8 * 0.55)
+                strokeWidth: Math.max(1.2, cl.pps / 8 * 0.55)
                 fillColor: "transparent"
-                PathSvg { path: clip.isAudio ? clip.wavePath() : "" }
+                PathSvg { path: cl.isAudio ? cl.wavePath() : "" }
             }
         }
 
@@ -86,12 +87,12 @@ Item {
             x: 7; y: 4
             width: parent.width - 12
             elide: Text.ElideRight
-            text: clip.name + (clip.width > 150 ? "   " + clip.dur.toFixed(1) + "s" : "")
-            color: clip.kind === "title" ? "#1C1710" : "white"
+            text: cl.name + (cl.width > 150 ? "   " + cl.dur.toFixed(1) + "s" : "")
+            color: cl.kind === "title" ? "#1C1710" : "white"
             font.family: Theme.fontUI
             font.pixelSize: Theme.sizeSmall + 0.5
             font.weight: Font.DemiBold
-            style: clip.kind === "title" ? Text.Normal : Text.Outline
+            style: cl.kind === "title" ? Text.Normal : Text.Outline
             styleColor: "#66000000"
         }
     }
@@ -102,21 +103,21 @@ Item {
         anchors.margins: -2
         radius: Theme.radiusS + 2
         color: "transparent"
-        border.width: clip.selected ? 2 : (hover.hovered ? 1 : 0)
-        border.color: clip.selected ? Theme.paper : "#59FFFFFF"
+        border.width: cl.selected ? 2 : (hover.hovered ? 1 : 0)
+        border.color: cl.selected ? Theme.paper : "#59FFFFFF"
         visible: border.width > 0
     }
     Repeater {
-        model: clip.selected ? [0.12, 0.46, 0.84] : []
+        model: cl.selected ? [0.12, 0.46, 0.84] : []
         Rectangle {
             required property real modelData
-            x: modelData * clip.width - 4; y: clip.height - 14
+            x: modelData * cl.width - 4; y: cl.height - 14
             width: 9; height: 9; rotation: 45
             color: Theme.paper; border.width: 1.5; border.color: "#17140F"
         }
     }
 
-    HoverHandler { id: hover; cursorShape: clip.tool === "blade" ? Qt.CrossCursor : Qt.OpenHandCursor }
+    HoverHandler { id: hover; cursorShape: cl.tool === "blade" ? Qt.CrossCursor : Qt.OpenHandCursor }
 
     // Move / blade
     MouseArea {
@@ -126,16 +127,16 @@ Item {
         property real grabX: 0
         property real grabStart: 0
         onPressed: (m) => {
-            clip.forceActiveFocus()
-            clip.pressedAt((m.x + 8) / clip.pps)
-            grabX = mapToItem(clip.parent, m.x, 0).x
-            grabStart = clip.start
+            cl.forceActiveFocus()
+            cl.pressedAt((m.x + 8) / cl.pps)
+            grabX = mapToItem(cl.parent, m.x, 0).x
+            grabStart = cl.start
         }
         onPositionChanged: (m) => {
-            if (!pressed || clip.tool === "blade") return
-            clip.moveRequested(grabStart + (mapToItem(clip.parent, m.x, 0).x - grabX) / clip.pps)
+            if (!pressed || cl.tool === "blade") return
+            cl.moveRequested(grabStart + (mapToItem(cl.parent, m.x, 0).x - grabX) / cl.pps)
         }
-        onReleased: clip.released()
+        onReleased: cl.released()
     }
 
     // Trim handles (visible on hover / selection)
@@ -144,10 +145,10 @@ Item {
         delegate: MouseArea {
             required property string modelData
             readonly property bool isLeft: modelData === "left"
-            x: isLeft ? 0 : clip.width - 8; width: 8; height: clip.height
+            x: isLeft ? 0 : cl.width - 8; width: 8; height: cl.height
             cursorShape: Qt.SizeHorCursor
             hoverEnabled: true
-            enabled: clip.tool === "select"
+            enabled: cl.tool === "select"
             property real grabX: 0
             property real origStart: 0
             property real origEnd: 0
@@ -155,17 +156,17 @@ Item {
                 anchors.fill: parent
                 radius: Theme.radiusS
                 color: Theme.paper
-                opacity: clip.selected || parent.containsMouse ? 0.95 : 0
+                opacity: cl.selected || parent.containsMouse ? 0.95 : 0
                 Behavior on opacity { NumberAnimation { duration: Theme.durFast } }
                 Rectangle { anchors.centerIn: parent; width: 2; height: 14; color: "#17140F" }
             }
-            onPressed: (m) => { grabX = mapToItem(clip.parent, m.x, 0).x; origStart = clip.start; origEnd = clip.start + clip.dur }
+            onPressed: (m) => { grabX = mapToItem(cl.parent, m.x, 0).x; origStart = cl.start; origEnd = cl.start + cl.dur }
             onPositionChanged: (m) => {
                 if (!pressed) return
-                const dt = (mapToItem(clip.parent, m.x, 0).x - grabX) / clip.pps
-                if (isLeft) clip.trimLeftRequested(origStart + dt); else clip.trimRightRequested(origEnd + dt)
+                const dt = (mapToItem(cl.parent, m.x, 0).x - grabX) / cl.pps
+                if (isLeft) cl.trimLeftRequested(origStart + dt); else cl.trimRightRequested(origEnd + dt)
             }
-            onReleased: clip.released()
+            onReleased: cl.released()
         }
     }
 

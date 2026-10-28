@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Shapes
+import FrameEase
 
 // Stroke icon drawn from a 24x24 SVG path string (same paths as the design canvas).
 Item {
@@ -8,6 +9,7 @@ Item {
     property color color: Theme.tx2
     property real size: 16
     property real strokeWidth: 1.7
+    property bool filled: false
 
     implicitWidth: size
     implicitHeight: size
@@ -21,7 +23,7 @@ Item {
         ShapePath {
             strokeColor: root.color
             strokeWidth: root.strokeWidth
-            fillColor: "transparent"
+            fillColor: root.filled ? root.color : "transparent"
             capStyle: ShapePath.RoundCap
             joinStyle: ShapePath.RoundJoin
             PathSvg { path: root.path }

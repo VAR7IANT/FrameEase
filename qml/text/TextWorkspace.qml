@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Shapes
+import FrameEase
 
 // Text & subtitles: edit cues like a document (left), see them on the picture and on a synced
 // subtitle track (centre), style them all at once (right). Cues live in a ListModel so typing
@@ -30,17 +31,17 @@ Item {
 
     ListModel {
         id: cues
-        ListElement { s: 16.5; e: 19.8; text: "I've fished this harbour since I was nine." }
-        ListElement { s: 20.2; e: 23.9; text: "Back then the light came up over the cliffs," }
-        ListElement { s: 24.4; e: 28.0; text: "and the whole town went quiet for a minute." }
-        ListElement { s: 29.0; e: 32.6; text: "You learn to read the water before you read anything else." }
-        ListElement { s: 33.1; e: 36.9; text: "My father called it the morning conversation." }
-        ListElement { s: 38.4; e: 42.0; text: "Some days the sea answers. Some days it doesn't." }
-        ListElement { s: 43.0; e: 46.9; text: "But you go out anyway — that's the whole job." }
-        ListElement { s: 48.2; e: 52.0; text: "Now I take visitors out, just to show them the light." }
+        ListElement { s: 16.5; e: 19.8; body: "I've fished this harbour since I was nine." }
+        ListElement { s: 20.2; e: 23.9; body: "Back then the light came up over the cliffs," }
+        ListElement { s: 24.4; e: 28.0; body: "and the whole town went quiet for a minute." }
+        ListElement { s: 29.0; e: 32.6; body: "You learn to read the water before you read anything else." }
+        ListElement { s: 33.1; e: 36.9; body: "My father called it the morning conversation." }
+        ListElement { s: 38.4; e: 42.0; body: "Some days the sea answers. Some days it doesn't." }
+        ListElement { s: 43.0; e: 46.9; body: "But you go out anyway — that's the whole job." }
+        ListElement { s: 48.2; e: 52.0; body: "Now I take visitors out, just to show them the light." }
     }
 
-    function cps(i) { const c = cues.get(i); return c.text.length / Math.max(0.1, c.e - c.s) }
+    function cps(i) { const c = cues.get(i); return c.body.length / Math.max(0.1, c.e - c.s) }
     function activeIndex() {
         for (let i = 0; i < cues.count; i++) { const c = cues.get(i); if (t >= c.s && t < c.e) return i }
         return -1
@@ -59,8 +60,8 @@ Item {
     readonly property string overlayHtml: {
         if (active < 0) return ""
         const c = cues.get(active)
-        if (!highlight) return esc(c.text)
-        const words = c.text.split(" ")
+        if (!highlight) return esc(c.body)
+        const words = c.body.split(" ")
         const wi = Math.min(words.length - 1, Math.floor((t - c.s) / (c.e - c.s) * words.length))
         return esc(words.slice(0, wi).join(" ")) + (wi > 0 ? " " : "") + "<font color='#FF8A6B'>" + esc(words[wi]) + "</font>" + (wi < words.length - 1 ? " " + esc(words.slice(wi + 1).join(" ")) : "")
     }
@@ -120,7 +121,7 @@ Item {
                         required property int index
                         required property real s
                         required property real e
-                        required property string text
+                        required property string body
                         readonly property bool on: root.sel === index
                         readonly property real rate: root.cps(index) + 0 * edit.text.length
                         width: list.width - 8; height: 84; radius: Theme.radiusL - 1
@@ -130,11 +131,12 @@ Item {
                         Rectangle { visible: row.on; width: 3; height: parent.height - 20; y: 10; radius: 1.5; color: Theme.accent }
 
                         AbstractButton {
+                            id: jumpBtn
                             x: 16; y: 12; width: 54; height: 52
                             focusPolicy: Qt.StrongFocus
                             Accessible.role: Accessible.Button; Accessible.name: "Jump to cue " + (row.index + 1)
                             onClicked: root.jump(row.index)
-                            background: Rectangle { color: "transparent"; border.width: parent.visualFocus ? 2 : 0; border.color: Theme.paper; radius: 4 }
+                            background: Rectangle { color: "transparent"; border.width: jumpBtn.visualFocus ? 2 : 0; border.color: Theme.paper; radius: 4 }
                             contentItem: Column { spacing: 3
                                 Text { text: (row.index + 1 < 10 ? "0" : "") + (row.index + 1); color: Theme.tx3; font.family: Theme.fontMono; font.pixelSize: Theme.sizeSmall }
                                 Text { text: root.tc(row.s); color: Theme.tx; font.family: Theme.fontMono; font.pixelSize: Theme.sizeSmall + 0.5 }
@@ -155,8 +157,8 @@ Item {
                             font.family: Theme.fontUI; font.pixelSize: 14
                             background: Rectangle { color: "transparent"; border.width: edit.activeFocus ? 2 : 0; border.color: Theme.paper; radius: 3 }
                             Accessible.name: "Cue " + (row.index + 1) + " text"
-                            Component.onCompleted: text = row.text           // seed once; typing owns the text afterwards
-                            onTextChanged: { if (text !== row.text) { cues.setProperty(row.index, "text", text); root.recount() } }
+                            Component.onCompleted: text = row.body           // seed once; typing owns the text afterwards
+                            onTextChanged: { if (text !== row.body) { cues.setProperty(row.index, "body", text); root.recount() } }
                             onActiveFocusChanged: if (activeFocus) root.jump(row.index)
                         }
                     }
@@ -165,8 +167,10 @@ Item {
         }
 
         // ================= Stage + subtitle track =================
-        ColumnLayout {
-            Layout.fillWidth: true; Layout.fillHeight: true; spacing: 0
+        Item {
+            Layout.fillWidth: true; Layout.fillHeight: true; Layout.minimumWidth: 300
+            ColumnLayout {
+                anchors.fill: parent; spacing: 0
 
             Item {
                 Layout.fillWidth: true; Layout.fillHeight: true
@@ -223,10 +227,10 @@ Item {
             RowLayout {
                 Layout.fillWidth: true; Layout.leftMargin: 28; Layout.rightMargin: 28; Layout.bottomMargin: 12; spacing: 12
                 FEIconButton { checked: true; implicitWidth: 38; implicitHeight: 38; iconPath: root.playing ? "M7 5v14M17 5v14" : "M8 5l11 7-11 7z"
-                               tip: root.playing ? "Pause (Space)" : "Play (Space)"; onClicked: root.playing = !root.playing }
+                               iconFilled: !root.playing; tip: root.playing ? "Pause (Space)" : "Play (Space)"; onClicked: root.playing = !root.playing }
                 Text { text: root.timecode(root.t); color: Theme.tx; font.family: Theme.fontMono; font.pixelSize: 20; font.weight: Font.Medium }
-                Item { Layout.fillWidth: true }
-                Text { text: "Click a block, or anywhere on the track, to jump there"; color: Theme.tx3; font.family: Theme.fontUI; font.pixelSize: Theme.sizeBody - 0.5 }
+                Text { Layout.fillWidth: true; Layout.minimumWidth: 0; elide: Text.ElideRight; horizontalAlignment: Text.AlignRight
+                       text: "Click a block, or anywhere on the track, to jump there"; color: Theme.tx3; font.family: Theme.fontUI; font.pixelSize: Theme.sizeBody - 0.5 }
             }
 
             // subtitle track
@@ -276,7 +280,7 @@ Item {
                             required property int index
                             required property real s
                             required property real e
-                            required property string text
+                            required property string body
                             readonly property bool on: root.sel === index
                             x: lane.px(s); y: 10; width: Math.max(8, lane.px(e) - lane.px(s)); height: lane.height - 20
                             z: on ? 2 : 1
@@ -287,7 +291,7 @@ Item {
                                 color: blk.on ? "#4A6AA8" : (blk.hovered ? "#3A4868" : "#2F3A52")
                                 border.width: blk.on || blk.visualFocus ? 2 : 1
                                 border.color: blk.on || blk.visualFocus ? Theme.paper : (root.cps(blk.index) > 17 ? Theme.warn : "#4A5A80") }
-                            contentItem: Text { leftPadding: 7; topPadding: 4; elide: Text.ElideRight; text: blk.text; color: "#E4EBFA"
+                            contentItem: Text { leftPadding: 7; topPadding: 4; elide: Text.ElideRight; text: blk.body; color: "#E4EBFA"
                                                 font.family: Theme.fontUI; font.pixelSize: Theme.sizeSmall }
                         }
                     }
@@ -295,6 +299,7 @@ Item {
                     Rectangle { x: lane.px(root.t) - 1; width: 2; height: parent.height; color: Theme.accent; z: 5 }
                 }
             }
+        }
         }
 
         // ================= Style =================

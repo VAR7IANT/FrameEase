@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import FrameEase
 
 // Main editing workspace. Owns the transient editing state (playhead, tool, zoom, selection)
 // and connects the four panes. All edits go through MockProject until the C++ core lands.

@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Shapes
+import FrameEase
 
 // Lift / Gamma / Gain wheel. `offset` is the puck position in -0.5..0.5 (x right, y down),
 // clamped to the circle. Drag or click to set; double-click to reset; arrow keys nudge.

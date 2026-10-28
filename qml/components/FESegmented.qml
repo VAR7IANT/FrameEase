@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import FrameEase
 
 // Two-or-more option segmented control (e.g. Simple | Pro).
 Rectangle {
@@ -22,6 +23,7 @@ Rectangle {
         Repeater {
             model: root.options
             delegate: AbstractButton {
+                id: segBtn
                 required property int index
                 required property string modelData
                 width: lbl.implicitWidth + 20
@@ -34,7 +36,7 @@ Rectangle {
                 background: Rectangle {
                     radius: Theme.radiusS
                     color: root.currentIndex === index ? Theme.p3 : "transparent"
-                    border.width: parent.visualFocus ? 2 : 0
+                    border.width: segBtn.visualFocus ? 2 : 0
                     border.color: Theme.paper
                     Behavior on color { ColorAnimation { duration: Theme.durFast } }
                 }

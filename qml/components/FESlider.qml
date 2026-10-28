@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import FrameEase
 
 // Labelled slider row: label | track | value. Keyboard: arrows, PageUp/PageDown; double-click resets.
 Item {

@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import FrameEase
 
 // Text button. `primary: true` is the single accent-filled call to action on a screen.
 AbstractButton {

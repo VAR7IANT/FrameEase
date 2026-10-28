@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import FrameEase
 
 // Collapsible inspector section: the progressive-disclosure primitive.
 // Usage: FESection { title: "Transform"; FESlider { ... } }
