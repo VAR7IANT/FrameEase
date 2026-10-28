@@ -68,7 +68,7 @@ Rectangle {
         // meter + fader + scale
         Row {
             Layout.alignment: Qt.AlignHCenter; spacing: 10
-            LevelMeter { width: 24; height: 290; left: root.meterL; right: root.meterR }
+            LevelMeter { width: 24; height: 290; levelL: root.meterL; levelR: root.meterR }
             FEFader { height: 290; value: root.db; onMoved: root.dbMoved(value); Accessible.name: root.name + " level" }
             Column {
                 height: 290

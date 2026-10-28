@@ -43,6 +43,12 @@ jobs:
         shell: pwsh
         run: cmake --build build --parallel
 
+      - name: qmllint (informational)
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          cmake --build build --target all_qmllint 2>&1 | Tee-Object -FilePath qmllint.log | Select-Object -Last 200
+
       - name: Deploy Qt runtime
         shell: pwsh
         run: |
@@ -68,6 +74,14 @@ jobs:
           name: smoke-test-evidence
           path: smoke-out/
           if-no-files-found: warn
+
+      - name: Upload qmllint log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qmllint-log
+          path: qmllint.log
+          if-no-files-found: ignore
 
       - name: Upload Windows build
         uses: actions/upload-artifact@v4

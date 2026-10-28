@@ -1,17 +1,17 @@
 import QtQuick
 import FrameEase
 
-// Stereo bar meter. `left` / `right` are 0..1. Green to amber to red, clipped by height.
+// Stereo bar meter. `levelL` / `levelR` are 0..1. Green to amber to red, clipped by height.
 Row {
     id: root
-    property real left: 0
-    property real right: 0
+    property real levelL: 0
+    property real levelR: 0
     spacing: 3
     implicitWidth: 24
     implicitHeight: 290
 
     Repeater {
-        model: [root.left, root.right]
+        model: [root.levelL, root.levelR]
         Rectangle {
             required property real modelData
             width: (root.width - root.spacing) / 2; height: root.height
