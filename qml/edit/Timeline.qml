@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Shapes
+import FrameEase
 
 // The multitrack timeline: toolbar, story map, ruler, track headers and lanes.
 // Editing rules (snap, clamp, split, ripple) live here; clips only report pointer intent.

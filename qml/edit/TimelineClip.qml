@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Shapes
+import FrameEase
 
 // One clip on the timeline. Pure presentation + pointer intent; the Timeline owns the editing rules
 // (snapping, clamping, ripple) and answers these signals by writing to the model.

@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Shapes
+import FrameEase
 
 // Stroke icon drawn from a 24x24 SVG path string (same paths as the design canvas).
 Item {

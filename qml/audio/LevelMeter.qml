@@ -1,4 +1,5 @@
 import QtQuick
+import FrameEase
 
 // Stereo bar meter. `left` / `right` are 0..1. Green to amber to red, clipped by height.
 Row {

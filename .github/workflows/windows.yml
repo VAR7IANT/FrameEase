@@ -1,0 +1,76 @@
+name: Windows build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: windows-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  QT_VERSION: "6.8.*"
+
+jobs:
+  build:
+    runs-on: windows-2022
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: windows
+          target: desktop
+          arch: win64_msvc2022_64
+          cache: true
+
+      - name: MSVC developer environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Configure
+        shell: pwsh
+        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        shell: pwsh
+        run: cmake --build build --parallel
+
+      - name: Deploy Qt runtime
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist | Out-Null
+          Copy-Item build/FrameEase.exe dist/
+          windeployqt --release --no-translations --qmldir qml --dir dist dist/FrameEase.exe
+          Get-ChildItem dist | Select-Object -First 40 | Format-Table Name, Length
+
+      - name: Startup smoke test
+        shell: pwsh
+        run: |
+          $env:QSG_INFO = "1"
+          $p = Start-Process -FilePath "$PWD/dist/FrameEase.exe" -ArgumentList "--smoke-test","--out","$PWD/smoke-out" -PassThru
+          if (-not $p.WaitForExit(180000)) { $p.Kill(); Write-Error "smoke test timed out after 180 s"; exit 1 }
+          Write-Host "exit code: $($p.ExitCode)"
+          if (Test-Path smoke-out/smoke-report.txt) { Get-Content smoke-out/smoke-report.txt } else { Write-Host "no report was written" }
+          if ($p.ExitCode -ne 0) { exit 1 }
+
+      - name: Upload smoke-test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-test-evidence
+          path: smoke-out/
+          if-no-files-found: warn
+
+      - name: Upload Windows build
+        uses: actions/upload-artifact@v4
+        with:
+          name: FrameEase-windows-x64
+          path: dist/

@@ -49,6 +49,11 @@ qt_add_qml_module(FrameEase
 
 target_link_libraries(FrameEase PRIVATE Qt6::Quick Qt6::QuickControls2 Qt6::Shapes)
 
+# Startup smoke test: loads FrameEase/Main, visits Edit/Color/Audio/Text, fails on any QML warning or blank frame.
+# Needs a display session (a real Windows desktop or the CI runner), so it is a plain exe flag rather than a unit test.
+enable_testing()
+add_test(NAME startup_smoke COMMAND FrameEase --smoke-test --out ${CMAKE_BINARY_DIR}/smoke-out)
+
 # Future integration points (not linked yet; the UI talks to MockProject only):
 #   - FrameEaseCore  : C++20 editing engine (timeline model, commands, undo stack)
 #   - FFmpeg         : decode / proxy / export

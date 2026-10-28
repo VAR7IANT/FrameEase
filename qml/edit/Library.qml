@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import FrameEase
 
 // Media bin: search, filters, thumbnail grid. Mock data only; the grid binds to MockProject.media.
 Rectangle {

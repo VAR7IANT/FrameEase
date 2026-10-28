@@ -1,4 +1,5 @@
 import QtQuick
+import FrameEase
 
 // Procedural stand-in for a decoded video frame. Fills its own size; palette comes from MockProject.pal.
 Item {

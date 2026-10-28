@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import FrameEase
 
 // Two-or-more option segmented control (e.g. Simple | Pro).
 Rectangle {

@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import FrameEase
 
 // Vertical level fader, -60..+12 dB. Double-click resets to 0 dB.
 Slider {

@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import FrameEase
 
 // One mixer channel: name, pan, meter + fader, mute / solo, insert list.
 Rectangle {

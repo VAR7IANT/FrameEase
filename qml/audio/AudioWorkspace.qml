@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Shapes
+import FrameEase
 
 // Audio workspace: Sound check (assistant) | waveform + mixer | voice tools.
 // Meters and loudness are synthesised from the faders; the engine will replace `level()`.

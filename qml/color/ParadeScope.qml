@@ -1,4 +1,5 @@
 import QtQuick
+import FrameEase
 
 // RGB parade. Traces are synthesised from the grade so the scope reacts to every slider;
 // the real implementation will read from the engine's GPU histogram buffer.

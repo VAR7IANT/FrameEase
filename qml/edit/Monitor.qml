@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import FrameEase
 
 // Program monitor: 16:9 frame that always fits, plus a transport.
 // The "video" is a procedural coastal scene whose palette follows the clip under the playhead.

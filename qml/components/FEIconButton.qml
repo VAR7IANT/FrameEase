@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import FrameEase
 
 // 28px icon button. `checked` renders the paper "on" state used for tools & toggles.
 AbstractButton {

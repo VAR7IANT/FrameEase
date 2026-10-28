@@ -1,4 +1,5 @@
 import QtQuick
+import FrameEase
 
 // Honest stand-in for workspaces whose QML port is not done yet.
 // The full design for each lives in the HTML design canvas (see README).

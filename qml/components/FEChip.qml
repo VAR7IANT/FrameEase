@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import FrameEase
 
 // Pill used for filters, presets and quick choices. `checked` = paper fill.
 AbstractButton {

@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Shapes
 import QtQuick.Effects
+import FrameEase
 
 // Color workspace. Progressive disclosure: Basic (looks + sliders) -> Wheels -> Curves -> Secondary.
 // The grade is one plain object (`grade`) so a future C++ ColorNode can replace it 1:1.

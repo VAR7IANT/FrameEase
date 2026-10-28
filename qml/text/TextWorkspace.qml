@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Shapes
+import FrameEase
 
 // Text & subtitles: edit cues like a document (left), see them on the picture and on a synced
 // subtitle track (centre), style them all at once (right). Cues live in a ListModel so typing
