@@ -229,8 +229,8 @@ Item {
                 FEIconButton { checked: true; implicitWidth: 38; implicitHeight: 38; iconPath: root.playing ? "M7 5v14M17 5v14" : "M8 5l11 7-11 7z"
                                iconFilled: !root.playing; tip: root.playing ? "Pause (Space)" : "Play (Space)"; onClicked: root.playing = !root.playing }
                 Text { text: root.timecode(root.t); color: Theme.tx; font.family: Theme.fontMono; font.pixelSize: 20; font.weight: Font.Medium }
-                Item { Layout.fillWidth: true }
-                Text { text: "Click a block, or anywhere on the track, to jump there"; color: Theme.tx3; font.family: Theme.fontUI; font.pixelSize: Theme.sizeBody - 0.5 }
+                Text { Layout.fillWidth: true; Layout.minimumWidth: 0; elide: Text.ElideRight; horizontalAlignment: Text.AlignRight
+                       text: "Click a block, or anywhere on the track, to jump there"; color: Theme.tx3; font.family: Theme.fontUI; font.pixelSize: Theme.sizeBody - 0.5 }
             }
 
             // subtitle track
