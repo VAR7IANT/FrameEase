@@ -78,6 +78,7 @@ jobs:
           Copy-Item "$env:QT_ROOT_DIR/plugins/platforms/qoffscreen.dll" dist/platforms/
           $env:QT_QPA_PLATFORM = "offscreen"
           $env:QSG_RHI_BACKEND = "software"
+          $env:QT_QPA_FONTDIR = "C:\Windows\Fonts"   # the offscreen platform has no font database of its own
           $p = Start-Process -FilePath "$PWD/dist/FrameEase.exe" -ArgumentList "--smoke-test","--out","$PWD/smoke-out-offscreen" -PassThru
           if (-not $p.WaitForExit(300000)) { $p.Kill(); Write-Error "offscreen smoke test timed out"; exit 1 }
           Write-Host "exit code: $($p.ExitCode)"
