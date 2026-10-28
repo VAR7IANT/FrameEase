@@ -276,22 +276,23 @@ Rectangle {
 
                     // ruler (click or drag to scrub). Beats show nothing but time, so labels stay quiet.
                     Rectangle {
+                        id: ruler
                         width: content.width; height: root.rulerH; color: "#111316"
                         Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: Theme.line }
                         readonly property real step: [1, 2, 5, 10, 15, 30, 60].find(v => v * root.pps >= 72) || 60
                         Repeater {
-                            model: Math.floor(root.total / (parent.step / 5)) + 1
+                            model: Math.floor(root.total / (ruler.step / 5)) + 1
                             Item {
                                 required property int index
                                 readonly property bool major: index % 5 === 0
-                                x: index * (parent.step / 5) * root.pps
+                                x: index * (ruler.step / 5) * root.pps
                                 anchors.bottom: parent.bottom
                                 height: major ? 18 : 6
                                 Rectangle { width: 1; height: parent.height; color: "#3D424A" }
                                 Text {
                                     visible: parent.major
                                     x: 4; y: 0
-                                    readonly property int s: Math.round(index * (parent.parent.step / 5))
+                                    readonly property int s: Math.round(index * (ruler.step / 5))
                                     text: Math.floor(s / 60) + ":" + (s % 60 < 10 ? "0" : "") + (s % 60)
                                     color: Theme.tx3; font.family: Theme.fontMono; font.pixelSize: Theme.sizeSmall
                                 }

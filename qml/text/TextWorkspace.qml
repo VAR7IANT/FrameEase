@@ -131,11 +131,12 @@ Item {
                         Rectangle { visible: row.on; width: 3; height: parent.height - 20; y: 10; radius: 1.5; color: Theme.accent }
 
                         AbstractButton {
+                            id: jumpBtn
                             x: 16; y: 12; width: 54; height: 52
                             focusPolicy: Qt.StrongFocus
                             Accessible.role: Accessible.Button; Accessible.name: "Jump to cue " + (row.index + 1)
                             onClicked: root.jump(row.index)
-                            background: Rectangle { color: "transparent"; border.width: parent.visualFocus ? 2 : 0; border.color: Theme.paper; radius: 4 }
+                            background: Rectangle { color: "transparent"; border.width: jumpBtn.visualFocus ? 2 : 0; border.color: Theme.paper; radius: 4 }
                             contentItem: Column { spacing: 3
                                 Text { text: (row.index + 1 < 10 ? "0" : "") + (row.index + 1); color: Theme.tx3; font.family: Theme.fontMono; font.pixelSize: Theme.sizeSmall }
                                 Text { text: root.tc(row.s); color: Theme.tx; font.family: Theme.fontMono; font.pixelSize: Theme.sizeSmall + 0.5 }

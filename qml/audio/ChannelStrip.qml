@@ -37,7 +37,7 @@ Rectangle {
 
         RowLayout {
             Layout.fillWidth: true; spacing: 8
-            Rectangle { width: 8; height: 8; radius: 2; color: root.swatch }
+            Rectangle { Layout.preferredWidth: 8; Layout.preferredHeight: 8; radius: 2; color: root.swatch }
             Text { text: root.name; color: Theme.tx; font.family: Theme.fontUI; font.pixelSize: Theme.sizeBody - 0.5; font.weight: Font.DemiBold }
             Item { Layout.fillWidth: true }
             Text { visible: !root.master; text: root.chanId; color: Theme.tx3; font.family: Theme.fontMono; font.pixelSize: Theme.sizeSmall }
@@ -51,14 +51,15 @@ Rectangle {
                 Item { Layout.fillWidth: true }
                 Text { text: root.pan === 0 ? "C" : (root.pan < 0 ? "L" + (-root.pan) : "R" + root.pan); color: Theme.tx; font.family: Theme.fontMono; font.pixelSize: Theme.sizeSmall } }
             Slider {
+                id: panSlider
                 Layout.fillWidth: true; from: -100; to: 100; value: root.pan; stepSize: 1
                 Accessible.name: root.name + " pan"
                 onMoved: root.panMoved(value)
                 TapHandler { onDoubleTapped: root.panMoved(0) }
-                background: Rectangle { x: parent.leftPadding; y: parent.topPadding + parent.availableHeight / 2 - 2; width: parent.availableWidth; height: 4; radius: 2; color: "#0F1114"
+                background: Rectangle { x: panSlider.leftPadding; y: panSlider.topPadding + panSlider.availableHeight / 2 - 2; width: panSlider.availableWidth; height: 4; radius: 2; color: "#0F1114"
                     border.color: Theme.line
                     Rectangle { x: parent.width / 2; width: 1; height: parent.height; color: Theme.tx3 } }
-                handle: Rectangle { x: parent.leftPadding + parent.visualPosition * (parent.availableWidth - width); y: parent.topPadding + parent.availableHeight / 2 - height / 2
+                handle: Rectangle { x: panSlider.leftPadding + panSlider.visualPosition * (panSlider.availableWidth - width); y: panSlider.topPadding + panSlider.availableHeight / 2 - height / 2
                     width: 12; height: 12; radius: 6; color: Theme.paper }
             }
         }
