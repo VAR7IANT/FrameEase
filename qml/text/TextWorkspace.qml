@@ -31,17 +31,17 @@ Item {
 
     ListModel {
         id: cues
-        ListElement { s: 16.5; e: 19.8; text: "I've fished this harbour since I was nine." }
-        ListElement { s: 20.2; e: 23.9; text: "Back then the light came up over the cliffs," }
-        ListElement { s: 24.4; e: 28.0; text: "and the whole town went quiet for a minute." }
-        ListElement { s: 29.0; e: 32.6; text: "You learn to read the water before you read anything else." }
-        ListElement { s: 33.1; e: 36.9; text: "My father called it the morning conversation." }
-        ListElement { s: 38.4; e: 42.0; text: "Some days the sea answers. Some days it doesn't." }
-        ListElement { s: 43.0; e: 46.9; text: "But you go out anyway — that's the whole job." }
-        ListElement { s: 48.2; e: 52.0; text: "Now I take visitors out, just to show them the light." }
+        ListElement { s: 16.5; e: 19.8; body: "I've fished this harbour since I was nine." }
+        ListElement { s: 20.2; e: 23.9; body: "Back then the light came up over the cliffs," }
+        ListElement { s: 24.4; e: 28.0; body: "and the whole town went quiet for a minute." }
+        ListElement { s: 29.0; e: 32.6; body: "You learn to read the water before you read anything else." }
+        ListElement { s: 33.1; e: 36.9; body: "My father called it the morning conversation." }
+        ListElement { s: 38.4; e: 42.0; body: "Some days the sea answers. Some days it doesn't." }
+        ListElement { s: 43.0; e: 46.9; body: "But you go out anyway — that's the whole job." }
+        ListElement { s: 48.2; e: 52.0; body: "Now I take visitors out, just to show them the light." }
     }
 
-    function cps(i) { const c = cues.get(i); return c.text.length / Math.max(0.1, c.e - c.s) }
+    function cps(i) { const c = cues.get(i); return c.body.length / Math.max(0.1, c.e - c.s) }
     function activeIndex() {
         for (let i = 0; i < cues.count; i++) { const c = cues.get(i); if (t >= c.s && t < c.e) return i }
         return -1
@@ -60,8 +60,8 @@ Item {
     readonly property string overlayHtml: {
         if (active < 0) return ""
         const c = cues.get(active)
-        if (!highlight) return esc(c.text)
-        const words = c.text.split(" ")
+        if (!highlight) return esc(c.body)
+        const words = c.body.split(" ")
         const wi = Math.min(words.length - 1, Math.floor((t - c.s) / (c.e - c.s) * words.length))
         return esc(words.slice(0, wi).join(" ")) + (wi > 0 ? " " : "") + "<font color='#FF8A6B'>" + esc(words[wi]) + "</font>" + (wi < words.length - 1 ? " " + esc(words.slice(wi + 1).join(" ")) : "")
     }
@@ -121,7 +121,7 @@ Item {
                         required property int index
                         required property real s
                         required property real e
-                        required property string text
+                        required property string body
                         readonly property bool on: root.sel === index
                         readonly property real rate: root.cps(index) + 0 * edit.text.length
                         width: list.width - 8; height: 84; radius: Theme.radiusL - 1
@@ -157,8 +157,8 @@ Item {
                             font.family: Theme.fontUI; font.pixelSize: 14
                             background: Rectangle { color: "transparent"; border.width: edit.activeFocus ? 2 : 0; border.color: Theme.paper; radius: 3 }
                             Accessible.name: "Cue " + (row.index + 1) + " text"
-                            Component.onCompleted: text = row.text           // seed once; typing owns the text afterwards
-                            onTextChanged: { if (text !== row.text) { cues.setProperty(row.index, "text", text); root.recount() } }
+                            Component.onCompleted: text = row.body           // seed once; typing owns the text afterwards
+                            onTextChanged: { if (text !== row.body) { cues.setProperty(row.index, "body", text); root.recount() } }
                             onActiveFocusChanged: if (activeFocus) root.jump(row.index)
                         }
                     }
@@ -278,7 +278,7 @@ Item {
                             required property int index
                             required property real s
                             required property real e
-                            required property string text
+                            required property string body
                             readonly property bool on: root.sel === index
                             x: lane.px(s); y: 10; width: Math.max(8, lane.px(e) - lane.px(s)); height: lane.height - 20
                             z: on ? 2 : 1
@@ -289,7 +289,7 @@ Item {
                                 color: blk.on ? "#4A6AA8" : (blk.hovered ? "#3A4868" : "#2F3A52")
                                 border.width: blk.on || blk.visualFocus ? 2 : 1
                                 border.color: blk.on || blk.visualFocus ? Theme.paper : (root.cps(blk.index) > 17 ? Theme.warn : "#4A5A80") }
-                            contentItem: Text { leftPadding: 7; topPadding: 4; elide: Text.ElideRight; text: blk.text; color: "#E4EBFA"
+                            contentItem: Text { leftPadding: 7; topPadding: 4; elide: Text.ElideRight; text: blk.body; color: "#E4EBFA"
                                                 font.family: Theme.fontUI; font.pixelSize: Theme.sizeSmall }
                         }
                     }
