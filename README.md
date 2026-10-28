@@ -9,25 +9,61 @@ main Edit workspace on mock data. The editing engine (C++20 core, FFmpeg, later 
 
 | Area | State |
 | --- | --- |
-| Design for all 7 screens (Home, Media, Edit, Color, Audio, Text, Export) | Done as interactive HTML prototypes in [`design/`](design) (also published as a Design canvas) |
-| QML design system (`Theme`, `FE*` components) | Written, **not yet compiled** |
-| QML Edit workspace (library, monitor, inspector, timeline) | Written, **not yet compiled**, runs on `MockProject` |
-| QML Color workspace (looks, sliders, wheels, curves presets, wipe, scopes, shots) | Written, **not yet compiled** |
-| QML Audio workspace (sound check, waveform, mixer, voice tools) | Written, **not yet compiled** |
-| QML Text & subtitles workspace (editable cues, synced track, live style) | Written, **not yet compiled** |
-| QML Home / Media / Export | **Not ported.** Placeholders only |
+| Design for all 7 screens (Home, Media, Edit, Color, Audio, Text, Export) | Interactive HTML prototypes in [`design/`](design) (also published as a Design canvas) |
+| QML shell, design system (`Theme`, `FE*`), Edit / Color / Audio / Text workspaces | **Builds on Windows CI (Qt 6.8, MSVC 2022) and loads without QML warnings** in the smoke test below. Mock data only |
+| QML Home / Media / Export | **Not ported.** Placeholders only; deliberately outside the smoke test |
+| Interaction behaviour (drag, trim, snapping, sliders, wheels, playback) | **Not covered by any automated test.** Only startup, workspace switching and a non-blank render are checked |
 | Editing engine, decoding, export | Not started. Nothing here touches media files |
 
-The machine this was authored on had no Qt or CMake. Expect a first-build pass to fix typos and binding
-errors before the window opens.
+## Build
 
-## Build (Windows, Qt 6.5+)
+### CI (Windows)
 
-```bash
-cmake -S . -B build -G Ninja -DCMAKE_PREFIX_PATH="C:/Qt/6.8.0/msvc2022_64"
+`.github/workflows/windows.yml` runs on every push to `main` and every pull request:
+Qt 6.8 (`win64_msvc2022_64`) + MSVC 2022 + CMake + Ninja, Release build, `windeployqt`, the startup smoke test,
+and uploads three artifacts:
+
+- `FrameEase-windows-x64`: `FrameEase.exe` plus the Qt runtime (about 120 MB, unzip and run)
+- `smoke-test-evidence`: `smoke-report.txt`, `qt-messages.log` and one PNG per workspace
+- `qmllint-log`: informational lint output (not a gate)
+
+### Local (Windows, Qt 6.8)
+
+```powershell
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="C:/Qt/6.8.3/msvc2022_64"
 cmake --build build
-./build/FrameEase.exe
+windeployqt --release --no-translations --qmldir qml --dir dist build/FrameEase.exe   # copy FrameEase.exe into dist first
+dist/FrameEase.exe
 ```
+
+Run from a "x64 Native Tools" prompt so Ninja finds MSVC.
+
+## Verification
+
+```powershell
+dist/FrameEase.exe --smoke-test --out smoke-out
+```
+
+The exe is a GUI-subsystem program, so run it with `Start-Process -Wait` (as CI does) and read `smoke-out/smoke-report.txt`.
+The test loads `FrameEase/Main`, then for Edit, Color, Audio and Text: switches to it, waits about 0.9 s,
+grabs the window (fails if the frame is blank) and fails on any QML warning or error. Exit code 0 means every check passed.
+All Qt messages are written to `smoke-out/qt-messages.log`; the per-workspace PNGs are in the same folder.
+
+**What a pass does not prove**
+
+- Anything about interaction. No clicks, drags, keys or sliders are exercised.
+- Anything about other machines. CI renders with Direct3D 11 on the *Microsoft Basic Render Driver* (software WARP) at 1180 x 749 and nothing else: no real GPU, no 4K, no high-DPI scaling, no 1366 x 768.
+- Pixel correctness. The screenshots were reviewed by eye once; no image comparison runs in CI.
+- Home, Media and Export, which are placeholders.
+
+## Known issues
+
+- `qmllint` reports about 145 "unqualified access" style notices (delegates reading ids and model roles from enclosing scopes). They work at runtime and are not fixed. Adding `pragma ComponentBehavior: Bound` to the affected files would clear them.
+- In the CI screenshots the top-bar "Color" tab keeps its highlight after switching to Audio or Text, while the new tab's label turns bright. The smoke test sets `current` from C++ and then calls `grabWindow`, so this may be a harness artifact (animations paused around the grab), but it has not been reproduced or ruled out on a real desktop.
+- Fonts (Instrument Sans / Serif, Geist Mono) are not bundled yet; the CI screenshots show the fallback stack.
+- Windows CI uses a floating `6.8.*` Qt version; pin it if reproducibility matters.
+
+## Fonts
 
 Bundle Instrument Sans, Instrument Serif and Geist Mono (all OFL) and register them with
 `QFontDatabase::addApplicationFont` before the engine loads. Until then `Theme` falls back to Segoe UI Variable.
