@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FrameEase — Text &amp; Subtitles</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--void:#0E0F11;--p1:#14161A;--p2:#1B1E23;--p3:#262A30;--ln:#23272C;--ln2:#363B43;--tx:#ECE8E0;--tx2:#A9A69F;--tx3:#878A92;--paper:#F2E9D8;--acc-ink:#1A0C08;--ease:cubic-bezier(.22,.8,.2,1);--mono:'Geist Mono','JetBrains Mono',ui-monospace,monospace;--serif:'Instrument Serif',Georgia,serif}
+*{box-sizing:border-box}
+body{margin:0;background:#0E0F11}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:inherit}
+input,textarea{font:inherit}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--paper);outline-offset:2px}
+.ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.ib{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:7px;color:var(--tx2);transition:background .14s,color .14s}
+.ib:hover{background:var(--p3);color:var(--tx)}
+.btn{height:30px;padding:0 12px;display:inline-flex;align-items:center;gap:7px;border-radius:7px;background:var(--p2);border:1px solid var(--ln2);color:var(--tx);font-weight:500;transition:background .14s,border-color .14s}
+.btn:hover{background:var(--p3);border-color:#4a505a}
+.btn.pri{background:var(--acc);border-color:transparent;color:var(--acc-ink);font-weight:600}
+.chip{height:26px;padding:0 11px;display:inline-flex;align-items:center;gap:6px;border-radius:13px;border:1px solid var(--ln2);color:var(--tx2);font-size:12px;white-space:nowrap;transition:all .14s var(--ease)}
+.chip:hover{color:var(--tx);border-color:#555b66}
+.chip.on{background:var(--paper);border-color:var(--paper);color:#17140F;font-weight:600}
+.kbd{font-family:var(--mono);font-size:11px;padding:1px 5px;border:1px solid var(--ln2);border-radius:4px;color:var(--tx3)}
+.nav{position:relative;height:32px;padding:0 13px;display:inline-flex;align-items:center;border-radius:8px;color:var(--tx2);font-weight:500;transition:color .14s,background .14s}
+.nav:hover{color:var(--tx);background:#181B1F}
+.nav.on{color:var(--tx);background:#1D2025}
+.nav.on::after{content:'';position:absolute;left:50%;bottom:3px;width:16px;height:5px;margin-left:-8px;border-bottom:2px solid var(--acc);border-radius:0 0 8px 8px}
+.cue{display:flex;gap:12px;padding:12px 14px;border-radius:11px;border:1px solid transparent;transition:background .12s,border-color .12s}
+.cue:hover{background:var(--p2)}
+.cue.on{background:var(--p2);border-color:var(--ln2);box-shadow:inset 3px 0 0 var(--acc)}
+.cue textarea{width:100%;resize:none;background:transparent;border:0;outline:0;color:var(--tx);font-size:14px;line-height:1.4;padding:0;margin-top:4px;height:42px;font-family:inherit}
+.cue textarea:focus{outline:2px solid var(--paper);outline-offset:3px;border-radius:3px}
+.blk{position:absolute;top:10px;bottom:10px;border-radius:6px;background:#2f3a52;border:1px solid #4a5a80;overflow:hidden;color:#E4EBFA;font-size:11px;padding:4px 7px;white-space:nowrap;text-overflow:ellipsis;transition:background .12s}
+.blk:hover{background:#3a4868}
+.blk.on{background:#4a6aa8;border-color:var(--paper);box-shadow:0 0 0 1px var(--paper);z-index:2}
+.blk.bad{border-color:#F2C14E}
+.sw{width:30px;height:30px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(255,255,255,.2);transition:transform .14s var(--ease)}
+.sw:hover{transform:scale(1.08)}
+.sw.on{box-shadow:0 0 0 2px var(--void),0 0 0 4px var(--paper)}
+.pos{height:46px;border-radius:8px;background:#0F1114;border:1px solid var(--ln2);display:flex;padding:6px;transition:all .12s}
+.pos:hover{border-color:#5a606b}
+.pos.on{border-color:var(--paper);box-shadow:0 0 0 1px var(--paper)}
+input[type=range]{accent-color:var(--acc);margin:0;background:transparent;width:100%}
+.scroll::-webkit-scrollbar{width:8px}
+.scroll::-webkit-scrollbar-thumb{background:#2d3238;border-radius:4px}
+@media (max-width:1560px){.sty{width:330px!important}.cues{width:440px!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</helmet>
+
+<div style="--acc:#FF5B3A;width:100%;min-width:1100px;height:1080px;display:flex;flex-direction:column;background:var(--void);color:var(--tx);font-family:'Instrument Sans',system-ui,sans-serif;font-size:12.5px;overflow:hidden">
+
+<header style="height:48px;flex:none;display:flex;align-items:center;gap:14px;padding:0 12px 0 14px;border-bottom:1px solid var(--ln)">
+  <a href="Home.dc.html" aria-label="FrameEase home" style="display:flex;align-items:center;gap:9px">
+    <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="1.5" y="1.5" width="23" height="23" rx="7" fill="none" stroke="#ECE8E0" stroke-width="1.6"/><path d="M5.5 19.5C11 19.5 11 6.5 20.5 6.5" fill="none" stroke="#ECE8E0" stroke-width="1.8" stroke-linecap="round"/><circle cx="20.5" cy="6.5" r="2.6" fill="var(--acc)"/></svg>
+    <span style="font-weight:600;font-size:15px;letter-spacing:-.01em">Frame<span style="font-family:var(--serif);font-style:italic;font-weight:400;font-size:17px;margin-left:1px">Ease</span></span>
+  </a>
+  <span style="width:1px;height:20px;background:var(--ln2)"></span>
+  <span style="font-weight:600;font-size:13px">Coastal Light</span>
+  <nav aria-label="Workspaces" style="flex:1;display:flex;justify-content:center;gap:2px">
+    <sc-for list="{{nav}}" as="n" hint-placeholder-count="5"><a class="nav {{n.on}}" href="{{n.href}}" aria-current="{{n.cur}}">{{n.label}}</a></sc-for>
+  </nav>
+  <a class="btn pri" href="Export.dc.html" style="height:32px;padding:0 15px">Export<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+</header>
+
+<div style="flex:1;min-height:0;display:flex">
+
+<!-- Cues -->
+<aside class="cues" aria-label="Subtitle cues" style="width:520px;flex:none;background:var(--p1);border-right:1px solid var(--ln);display:flex;flex-direction:column;min-height:0">
+  <div style="padding:20px 20px 12px">
+    <div style="display:flex;align-items:center;gap:10px"><h1 style="margin:0;font-family:var(--serif);font-weight:400;font-size:32px;letter-spacing:-.01em;flex:1">Subtitles</h1><span class="mono" style="color:var(--tx3)">{{cueCount}} cues</span></div>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn pri"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a3 3 0 00-3 3v6a3 3 0 006 0V6a3 3 0 00-3-3zM6 11a6 6 0 0012 0M12 17v4"/></svg>Auto-transcribe</button>
+      <button class="btn">Import .srt</button>
+      <button class="btn"><span>English</span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:13px;height:13px"><path d="M6 9l6 6 6-6"/></svg></button>
+    </div>
+    <div style="margin-top:12px;padding:10px 12px;border-radius:9px;background:var(--p2);border:1px solid var(--ln);display:flex;align-items:center;gap:10px;color:var(--tx2)">
+      <span style="width:8px;height:8px;border-radius:50%;background:{{warnColor}}"></span><span style="flex:1">{{warnText}}</span>
+    </div>
+  </div>
+  <div class="scroll" style="flex:1;min-height:0;overflow:auto;padding:0 10px 16px">
+    <sc-for list="{{cues}}" as="c" hint-placeholder-count="8">
+      <div class="cue {{c.on}}">
+        <button onClick="{{c.pick}}" aria-label="Jump to cue {{c.num}}" style="width:54px;flex:none;text-align:left">
+          <span class="mono" style="display:block;color:var(--tx3);font-size:11px">{{c.num}}</span>
+          <span class="mono" style="display:block;margin-top:4px;font-size:11.5px">{{c.inTc}}</span>
+          <span class="mono" style="display:block;color:var(--tx3);font-size:11.5px">{{c.outTc}}</span>
+        </button>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:8px"><span class="chip" style="height:20px;font-size:11px;padding:0 8px">Mara</span><span class="mono" style="font-size:11px;color:{{c.cpsColor}}">{{c.cps}} chars/s</span></div>
+          <textarea aria-label="Cue {{c.num}} text" onInput="{{c.edit}}" onFocus="{{c.pick}}">{{c.text}}</textarea>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</aside>
+
+<!-- Stage -->
+<main style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:0">
+  <div style="flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:24px 28px 12px;container-type:size">
+    <div style="position:relative;width:min(100cqw, calc(100cqh * 1.7778));aspect-ratio:16/9;container-type:inline-size">
+      <div style="position:absolute;inset:0;overflow:hidden;border-radius:3px;box-shadow:0 0 0 1px #000,0 24px 70px rgba(0,0,0,.6)">
+        <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;display:block" role="img" aria-label="Interview frame">
+          <defs>
+            <linearGradient id="k1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4b52"/><stop offset=".6" stop-color="#7e8f86"/><stop offset="1" stop-color="#d9c9a0"/></linearGradient>
+            <linearGradient id="k2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5f6f66"/><stop offset="1" stop-color="#1d2a28"/></linearGradient>
+          </defs>
+          <rect width="1600" height="900" fill="url(#k1)"/>
+          <rect y="640" width="1600" height="260" fill="url(#k2)"/>
+          <circle cx="1180" cy="230" r="70" fill="#f3e2b5" opacity=".9"/>
+          <path d="M0 900V610L180 560 330 600 520 540 700 610V900Z" fill="#10171a" opacity=".55"/>
+          <circle cx="700" cy="330" r="92" fill="#c89a78"/><path d="M520 900C520 640 600 540 700 540S880 640 880 900Z" fill="#26343b"/><path d="M608 300C620 220 780 210 794 310C760 270 640 270 608 300Z" fill="#2a2420"/>
+        </svg>
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,transparent 55%,rgba(0,0,0,.4))"></div>
+      </div>
+      <sc-if value="{{hasActive}}" hint-placeholder-val="{{true}}">
+        <div style="position:absolute;left:8%;right:8%;{{posCss}};display:flex;justify-content:center;pointer-events:none">
+          <div style="max-width:100%;text-align:center;padding:{{padCss}};border-radius:.7cqw;background:{{bgCss}};color:{{textColor}};font-family:{{fontFam}};font-weight:{{weight}};font-size:{{sizeCq}}cqw;line-height:1.25;text-shadow:{{shadowCss}}">{{before}}<span style="color:{{hiColor}}">{{hiWord}}</span>{{after}}</div>
+        </div>
+      </sc-if>
+      <div style="position:absolute;inset:5%;border:1px dashed rgba(255,255,255,.28);pointer-events:none"></div>
+    </div>
+  </div>
+
+  <div style="flex:none;display:flex;align-items:center;gap:12px;padding:4px 28px 12px">
+    <button onClick="{{togglePlay}}" aria-label="{{playLabel}}" style="width:38px;height:38px;border-radius:50%;background:var(--paper);color:#17140F;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="{{playD}}" fill="#17140F"/></svg></button>
+    <span class="mono" style="font-size:20px;font-weight:500">{{tc}}</span>
+    <span style="flex:1"></span>
+    <span style="color:var(--tx3)">Click a block, or anywhere on the track, to jump there</span>
+  </div>
+
+  <!-- subtitle lane -->
+  <div style="height:178px;flex:none;border-top:1px solid var(--ln2);background:var(--p1);padding:0 0 0 0;display:flex;flex-direction:column">
+    <div style="height:30px;display:flex;align-items:center;padding:0 28px;gap:12px;border-bottom:1px solid var(--ln);color:var(--tx3);font-size:11.5px"><span style="font-weight:600;color:var(--tx)">Subtitle track</span><span>S1 · English</span><span style="flex:1"></span><span class="mono">0:16</span><span style="width:560px;height:1px"></span><span class="mono">0:56</span></div>
+    <div style="flex:1;position:relative;margin:0 28px;" onMouseDown="{{laneDown}}">
+      <svg viewBox="0 0 1000 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;opacity:.55" aria-hidden="true"><path d="{{laneWave}}" stroke="#4d7a5d" stroke-width="1.2" fill="none"/></svg>
+      <sc-for list="{{blocks}}" as="b" hint-placeholder-count="8">
+        <button class="blk {{b.on}} {{b.bad}}" style="left:{{b.left}}%;width:{{b.w}}%" onMouseDown="{{b.stop}}" onClick="{{b.pick}}" aria-label="Cue {{b.num}}">{{b.text}}</button>
+      </sc-for>
+      <div style="position:absolute;top:0;bottom:0;left:{{phPct}}%;width:2px;background:var(--acc);box-shadow:0 0 10px rgba(255,91,58,.5);pointer-events:none"></div>
+    </div>
+  </div>
+</main>
+
+<!-- Style -->
+<aside class="sty" aria-label="Subtitle style" style="width:380px;flex:none;background:var(--p1);border-left:1px solid var(--ln);padding:22px 22px;overflow:auto;display:flex;flex-direction:column;gap:22px">
+  <div>
+    <div style="display:flex;align-items:center;gap:10px"><h2 style="margin:0;font-size:15px;font-weight:600;flex:1">Style</h2><span style="color:var(--tx3);font-size:11.5px">Applies to all cues</span></div>
+    <div style="margin-top:14px;display:flex;gap:6px"><sc-for list="{{fonts}}" as="f" hint-placeholder-count="3"><button class="chip {{f.on}}" aria-pressed="{{f.pressed}}" onClick="{{f.pick}}" style="flex:1;justify-content:center;font-family:{{f.fam}};font-size:14px;height:34px">{{f.name}}</button></sc-for></div>
+    <div style="margin-top:14px;display:flex;align-items:center;gap:10px"><label for="sz" style="width:60px;color:var(--tx2)">Size</label><input id="sz" type="range" min="25" max="70" value="{{size}}" onInput="{{setSize}}"><span class="mono" style="width:34px;text-align:right">{{size}}</span></div>
+    <div style="margin-top:6px;display:flex;align-items:center;gap:10px"><label for="wt" style="width:60px;color:var(--tx2)">Weight</label><input id="wt" type="range" min="400" max="700" step="100" value="{{weight}}" onInput="{{setWeight}}"><span class="mono" style="width:34px;text-align:right">{{weight}}</span></div>
+  </div>
+
+  <div>
+    <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3)">Colour</div>
+    <div style="margin-top:10px;display:flex;gap:12px"><sc-for list="{{colors}}" as="c" hint-placeholder-count="5"><button class="sw {{c.on}}" aria-pressed="{{c.pressed}}" aria-label="{{c.name}}" onClick="{{c.pick}}" style="background:{{c.hex}}"></button></sc-for></div>
+  </div>
+
+  <div>
+    <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3)">Background</div>
+    <div style="margin-top:10px;display:flex;gap:6px"><sc-for list="{{bgs}}" as="b" hint-placeholder-count="3"><button class="chip {{b.on}}" aria-pressed="{{b.pressed}}" onClick="{{b.pick}}" style="flex:1;justify-content:center;height:32px">{{b.name}}</button></sc-for></div>
+  </div>
+
+  <div>
+    <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3)">Position</div>
+    <div style="margin-top:10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+      <sc-for list="{{poss}}" as="p" hint-placeholder-count="3"><button class="pos {{p.on}}" aria-pressed="{{p.pressed}}" onClick="{{p.pick}}" aria-label="{{p.name}}" style="align-items:{{p.align}};justify-content:center"><span style="width:56%;height:6px;border-radius:3px;background:var(--tx2)"></span></button></sc-for>
+    </div>
+  </div>
+
+  <div>
+    <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3)">Emphasis</div>
+    <button onClick="{{toggleHi}}" aria-pressed="{{hi}}" style="margin-top:10px;width:100%;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;background:var(--p2);border:1px solid var(--ln)">
+      <span style="flex:1"><span style="display:block;font-weight:500">Highlight the word being spoken</span><span style="display:block;color:var(--tx3);margin-top:2px;font-size:11.5px">Uses word timings from the transcript</span></span>
+      <span style="width:38px;height:22px;border-radius:11px;background:{{hiBg}};position:relative;transition:background .18s"><span style="position:absolute;top:2px;left:{{hiKnob}}px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .18s var(--ease)"></span></span>
+    </button>
+  </div>
+
+  <div style="margin-top:auto;display:flex;gap:8px"><button class="btn" style="flex:1;justify-content:center">Burn into video</button><button class="btn" style="flex:1;justify-content:center">Export .srt</button></div>
+</aside>
+</div>
+</div>
+</x-dc>
+
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+const T0 = 14, T1 = 56;
+const CUES0 = [
+  [16.5,19.8,"I've fished this harbour since I was nine."],
+  [20.2,23.9,"Back then the light came up over the cliffs,"],
+  [24.4,28.0,"and the whole town went quiet for a minute."],
+  [29.0,32.6,"You learn to read the water before you read anything else."],
+  [33.1,36.9,"My father called it the morning conversation."],
+  [38.4,42.0,"Some days the sea answers. Some days it doesn't."],
+  [43.0,46.9,"But you go out anyway — that's the whole job."],
+  [48.2,52.0,"Now I take visitors out, just to show them the light."]
+];
+const FONTS = [{k:'sans',name:'Sans',fam:"'Instrument Sans',sans-serif"},{k:'serif',name:'Serif',fam:"'Instrument Serif',serif"},{k:'mono',name:'Mono',fam:"'Geist Mono',monospace"}];
+const COLORS = [{name:'White',hex:'#FFFFFF'},{name:'Paper',hex:'#F2E9D8'},{name:'Sun',hex:'#FFD84D'},{name:'Lagoon',hex:'#7FE3D8'},{name:'Coral',hex:'#FF8A6B'}];
+const BGS = [{k:'none',name:'None'},{k:'shadow',name:'Shadow'},{k:'box',name:'Box'}];
+const POS = [{k:'top',name:'Top',align:'flex-start'},{k:'mid',name:'Middle',align:'center'},{k:'bot',name:'Bottom',align:'flex-end'}];
+const pad=(n)=>String(n).padStart(2,'0');
+const tcs=(t)=>{ const f=Math.floor(t*24+1e-6); return '00:'+pad(Math.floor(f/24/60))+':'+pad(Math.floor(f/24)%60)+':'+pad(f%24); };
+const shortTc=(t)=> Math.floor(t/60)+':'+pad(Math.floor(t%60))+'.'+Math.floor((t%1)*10);
+class Component extends DCLogic {
+  state = {cues:CUES0.map(c=>({s:c[0],e:c[1],text:c[2]})), sel:1, t:21.5, playing:false, font:'sans', size:44, weight:600, color:'#FFFFFF', bg:'shadow', pos:'bot', hi:true};
+  componentDidMount(){ this._iv=setInterval(()=>{ if(!this.state.playing) return; let t=this.state.t+0.05; if(t>T1) t=T0+2; const idx=this.state.cues.findIndex(c=>t>=c.s&&t<c.e); this.setState(idx>=0?{t,sel:idx}:{t}); },50); }
+  componentWillUnmount(){ clearInterval(this._iv); }
+  renderVals(){
+    const s=this.state, up=(p)=>this.setState(p);
+    const active=s.cues.findIndex(c=>s.t>=c.s&&s.t<c.e);
+    const cur = active>=0?s.cues[active]:null;
+    const cps=(c)=>c.text.length/Math.max(.1,c.e-c.s);
+    const bad=s.cues.filter(c=>cps(c)>17).length;
+    const words = cur?cur.text.split(' '):[]; const wi = cur?Math.min(words.length-1, Math.floor((s.t-cur.s)/(cur.e-cur.s)*words.length)):0;
+    const before = cur&&s.hi?words.slice(0,wi).join(' ')+(wi>0?' ':''):(cur?cur.text:''), hiWord=cur&&s.hi?words[wi]:'', after=cur&&s.hi?(wi<words.length-1?' '+words.slice(wi+1).join(' '):''):'';
+    const fam=FONTS.find(f=>f.k===s.font).fam;
+    const posCss = s.pos==='top'?'top:7%':s.pos==='mid'?'top:44%':'bottom:8%';
+    let lw=''; for(let x=0;x<1000;x+=5){ const t=T0+(x/1000)*(T1-T0); const on=s.cues.some(c=>t>=c.s&&t<=c.e); const a=on?(.25+.7*Math.abs(Math.sin(x*.21)*Math.sin(x*.047+1))):.04; lw+='M'+x+' '+(50-a*42).toFixed(1)+'V'+(50+a*42).toFixed(1); }
+    return {
+      nav:[['Media','Media.dc.html'],['Edit','Main.dc.html'],['Color','Color.dc.html'],['Audio','Audio.dc.html'],['Text','Text.dc.html']].map(x=>({label:x[0],href:x[1],on:x[0]==='Text'?'on':'',cur:x[0]==='Text'?'page':'false'})),
+      cueCount:s.cues.length, warnColor:bad?'#F2C14E':'#7BD389', warnText:bad?(bad+' cue'+(bad>1?'s':'')+' read faster than 17 characters per second — consider splitting.'):'All cues are comfortable to read.',
+      cues:s.cues.map((c,i)=>{ const v=cps(c); return { num:pad(i+1), inTc:shortTc(c.s), outTc:shortTc(c.e), text:c.text, cps:v.toFixed(1), cpsColor:v>17?'#F2C14E':'#878A92', on:s.sel===i?'on':'',
+        pick:()=>up({sel:i,t:c.s+.05,playing:false}), edit:(e)=>up({cues:s.cues.map((x,j)=>j===i?{...x,text:e.target.value}:x)}) }; }),
+      hasActive:!!cur, before, hiWord, after, hiColor:'#FF8A6B', posCss, padCss:s.bg==='box'?'.5cqw 1.4cqw':'0', bgCss:s.bg==='box'?'rgba(10,12,14,.78)':'transparent', textColor:s.color,
+      fontFam:fam, weight:s.weight, sizeCq:(s.size/10).toFixed(2), shadowCss:s.bg==='shadow'?'0 2px 12px rgba(0,0,0,.85),0 0 2px rgba(0,0,0,.9)':'none',
+      tc:tcs(s.t), togglePlay:()=>up({playing:!s.playing}), playLabel:s.playing?'Pause':'Play', playD:s.playing?'M5 4h5v16H5zM14 4h5v16h-5z':'M7 4v16l13-8z',
+      laneWave:lw, phPct:(((s.t-T0)/(T1-T0))*100).toFixed(2),
+      laneDown:(e)=>{ const r=e.currentTarget.getBoundingClientRect(); up({t:T0+Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*(T1-T0)}); },
+      blocks:s.cues.map((c,i)=>({ num:pad(i+1), left:((c.s-T0)/(T1-T0)*100).toFixed(2), w:((c.e-c.s)/(T1-T0)*100).toFixed(2), text:c.text, on:s.sel===i?'on':'', bad:cps(c)>17?'bad':'',
+        stop:(e)=>e.stopPropagation(), pick:()=>up({sel:i,t:c.s+.05,playing:false}) })),
+      fonts:FONTS.map(f=>({name:f.name,fam:f.fam,on:s.font===f.k?'on':'',pressed:s.font===f.k,pick:()=>up({font:f.k})})),
+      size:s.size, setSize:(e)=>up({size:+e.target.value}), setWeight:(e)=>up({weight:+e.target.value}),
+      colors:COLORS.map(c=>({...c,on:s.color===c.hex?'on':'',pressed:s.color===c.hex,pick:()=>up({color:c.hex})})),
+      bgs:BGS.map(b=>({name:b.name,on:s.bg===b.k?'on':'',pressed:s.bg===b.k,pick:()=>up({bg:b.k})})),
+      poss:POS.map(p=>({name:p.name,align:p.align,on:s.pos===p.k?'on':'',pressed:s.pos===p.k,pick:()=>up({pos:p.k})})),
+      hi:s.hi, toggleHi:()=>up({hi:!s.hi}), hiBg:s.hi?'#FF5B3A':'#363B43', hiKnob:s.hi?18:2
+    };
+  }
+}
+</script>
+</body>
+</html>

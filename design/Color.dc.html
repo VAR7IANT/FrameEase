@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FrameEase — Color</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--void:#0E0F11;--p1:#14161A;--p2:#1B1E23;--p3:#262A30;--ln:#23272C;--ln2:#363B43;--tx:#ECE8E0;--tx2:#A9A69F;--tx3:#878A92;--paper:#F2E9D8;--acc-ink:#1A0C08;--ease:cubic-bezier(.22,.8,.2,1);--mono:'Geist Mono','JetBrains Mono',ui-monospace,monospace;--serif:'Instrument Serif',Georgia,serif}
+*{box-sizing:border-box}
+body{margin:0;background:#0E0F11}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:inherit}
+input{font:inherit}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--paper);outline-offset:2px}
+.ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.ib{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:7px;color:var(--tx2);transition:background .14s,color .14s}
+.ib:hover{background:var(--p3);color:var(--tx)}
+.ib.on{background:var(--paper);color:#17140F}
+.btn{height:30px;padding:0 12px;display:inline-flex;align-items:center;gap:7px;border-radius:7px;background:var(--p2);border:1px solid var(--ln2);color:var(--tx);font-weight:500;transition:background .14s,border-color .14s}
+.btn:hover{background:var(--p3);border-color:#4a505a}
+.btn.pri{background:var(--acc);border-color:transparent;color:var(--acc-ink);font-weight:600}
+.chip{height:24px;padding:0 10px;display:inline-flex;align-items:center;gap:6px;border-radius:12px;border:1px solid var(--ln2);color:var(--tx2);font-size:11.5px;white-space:nowrap;transition:all .14s var(--ease)}
+.chip:hover{color:var(--tx);border-color:#555b66}
+.chip.on{background:var(--paper);border-color:var(--paper);color:#17140F;font-weight:600}
+.kbd{font-family:var(--mono);font-size:11px;padding:1px 5px;border:1px solid var(--ln2);border-radius:4px;color:var(--tx3)}
+.nav{position:relative;height:32px;padding:0 13px;display:inline-flex;align-items:center;border-radius:8px;color:var(--tx2);font-weight:500;transition:color .14s,background .14s}
+.nav:hover{color:var(--tx);background:#181B1F}
+.nav.on{color:var(--tx);background:#1D2025}
+.nav.on::after{content:'';position:absolute;left:50%;bottom:3px;width:16px;height:5px;margin-left:-8px;border-bottom:2px solid var(--acc);border-radius:0 0 8px 8px}
+.tab{height:34px;padding:0 4px;margin-right:18px;color:var(--tx2);font-weight:500;position:relative}
+.tab:hover{color:var(--tx)}
+.tab.on{color:var(--tx)}
+.tab.on::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--acc)}
+.look{display:flex;flex-direction:column;gap:6px;min-width:0;text-align:center;font-size:11.5px;color:var(--tx2)}
+.look .sw{aspect-ratio:4/3;border-radius:7px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);transition:transform .16s var(--ease)}
+.look:hover .sw{transform:translateY(-2px)}
+.look.on{color:var(--tx)}
+.look.on .sw{box-shadow:0 0 0 2px var(--paper)}
+.node{display:flex;align-items:center;gap:10px;height:54px;padding:0 14px 0 8px;border-radius:10px;background:var(--p2);border:1px solid var(--ln2);transition:all .14s}
+.node:hover{border-color:#5a606b}
+.node.on{border-color:var(--paper);box-shadow:0 0 0 1px var(--paper)}
+.shot{position:relative;width:132px;height:74px;border-radius:7px;overflow:hidden;flex:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);transition:transform .16s var(--ease)}
+.shot:hover{transform:translateY(-2px)}
+.shot.on{box-shadow:0 0 0 2px var(--acc)}
+input[type=range]{width:100%;margin:0;height:18px;accent-color:var(--acc);background:transparent}
+.scroll::-webkit-scrollbar{width:8px}
+.scroll::-webkit-scrollbar-thumb{background:#2d3238;border-radius:4px}
+@media (max-width:1560px){.panel{width:380px!important}.scopes{display:none!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</helmet>
+
+<div style="--acc:#FF5B3A;width:100%;min-width:1100px;height:1080px;display:flex;flex-direction:column;background:var(--void);color:var(--tx);font-family:'Instrument Sans',system-ui,sans-serif;font-size:12.5px;overflow:hidden">
+
+<header style="height:48px;flex:none;display:flex;align-items:center;gap:14px;padding:0 12px 0 14px;border-bottom:1px solid var(--ln)">
+  <a href="Home.dc.html" aria-label="FrameEase home" style="display:flex;align-items:center;gap:9px">
+    <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="1.5" y="1.5" width="23" height="23" rx="7" fill="none" stroke="#ECE8E0" stroke-width="1.6"/><path d="M5.5 19.5C11 19.5 11 6.5 20.5 6.5" fill="none" stroke="#ECE8E0" stroke-width="1.8" stroke-linecap="round"/><circle cx="20.5" cy="6.5" r="2.6" fill="var(--acc)"/></svg>
+    <span style="font-weight:600;font-size:15px;letter-spacing:-.01em">Frame<span style="font-family:var(--serif);font-style:italic;font-weight:400;font-size:17px;margin-left:1px">Ease</span></span>
+  </a>
+  <span style="width:1px;height:20px;background:var(--ln2)"></span>
+  <span style="font-weight:600;font-size:13px">Coastal Light</span>
+  <nav aria-label="Workspaces" style="flex:1;display:flex;justify-content:center;gap:2px">
+    <sc-for list="{{nav}}" as="n" hint-placeholder-count="5"><a class="nav {{n.on}}" href="{{n.href}}" aria-current="{{n.cur}}">{{n.label}}</a></sc-for>
+  </nav>
+  <a class="btn pri" href="Export.dc.html" style="height:32px;padding:0 15px">Export<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+</header>
+
+<div style="flex:1;min-height:0;display:flex">
+<!-- LEFT: monitor + scopes + shots -->
+<div style="flex:1;min-width:0;display:flex;flex-direction:column">
+
+  <div style="height:44px;flex:none;display:flex;align-items:center;gap:10px;padding:0 18px">
+    <span style="font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--tx2)">Grade</span>
+    <span class="mono" style="color:var(--tx3);font-size:11.5px">{{shotName}} · V1 · 00:00:16:00</span>
+    <span style="flex:1"></span>
+    <span style="color:var(--tx3);font-size:11.5px">Before / after</span>
+    <button class="chip {{wipeOn}}" onClick="{{toggleWipe}}" aria-pressed="{{wipe}}">Wipe</button>
+    <button class="btn" style="height:26px" onClick="{{resetAll}}">Reset grade</button>
+  </div>
+
+  <div style="flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:4px 24px 10px;container-type:size">
+    <div style="position:relative;width:min(100cqw, calc(100cqh * 1.7778));aspect-ratio:16/9">
+      <!-- BEFORE -->
+      <div style="position:absolute;inset:0;overflow:hidden;border-radius:3px;box-shadow:0 0 0 1px #000,0 24px 70px rgba(0,0,0,.6)">
+        <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;display:block" role="img" aria-label="Original frame">
+          <defs>
+            <linearGradient id="bsk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{{pal.top}}"/><stop offset=".55" stop-color="{{pal.mid}}"/><stop offset="1" stop-color="{{pal.hor}}"/></linearGradient>
+            <linearGradient id="bsea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{{pal.s1}}"/><stop offset="1" stop-color="{{pal.s2}}"/></linearGradient>
+            <radialGradient id="bgl"><stop offset="0" stop-color="{{pal.sun}}" stop-opacity=".85"/><stop offset="1" stop-color="{{pal.sun}}" stop-opacity="0"/></radialGradient>
+          </defs>
+          <rect width="1600" height="560" fill="url(#bsk)"/><circle cx="1040" cy="500" r="300" fill="url(#bgl)"/><circle cx="1040" cy="500" r="50" fill="{{pal.sun}}"/>
+          <path d="M0 560L150 480 290 530 470 450 650 535 860 495 1120 560Z" fill="{{pal.s2}}" opacity=".32"/>
+          <rect y="560" width="1600" height="340" fill="url(#bsea)"/>
+          <g fill="{{pal.sun}}"><rect x="990" y="574" width="100" height="5" opacity=".7"/><rect x="962" y="597" width="156" height="5" opacity=".5"/><rect x="930" y="623" width="220" height="6" opacity=".38"/><rect x="892" y="653" width="296" height="7" opacity=".26"/><rect x="850" y="689" width="380" height="8" opacity=".16"/></g>
+          <path d="M0 650C230 612 430 700 570 900H0Z" fill="#06090C"/><path d="M0 740C160 720 300 790 360 900H0Z" fill="#020406"/>
+        </svg>
+        <div style="position:absolute;left:12px;top:12px;padding:3px 8px;border-radius:5px;background:rgba(10,12,14,.7);font-size:11px;color:#fff">Original</div>
+      </div>
+      <!-- AFTER -->
+      <div style="position:absolute;inset:0;overflow:hidden;border-radius:3px;clip-path:inset(0 0 0 {{wipePos}}%)">
+        <div style="position:absolute;inset:0;filter:{{gradeFilter}}">
+          <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;display:block" role="img" aria-label="Graded frame">
+            <defs>
+              <linearGradient id="asky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{{pal.top}}"/><stop offset=".55" stop-color="{{pal.mid}}"/><stop offset="1" stop-color="{{pal.hor}}"/></linearGradient>
+              <linearGradient id="asea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{{pal.s1}}"/><stop offset="1" stop-color="{{pal.s2}}"/></linearGradient>
+              <radialGradient id="agl"><stop offset="0" stop-color="{{pal.sun}}" stop-opacity=".85"/><stop offset="1" stop-color="{{pal.sun}}" stop-opacity="0"/></radialGradient>
+            </defs>
+            <rect width="1600" height="560" fill="url(#asky)"/><circle cx="1040" cy="500" r="300" fill="url(#agl)"/><circle cx="1040" cy="500" r="50" fill="{{pal.sun}}"/>
+            <path d="M0 560L150 480 290 530 470 450 650 535 860 495 1120 560Z" fill="{{pal.s2}}" opacity=".32"/>
+            <rect y="560" width="1600" height="340" fill="url(#asea)"/>
+            <g fill="{{pal.sun}}"><rect x="990" y="574" width="100" height="5" opacity=".7"/><rect x="962" y="597" width="156" height="5" opacity=".5"/><rect x="930" y="623" width="220" height="6" opacity=".38"/><rect x="892" y="653" width="296" height="7" opacity=".26"/><rect x="850" y="689" width="380" height="8" opacity=".16"/></g>
+            <path d="M0 650C230 612 430 700 570 900H0Z" fill="#06090C"/><path d="M0 740C160 720 300 790 360 900H0Z" fill="#020406"/>
+          </svg>
+        </div>
+        <div style="position:absolute;inset:0;background:{{wheelTint}};mix-blend-mode:soft-light;opacity:{{wheelOp}}"></div>
+        <div style="position:absolute;right:12px;top:12px;padding:3px 8px;border-radius:5px;background:rgba(10,12,14,.7);font-size:11px;color:#fff">Graded</div>
+      </div>
+      <div style="position:absolute;top:0;bottom:0;left:{{wipePos}}%;width:2px;margin-left:-1px;background:var(--paper);opacity:{{wipeLineOp}};pointer-events:none"></div>
+    </div>
+  </div>
+
+  <div style="flex:none;padding:0 24px 10px;display:flex;align-items:center;gap:12px;opacity:{{wipeLineOp}}">
+    <span style="color:var(--tx3);font-size:11.5px;width:56px">Original</span>
+    <input type="range" min="0" max="100" value="{{wipePos}}" onInput="{{setWipe}}" aria-label="Before and after wipe position">
+    <span style="color:var(--tx3);font-size:11.5px;width:56px;text-align:right">Graded</span>
+  </div>
+
+  <!-- scopes + shots -->
+  <div style="height:232px;flex:none;border-top:1px solid var(--ln);display:flex;background:var(--p1)">
+    <div class="scopes" style="width:520px;flex:none;border-right:1px solid var(--ln);padding:12px 16px 12px;display:flex;flex-direction:column">
+      <div style="display:flex;align-items:center;gap:8px;color:var(--tx3);font-size:11.5px;margin-bottom:8px"><span style="color:var(--tx);font-weight:600">Scopes</span><span class="chip on" style="height:22px">RGB parade</span><span class="chip" style="height:22px">Waveform</span><span class="chip" style="height:22px">Vectorscope</span></div>
+      <svg viewBox="0 0 480 160" style="width:100%;height:100%;display:block;background:#0B0C0E;border-radius:6px;border:1px solid var(--ln)" role="img" aria-label="RGB parade scope">
+        <g stroke="#23272C" stroke-width="1"><path d="M0 16H480M0 48H480M0 80H480M0 112H480M0 144H480"/></g>
+        <path d="{{trR}}" stroke="#ff6a5c" stroke-width="1.3" fill="none" opacity=".9"/>
+        <path d="{{trG}}" stroke="#6fdc88" stroke-width="1.3" fill="none" opacity=".9" transform="translate(160 0)"/>
+        <path d="{{trB}}" stroke="#6aa8ff" stroke-width="1.3" fill="none" opacity=".9" transform="translate(320 0)"/>
+        <path d="M160 0V160M320 0V160" stroke="#2b3036"/>
+      </svg>
+    </div>
+    <div style="flex:1;min-width:0;padding:12px 18px;display:flex;flex-direction:column">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-weight:600">Shots</span><span style="color:var(--tx3);font-size:11.5px">Grade one, then copy to similar shots</span><span style="flex:1"></span><button class="btn" style="height:26px">Match to this shot</button></div>
+      <div style="display:flex;gap:12px;overflow:hidden">
+        <sc-for list="{{shots}}" as="sh" hint-placeholder-count="6">
+          <button class="shot {{sh.on}}" onClick="{{sh.pick}}" aria-pressed="{{sh.pressed}}" aria-label="{{sh.name}}" style="background:{{sh.bg}}">
+            <span style="position:absolute;inset:0;background:{{sh.sun}}"></span>
+            <span style="position:absolute;left:6px;bottom:5px;font-size:11px;font-weight:500;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.7)">{{sh.name}}</span>
+            <span style="{{sh.dot}}"></span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RIGHT: grading panel -->
+<aside class="panel" aria-label="Color controls" style="width:452px;flex:none;background:var(--p1);border-left:1px solid var(--ln);display:flex;flex-direction:column;min-height:0">
+  <div style="padding:0 20px;border-bottom:1px solid var(--ln);display:flex;align-items:flex-end;height:48px">
+    <sc-for list="{{tabs}}" as="t" hint-placeholder-count="4"><button class="tab {{t.on}}" aria-pressed="{{t.pressed}}" onClick="{{t.pick}}">{{t.name}}</button></sc-for>
+  </div>
+  <div class="scroll" style="flex:1;min-height:0;overflow:auto;padding:18px 20px 24px">
+
+    <sc-if value="{{isBasic}}" hint-placeholder-val="{{true}}">
+      <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3);margin-bottom:10px">Looks</div>
+      <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px">
+        <sc-for list="{{looks}}" as="lk" hint-placeholder-count="5">
+          <button class="look {{lk.on}}" onClick="{{lk.pick}}" aria-pressed="{{lk.pressed}}"><span class="sw" style="display:block;background:{{lk.bg}}"></span>{{lk.name}}</button>
+        </sc-for>
+      </div>
+      <div style="margin-top:24px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3)">Light</div>
+      <sc-for list="{{lightSliders}}" as="sl" hint-placeholder-count="4">
+        <div style="display:flex;align-items:center;gap:10px;height:34px"><label for="{{sl.id}}" style="width:92px;color:var(--tx2)">{{sl.label}}</label><input id="{{sl.id}}" type="range" min="-50" max="50" value="{{sl.val}}" onInput="{{sl.on}}"><span class="mono" style="width:40px;text-align:right">{{sl.disp}}</span></div>
+      </sc-for>
+      <div style="margin-top:18px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3)">Colour</div>
+      <div style="margin:6px 0 4px;height:8px;border-radius:4px;background:linear-gradient(90deg,#4aa3ff,#e8e4dc,#ffb04a)" aria-hidden="true"></div>
+      <sc-for list="{{colorSliders}}" as="sl" hint-placeholder-count="4">
+        <div style="display:flex;align-items:center;gap:10px;height:34px"><label for="{{sl.id}}" style="width:92px;color:var(--tx2)">{{sl.label}}</label><input id="{{sl.id}}" type="range" min="-50" max="50" value="{{sl.val}}" onInput="{{sl.on}}"><span class="mono" style="width:40px;text-align:right">{{sl.disp}}</span></div>
+      </sc-for>
+      <div style="margin-top:20px;padding:14px;border-radius:10px;background:var(--p2);border:1px solid var(--ln);color:var(--tx2);line-height:1.5">Need more control? <button style="color:var(--acc);font-weight:500" onClick="{{goWheels}}">Switch to Wheels →</button> The Basic sliders are still applied underneath.</div>
+    </sc-if>
+
+    <sc-if value="{{isWheels}}" hint-placeholder-val="{{false}}">
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px">
+        <sc-for list="{{wheels}}" as="w" hint-placeholder-count="3">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+            <button onMouseDown="{{w.down}}" aria-label="{{w.label}} colour wheel" style="position:relative;width:100%;aspect-ratio:1;border-radius:50%;background:conic-gradient(from 90deg,#ff4d4d,#ffc24d,#a6ff4d,#4dffd2,#4d79ff,#c24dff,#ff4d4d);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)">
+              <span style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,#2a2d33 0,#2a2d33 12%,rgba(42,45,51,.2) 70%,rgba(42,45,51,0) 100%)"></span>
+              <span style="position:absolute;left:{{w.px}}%;top:{{w.py}}%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#fff;border:2px solid #17140F;box-shadow:0 2px 6px rgba(0,0,0,.5)"></span>
+            </button>
+            <span style="font-weight:600">{{w.label}}</span>
+            <span class="mono" style="color:var(--tx3);font-size:11px">{{w.read}}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="margin-top:22px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3)">Master</div>
+      <sc-for list="{{lightSliders}}" as="sl" hint-placeholder-count="2">
+        <div style="display:flex;align-items:center;gap:10px;height:34px"><label for="m{{sl.id}}" style="width:92px;color:var(--tx2)">{{sl.label}}</label><input id="m{{sl.id}}" type="range" min="-50" max="50" value="{{sl.val}}" onInput="{{sl.on}}"><span class="mono" style="width:40px;text-align:right">{{sl.disp}}</span></div>
+      </sc-for>
+      <div style="margin-top:12px;color:var(--tx3);line-height:1.5">Click or drag a wheel to push shadows, midtones or highlights toward a colour.</div>
+    </sc-if>
+
+    <sc-if value="{{isCurves}}" hint-placeholder-val="{{false}}">
+      <svg viewBox="0 0 240 240" style="width:100%;height:auto;display:block;background:#0B0C0E;border-radius:10px;border:1px solid var(--ln)" role="img" aria-label="Curve: {{curveName}}">
+        <g stroke="#23272C"><path d="M60 0V240M120 0V240M180 0V240M0 60H240M0 120H240M0 180H240"/></g>
+        <path d="M0 240L240 0" stroke="#3a3f47" stroke-dasharray="3 4"/>
+        <path d="{{cvD}}" stroke="#ECE8E0" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        <circle cx="0" cy="240" r="4" fill="#ECE8E0"/><circle cx="240" cy="0" r="4" fill="#ECE8E0"/>
+        <circle cx="{{cvX}}" cy="{{cvY}}" r="6" fill="#F2E9D8" stroke="#17140F" stroke-width="2"/>
+      </svg>
+      <div style="display:flex;gap:6px;margin-top:12px">
+        <sc-for list="{{curves}}" as="c" hint-placeholder-count="4"><button class="chip {{c.on}}" aria-pressed="{{c.pressed}}" onClick="{{c.pick}}">{{c.name}}</button></sc-for>
+      </div>
+      <div style="margin-top:12px;color:var(--tx3);line-height:1.5">Curves give you exact control of tone. Start from a preset, then drag the point.</div>
+    </sc-if>
+
+    <sc-if value="{{isSecondary}}" hint-placeholder-val="{{false}}">
+      <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3);margin-bottom:10px">Pick a colour range</div>
+      <div style="position:relative;height:28px;border-radius:7px;background:linear-gradient(90deg,#f33,#fd3,#3d4,#3dd,#35f,#d3f,#f33)">
+        <div style="position:absolute;left:6%;width:14%;top:-3px;bottom:-3px;border:2px solid var(--paper);border-radius:7px;background:rgba(255,255,255,.14)"></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:14px">
+        <div style="flex:1;padding:12px;border-radius:10px;background:var(--p2);border:1px solid var(--ln)"><div style="color:var(--tx3);font-size:11.5px">Hue</div><div class="mono" style="font-size:18px;margin-top:2px">24° ± 18</div></div>
+        <div style="flex:1;padding:12px;border-radius:10px;background:var(--p2);border:1px solid var(--ln)"><div style="color:var(--tx3);font-size:11.5px">Softness</div><div class="mono" style="font-size:18px;margin-top:2px">35%</div></div>
+      </div>
+      <div style="margin-top:14px;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;background:var(--p2);border:1px solid var(--ln)">
+        <span style="flex:1"><span style="display:block;font-weight:500">Protect skin tones</span><span style="display:block;color:var(--tx3);margin-top:2px;font-size:11.5px">Keeps faces natural while you grade the scene</span></span>
+        <span style="width:34px;height:20px;border-radius:10px;background:var(--acc);position:relative"><span style="position:absolute;right:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#fff"></span></span>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:8px"><button class="btn" style="flex:1;justify-content:center">Circle window</button><button class="btn" style="flex:1;justify-content:center">Gradient window</button></div>
+    </sc-if>
+  </div>
+
+  <!-- node stack -->
+  <div style="border-top:1px solid var(--ln);padding:12px 20px 16px;background:#111316">
+    <div style="display:flex;align-items:center;margin-bottom:10px"><span style="font-weight:600">Corrections</span><span style="flex:1"></span><span style="color:var(--tx3);font-size:11.5px">Applied top to bottom</span></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <sc-for list="{{nodes}}" as="n" hint-placeholder-count="3">
+        <button class="node {{n.on}}" onClick="{{n.pick}}" aria-pressed="{{n.pressed}}" style="flex:1;min-width:0">
+          <span class="mono" style="width:26px;height:26px;border-radius:6px;background:var(--p3);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--tx2)">{{n.num}}</span>
+          <span style="min-width:0"><span style="display:block;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{n.name}}</span><span style="display:block;color:var(--tx3);font-size:11px">{{n.sub}}</span></span>
+        </button>
+      </sc-for>
+      <button class="ib" aria-label="Add correction" style="border:1px dashed var(--ln2);width:36px;height:36px"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+    </div>
+  </div>
+</aside>
+</div>
+</div>
+</x-dc>
+
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+const PAL = {
+  sun:  {top:'#26365e',mid:'#d98c7a',hor:'#ffc58a',s1:'#6b86a0',s2:'#142230',sun:'#fff1d0'},
+  harb: {top:'#5d8fb3',mid:'#a9c8d6',hor:'#efe3cc',s1:'#4a7c8a',s2:'#14303a',sun:'#fffbea'},
+  fish: {top:'#3a4b52',mid:'#7e8f86',hor:'#d9c9a0',s1:'#5f6f66',s2:'#1d2a28',sun:'#f3e2b5'},
+  cliff:{top:'#2f6f9f',mid:'#7fb5d0',hor:'#e8f0e8',s1:'#2f7e8c',s2:'#0d3340',sun:'#ffffff'},
+  dusk: {top:'#1b1740',mid:'#7a3a72',hor:'#ff8a5c',s1:'#5a3a6a',s2:'#120c24',sun:'#ffd7a0'},
+  coda: {top:'#0f1217',mid:'#1a2230',hor:'#2b3a4d',s1:'#1f2c3a',s2:'#080b10',sun:'#6c86a6'}
+};
+const SHOTS = [['Sunrise_Drone_04','sun',72],['Harbour_Walk','harb',30],['Fishermen_Cu','fish',55],['Cliffs_Wide','cliff',22],['Dusk_Timelapse','dusk',64],['Night_Harbour','coda',40]];
+const LOOKS = [
+  {k:'none',name:'None',bg:'linear-gradient(135deg,#8a8a8a,#3a3a3a)',v:{ex:0,co:0,hi:0,sh:0,wm:0,ti:0,sa:0,vi:0}},
+  {k:'teal',name:'Teal Harbour',bg:'linear-gradient(135deg,#1c4f5c,#e3a46b)',v:{ex:-3,co:12,hi:-8,sh:10,wm:10,ti:-6,sa:8,vi:12}},
+  {k:'film',name:'Warm film',bg:'linear-gradient(135deg,#5b3a22,#f0c58a)',v:{ex:2,co:8,hi:-12,sh:14,wm:24,ti:4,sa:-4,vi:6}},
+  {k:'bleach',name:'Bleach',bg:'linear-gradient(135deg,#4a5560,#cfd3d6)',v:{ex:0,co:22,hi:6,sh:-8,wm:-6,ti:0,sa:-28,vi:0}},
+  {k:'noir',name:'Noir',bg:'linear-gradient(135deg,#0c0c0c,#bdbdbd)',v:{ex:-6,co:30,hi:-4,sh:-10,wm:0,ti:0,sa:-50,vi:0}}
+];
+const CURVES = [
+  {k:'linear',name:'Linear',d:'M0 240L240 0',px:120,py:120},
+  {k:'contrast',name:'Contrast',d:'M0 240C70 240 90 175 120 120S170 0 240 0',px:120,py:120},
+  {k:'fade',name:'Fade',d:'M0 205C70 190 90 150 120 120S190 30 240 15',px:120,py:120},
+  {k:'lift',name:'Lift shadows',d:'M0 240C40 190 80 150 120 120S190 40 240 0',px:60,py:170}
+];
+const sg=(n,l)=> (n>0?'+':n<0?'−':'')+Math.abs(n);
+class Component extends DCLogic {
+  state = {tab:'basic', look:'teal', shot:0, node:0, wipe:true, wipePos:50, curve:'contrast',
+    v:{ex:-3,co:12,hi:-8,sh:10,wm:10,ti:-6,sa:8,vi:12},
+    wheel:{lift:[.5,.5],gamma:[.5,.5],gain:[.62,.42]}};
+  renderVals(){
+    const s=this.state, up=(p)=>this.setState(p), v=s.v;
+    const setV=(k)=>(e)=>up({v:{...v,[k]:+e.target.value}, look:'custom'});
+    const slider=(id,label,k)=>({id:'c_'+id,label,val:v[k],disp:sg(v[k]),on:setV(k)});
+    const pal=PAL[SHOTS[s.shot][1]];
+    /* wheel tint */
+    const cols=Object.values(s.wheel).map(([x,y])=>{ const dx=x-.5, dy=y-.5, r=Math.min(1,Math.hypot(dx,dy)*2); const h=((Math.atan2(dy,dx)+Math.PI)/(2*Math.PI)*360+180)%360; return {h,r}; });
+    const strongest=cols.reduce((a,b)=>b.r>a.r?b:a,{h:0,r:0});
+    const avgR=cols.reduce((a,c)=>a+c.r,0)/3;
+    /* scopes */
+    const trace=(ch)=>{ let d=''; for(let x=0;x<160;x+=2){ const f=x/160; const base=ch==='R'?0.62:ch==='G'?0.5:0.4; const warm=(ch==='R'?v.wm:ch==='B'?-v.wm:v.ti*-.4)/120; const lvl=Math.max(.02,Math.min(.98, base + .3*Math.sin(f*6.28+ (ch==='R'?0:ch==='G'?.5:1)) * (1-f*.3) + warm + v.ex/160 + (f<.2?.12:0))); const y=160-lvl*150; const j=(Math.sin(x*3.7+ch.charCodeAt(0))*3); d+=(d?'L':'M')+x+' '+(y+j).toFixed(1); } return d; };
+    const cv=CURVES.find(c=>c.k===s.curve);
+    const wheelDef=[['lift','Lift'],['gamma','Gamma'],['gain','Gain']];
+    const wheels=wheelDef.map(([k,label])=>{ const [x,y]=s.wheel[k]; return { label, px:(x*100).toFixed(1), py:(y*100).toFixed(1), read:'R '+sg(Math.round((x-.5)*100))+'  B '+sg(Math.round((y-.5)*-100)),
+      down:(e)=>{ e.preventDefault(); const el=e.currentTarget;
+        const apply=(ev)=>{ const r=el.getBoundingClientRect(); let nx=(ev.clientX-r.left)/r.width, ny=(ev.clientY-r.top)/r.height; const dx=nx-.5, dy=ny-.5, d=Math.hypot(dx,dy); if(d>.5){ nx=.5+dx/d*.5; ny=.5+dy/d*.5; } up({wheel:{...this.state.wheel,[k]:[nx,ny]}}); };
+        apply(e); const mv=(ev)=>apply(ev), end=()=>{ window.removeEventListener('mousemove',mv); window.removeEventListener('mouseup',end); };
+        window.addEventListener('mousemove',mv); window.addEventListener('mouseup',end); } }; });
+    return {
+      nav:[['Media','Media.dc.html'],['Edit','Main.dc.html'],['Color','Color.dc.html'],['Audio','Audio.dc.html'],['Text','Text.dc.html']].map(n=>({label:n[0],href:n[1],on:n[0]==='Color'?'on':'',cur:n[0]==='Color'?'page':'false'})),
+      shotName:SHOTS[s.shot][0], pal,
+      wipe:s.wipe, wipeOn:s.wipe?'on':'', toggleWipe:()=>up({wipe:!s.wipe}), wipePos:s.wipe?s.wipePos:0, wipeLineOp:s.wipe?1:0, setWipe:(e)=>up({wipePos:+e.target.value}),
+      resetAll:()=>up({v:{ex:0,co:0,hi:0,sh:0,wm:0,ti:0,sa:0,vi:0},look:'none',wheel:{lift:[.5,.5],gamma:[.5,.5],gain:[.5,.5]}}),
+      gradeFilter:'brightness('+(1+v.ex/100).toFixed(2)+') contrast('+(1+v.co/100).toFixed(2)+') saturate('+(1+(v.sa+v.vi*.4)/100).toFixed(2)+') sepia('+(Math.max(0,v.wm)/200).toFixed(2)+') hue-rotate('+(v.ti*.6+Math.min(0,v.wm)*.5).toFixed(0)+'deg)',
+      wheelTint:'hsl('+strongest.h.toFixed(0)+' 80% 50%)', wheelOp:Math.min(.75,avgR*1.6+strongest.r*.4).toFixed(2),
+      trR:trace('R'), trG:trace('G'), trB:trace('B'),
+      shots:SHOTS.map((sh,i)=>{ const p=PAL[sh[1]]; return {name:sh[0].replace(/_/g,' '),on:s.shot===i?'on':'',pressed:s.shot===i,pick:()=>up({shot:i}),
+        bg:'linear-gradient(180deg,'+p.top+' 0%,'+p.mid+' 38%,'+p.hor+' 56%,'+p.s1+' 57%,'+p.s2+' 100%)', sun:'radial-gradient(circle at '+sh[2]+'% 55%,'+p.sun+' 0 5%,transparent 12%)',
+        dot: i<4?'position:absolute;right:6px;top:6px;width:8px;height:8px;border-radius:50%;background:#7BD389;box-shadow:0 0 0 2px rgba(0,0,0,.45)':'display:none' }; }),
+      tabs:[['basic','Basic'],['wheels','Wheels'],['curves','Curves'],['secondary','Secondary']].map(t=>({name:t[1],on:s.tab===t[0]?'on':'',pressed:s.tab===t[0],pick:()=>up({tab:t[0]})})),
+      isBasic:s.tab==='basic', isWheels:s.tab==='wheels', isCurves:s.tab==='curves', isSecondary:s.tab==='secondary', goWheels:()=>up({tab:'wheels'}),
+      looks:LOOKS.map(l=>({name:l.name,bg:l.bg,on:s.look===l.k?'on':'',pressed:s.look===l.k,pick:()=>up({look:l.k,v:{...l.v}})})),
+      lightSliders:[slider('ex','Exposure','ex'),slider('co','Contrast','co'),slider('hi','Highlights','hi'),slider('sh','Shadows','sh')],
+      colorSliders:[slider('wm','Temperature','wm'),slider('ti','Tint','ti'),slider('sa','Saturation','sa'),slider('vi','Vibrance','vi')],
+      wheels,
+      curves:CURVES.map(c=>({name:c.name,on:s.curve===c.k?'on':'',pressed:s.curve===c.k,pick:()=>up({curve:c.k})})), cvD:cv.d, cvX:cv.px, cvY:cv.py, curveName:cv.name,
+      nodes:[['01','Primary','Exposure · Colour'],['02','Skin tones','Qualifier · soft'],['03','Look','Teal Harbour · 24%']].map((n,i)=>({num:n[0],name:n[1],sub:n[2],on:s.node===i?'on':'',pressed:s.node===i,pick:()=>up({node:i})}))
+    };
+  }
+}
+</script>
+</body>
+</html>

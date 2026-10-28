@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FrameEase — Home</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--void:#0E0F11;--p1:#14161A;--p2:#1B1E23;--p3:#262A30;--ln:#23272C;--ln2:#363B43;--tx:#ECE8E0;--tx2:#A9A69F;--tx3:#878A92;--paper:#F2E9D8;--acc-ink:#1A0C08;--ease:cubic-bezier(.22,.8,.2,1);--mono:'Geist Mono','JetBrains Mono',ui-monospace,monospace;--serif:'Instrument Serif',Georgia,serif}
+*{box-sizing:border-box}
+body{margin:0;background:#0E0F11}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:inherit}
+input{font:inherit}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--paper);outline-offset:2px}
+.ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.ib{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:7px;color:var(--tx2);transition:background .14s,color .14s}
+.ib:hover{background:var(--p3);color:var(--tx)}
+.btn{height:34px;padding:0 15px;display:inline-flex;align-items:center;gap:8px;border-radius:8px;background:var(--p2);border:1px solid var(--ln2);color:var(--tx);font-weight:500;transition:background .14s,border-color .14s}
+.btn:hover{background:var(--p3);border-color:#4a505a}
+.btn.pri{background:var(--acc);border-color:transparent;color:var(--acc-ink);font-weight:600}
+.btn.pri:hover{filter:brightness(1.08)}
+.chip{height:26px;padding:0 11px;display:inline-flex;align-items:center;gap:6px;border-radius:13px;border:1px solid var(--ln2);color:var(--tx2);font-size:12px;white-space:nowrap;transition:all .14s var(--ease)}
+.chip:hover{color:var(--tx);border-color:#555b66}
+.chip.on{background:var(--paper);border-color:var(--paper);color:#17140F;font-weight:600}
+.kbd{font-family:var(--mono);font-size:11px;padding:1px 6px;border:1px solid var(--ln2);border-radius:4px;color:var(--tx3)}
+.nav{position:relative;height:32px;padding:0 13px;display:inline-flex;align-items:center;border-radius:8px;color:var(--tx2);font-weight:500;transition:color .14s,background .14s}
+.nav:hover{color:var(--tx);background:#181B1F}
+.proj{display:flex;flex-direction:column;gap:9px;border-radius:12px;min-width:0}
+.proj .th{position:relative;aspect-ratio:16/10;border-radius:10px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07);transition:transform .22s var(--ease),box-shadow .22s}
+.proj:hover .th{transform:translateY(-3px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.2),0 14px 30px rgba(0,0,0,.45)}
+.proj .open{position:absolute;right:10px;bottom:10px;opacity:0;transform:translateY(4px);transition:all .2s var(--ease)}
+.proj:hover .open,.proj:focus-visible .open{opacity:1;transform:none}
+.fmt{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:14px;border-radius:12px;border:1px solid var(--ln2);background:var(--p1);transition:all .16s var(--ease)}
+.fmt:hover{border-color:#5a606b;background:var(--p2)}
+.fmt.on{border-color:var(--paper);background:var(--p2);box-shadow:0 0 0 1px var(--paper)}
+.drop{border:1.5px dashed #444a53;border-radius:12px;transition:all .16s}
+.drop:hover{border-color:var(--acc);background:rgba(255,255,255,.02)}
+@media (max-width:1500px){.side{display:none!important}.grid4{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</helmet>
+
+<div style="--acc:#FF5B3A;width:100%;min-width:1100px;height:1080px;display:flex;flex-direction:column;background:var(--void);color:var(--tx);font-family:'Instrument Sans',system-ui,sans-serif;font-size:13px;overflow:hidden">
+
+<header style="height:48px;flex:none;display:flex;align-items:center;gap:14px;padding:0 12px 0 14px;border-bottom:1px solid var(--ln)">
+  <a href="Home.dc.html" aria-label="FrameEase home" style="display:flex;align-items:center;gap:9px">
+    <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="1.5" y="1.5" width="23" height="23" rx="7" fill="none" stroke="#ECE8E0" stroke-width="1.6"/><path d="M5.5 19.5C11 19.5 11 6.5 20.5 6.5" fill="none" stroke="#ECE8E0" stroke-width="1.8" stroke-linecap="round"/><circle cx="20.5" cy="6.5" r="2.6" fill="var(--acc)"/></svg>
+    <span style="font-weight:600;font-size:15px;letter-spacing:-.01em">Frame<span style="font-family:var(--serif);font-style:italic;font-weight:400;font-size:17px;margin-left:1px">Ease</span></span>
+  </a>
+  <span style="flex:1"></span>
+  <button class="btn" style="height:32px;width:230px;justify-content:space-between;color:var(--tx3);background:#111316;font-weight:400" aria-label="Search projects"><span style="display:flex;align-items:center;gap:7px"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>Search projects</span><span class="kbd">Ctrl K</span></button>
+  <button class="ib" aria-label="Settings"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg></button>
+</header>
+
+<div style="flex:1;min-height:0;display:flex">
+<main style="flex:1;min-width:0;overflow:auto;padding:52px 72px 56px">
+
+  <div class="mono" style="color:var(--tx3);font-size:12px;letter-spacing:.08em;text-transform:uppercase">Tuesday evening</div>
+  <h1 style="margin:10px 0 0;font-family:var(--serif);font-weight:400;font-size:68px;line-height:1;letter-spacing:-.015em;max-width:900px">Pick up where the <em>light</em> left off.</h1>
+
+  <!-- continue -->
+  <a href="Main.dc.html" class="proj" style="margin-top:40px;display:block;position:relative;border-radius:16px;overflow:hidden;height:300px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)" aria-label="Continue editing Coastal Light">
+    <svg viewBox="0 0 1600 300" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%" aria-hidden="true">
+      <defs>
+        <linearGradient id="hs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#26365e"/><stop offset=".6" stop-color="#d98c7a"/><stop offset="1" stop-color="#ffc58a"/></linearGradient>
+        <linearGradient id="hw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6b86a0"/><stop offset="1" stop-color="#142230"/></linearGradient>
+        <radialGradient id="hg"><stop offset="0" stop-color="#fff1d0" stop-opacity=".85"/><stop offset="1" stop-color="#fff1d0" stop-opacity="0"/></radialGradient>
+      </defs>
+      <rect width="1600" height="190" fill="url(#hs)"/><circle cx="1180" cy="170" r="200" fill="url(#hg)"/><circle cx="1180" cy="172" r="34" fill="#fff1d0"/>
+      <rect y="190" width="1600" height="110" fill="url(#hw)"/>
+      <g fill="#fff1d0"><rect x="1140" y="200" width="80" height="4" opacity=".7"/><rect x="1110" y="216" width="140" height="4" opacity=".45"/><rect x="1070" y="234" width="220" height="5" opacity=".3"/><rect x="1020" y="256" width="320" height="6" opacity=".18"/></g>
+      <path d="M0 230C200 205 380 250 470 300H0Z" fill="#06090C"/>
+    </svg>
+    <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,10,12,.82),rgba(8,10,12,.2) 62%,transparent)"></div>
+    <div style="position:absolute;left:36px;top:32px;bottom:32px;display:flex;flex-direction:column;justify-content:space-between;max-width:520px">
+      <div>
+        <span class="chip" style="background:rgba(10,12,14,.55);border-color:rgba(255,255,255,.2);color:#fff;height:24px">Continue</span>
+        <div style="font-family:var(--serif);font-size:46px;line-height:1.02;margin-top:14px">Coastal Light</div>
+        <div class="mono" style="margin-top:10px;color:#D8D4CC;font-size:12px">v3 · 2:24 · 4K 24p · edited 2 minutes ago</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <span class="btn pri" style="height:38px;padding:0 18px">Continue editing<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <span class="mono" style="color:#D8D4CC;font-size:12px">Playhead at 0:05 · Title selected</span>
+      </div>
+    </div>
+    <div style="position:absolute;left:36px;right:36px;bottom:16px;display:flex;gap:2px;height:8px;opacity:.9" aria-hidden="true">
+      <span style="flex:16;background:#5FB3BC;border-radius:2px"></span><span style="flex:22;background:#5FB3BC;border-radius:2px"></span><span style="flex:23;background:#5FB3BC;border-radius:2px"></span><span style="flex:27;background:#5FB3BC;border-radius:2px"></span><span style="flex:32;background:#5FB3BC;border-radius:2px"></span><span style="flex:24;background:#5FB3BC;border-radius:2px"></span>
+    </div>
+  </a>
+
+  <!-- new -->
+  <div style="margin-top:44px;display:flex;align-items:baseline;gap:14px">
+    <h2 style="margin:0;font-size:18px;font-weight:600">Start something new</h2>
+    <span style="color:var(--tx3)">Choose a shape. Everything else can change later.</span>
+  </div>
+  <div style="margin-top:16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) minmax(0,1.5fr);gap:14px">
+    <sc-for list="{{formats}}" as="f" hint-placeholder-count="4">
+      <button class="fmt {{f.on}}" aria-pressed="{{f.pressed}}" onClick="{{f.pick}}">
+        <span style="height:46px;display:flex;align-items:center"><span style="display:block;width:{{f.w}}px;height:{{f.h}}px;border:1.6px solid var(--tx);border-radius:4px;background:linear-gradient(180deg,#26365e,#d98c7a)"></span></span>
+        <span><span style="display:block;font-weight:600">{{f.name}}</span><span class="mono" style="display:block;margin-top:3px;color:var(--tx3);font-size:11.5px">{{f.meta}}</span></span>
+      </button>
+    </sc-for>
+    <div class="drop" style="display:flex;flex-direction:column;justify-content:center;gap:10px;padding:16px 20px">
+      <div style="display:flex;align-items:center;gap:10px;font-weight:600"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:20px;height:20px"><path d="M12 16V4M7 9l5-5 5 5M4 16v4h16v-4"/></svg>Drop footage here</div>
+      <div style="color:var(--tx2);line-height:1.45">We’ll read the frame rate and size, and build a {{pickedName}} project around it.</div>
+    </div>
+  </div>
+  <div style="margin-top:16px;display:flex;align-items:center;gap:12px">
+    <a class="btn pri" href="Main.dc.html" style="height:38px;padding:0 18px">Create {{pickedName}} project</a>
+    <a class="btn" href="Media.dc.html" style="height:38px">Import media first</a>
+    <span style="color:var(--tx3)">or open a project from disk <span class="kbd">Ctrl O</span></span>
+  </div>
+
+  <!-- recent -->
+  <div style="margin-top:52px;display:flex;align-items:center;gap:14px">
+    <h2 style="margin:0;font-size:18px;font-weight:600">Recent</h2>
+    <div style="display:flex;gap:6px">
+      <sc-for list="{{filters}}" as="f" hint-placeholder-count="3">
+        <button class="chip {{f.on}}" aria-pressed="{{f.pressed}}" onClick="{{f.pick}}">{{f.name}}</button>
+      </sc-for>
+    </div>
+    <span style="flex:1"></span>
+    <span style="color:var(--tx3)">Sorted by last opened</span>
+  </div>
+  <div class="grid4" style="margin-top:18px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:26px 20px">
+    <sc-for list="{{projects}}" as="p" hint-placeholder-count="8">
+      <a class="proj" href="Main.dc.html" aria-label="{{p.aria}}">
+        <span class="th" style="display:block;background:{{p.bg}}">
+          <span style="position:absolute;inset:0;background:{{p.sun}}"></span>
+          <span class="mono" style="position:absolute;right:8px;top:8px;padding:2px 6px;border-radius:5px;background:rgba(10,12,14,.7);font-size:11px;color:#fff">{{p.dur}}</span>
+          <span class="btn open" style="height:28px;padding:0 11px;font-size:12px">Open</span>
+        </span>
+        <span style="display:block"><span style="display:block;font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{p.name}}</span><span class="mono" style="display:block;margin-top:4px;color:var(--tx3);font-size:11.5px">{{p.meta}}</span></span>
+      </a>
+    </sc-for>
+  </div>
+</main>
+
+<aside class="side" style="width:392px;flex:none;border-left:1px solid var(--ln);background:var(--p1);padding:36px 28px;overflow:auto">
+  <h2 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--tx2)">Quick starts</h2>
+  <div style="margin-top:14px;display:flex;flex-direction:column;gap:6px">
+    <sc-for list="{{quick}}" as="q" hint-placeholder-count="4">
+      <button style="display:flex;align-items:center;gap:14px;padding:10px;border-radius:10px;transition:background .14s" onMouseOver="{{noop}}">
+        <span style="width:52px;height:52px;border-radius:9px;flex:none;background:{{q.bg}};display:flex;align-items:center;justify-content:center;color:#fff"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:20px;height:20px"><path d="{{q.d}}"/></svg></span>
+        <span style="flex:1"><span style="display:block;font-weight:600">{{q.name}}</span><span style="display:block;color:var(--tx3);margin-top:2px;line-height:1.35">{{q.meta}}</span></span>
+      </button>
+    </sc-for>
+  </div>
+
+  <h2 style="margin:40px 0 0;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--tx2)">Five keys that go far</h2>
+  <div style="margin-top:14px;display:flex;flex-direction:column">
+    <sc-for list="{{keys}}" as="k" hint-placeholder-count="5">
+      <div style="display:flex;align-items:center;gap:12px;height:40px;border-bottom:1px solid var(--ln)">
+        <span class="kbd" style="min-width:52px;text-align:center;color:var(--tx);border-color:#4a505a">{{k.key}}</span><span style="color:var(--tx2)">{{k.what}}</span>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="margin-top:36px;padding:18px;border-radius:12px;background:var(--p2);border:1px solid var(--ln2)">
+    <div style="font-family:var(--serif);font-style:italic;font-size:22px;line-height:1.15">Press <span class="kbd" style="font-style:normal;font-size:12px;color:var(--tx)">Ctrl K</span> and say what you want.</div>
+    <div style="margin-top:8px;color:var(--tx2);line-height:1.5">“Add a cross dissolve”, “Normalise dialogue”, “Export for Instagram” — every action in FrameEase is a sentence away.</div>
+  </div>
+</aside>
+</div>
+</div>
+</x-dc>
+
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+const PAL = {
+  sun:  {top:'#26365e',mid:'#d98c7a',hor:'#ffc58a',s1:'#6b86a0',s2:'#142230',sun:'#fff1d0'},
+  harb: {top:'#5d8fb3',mid:'#a9c8d6',hor:'#efe3cc',s1:'#4a7c8a',s2:'#14303a',sun:'#fffbea'},
+  fish: {top:'#3a4b52',mid:'#7e8f86',hor:'#d9c9a0',s1:'#5f6f66',s2:'#1d2a28',sun:'#f3e2b5'},
+  cliff:{top:'#2f6f9f',mid:'#7fb5d0',hor:'#e8f0e8',s1:'#2f7e8c',s2:'#0d3340',sun:'#ffffff'},
+  dusk: {top:'#1b1740',mid:'#7a3a72',hor:'#ff8a5c',s1:'#5a3a6a',s2:'#120c24',sun:'#ffd7a0'},
+  coda: {top:'#0f1217',mid:'#1a2230',hor:'#2b3a4d',s1:'#1f2c3a',s2:'#080b10',sun:'#6c86a6'}
+};
+const FORMATS = [
+  {k:'wide',name:'Widescreen',meta:'16:9 · 1920×1080',w:44,h:25,short:'widescreen'},
+  {k:'tall',name:'Vertical',meta:'9:16 · 1080×1920',w:22,h:40,short:'vertical'},
+  {k:'sq',name:'Square',meta:'1:1 · 1080×1080',w:34,h:34,short:'square'},
+  {k:'cine',name:'Cinema',meta:'2.39:1 · 4096×1716',w:48,h:20,short:'cinema'}
+];
+const PROJECTS = [
+  {name:'Coastal Light',kind:'Film',dur:'2:24',pal:'sun',sx:72,meta:'4K · 24p · 2 min ago'},
+  {name:'Market Day — cut 2',kind:'Film',dur:'6:10',pal:'fish',sx:30,meta:'1080p · 25p · Yesterday'},
+  {name:'Studio tour',kind:'Short',dur:'0:48',pal:'harb',sx:60,meta:'1080×1920 · 30p · Yesterday'},
+  {name:'Rain walk',kind:'Film',dur:'3:05',pal:'cliff',sx:20,meta:'4K · 24p · Mon'},
+  {name:'Product teaser v5',kind:'Short',dur:'0:30',pal:'dusk',sx:50,meta:'1080p · 30p · Mon'},
+  {name:'Mara interview',kind:'Film',dur:'18:42',pal:'coda',sx:80,meta:'4K · 24p · 3 days ago'},
+  {name:'Night drive',kind:'Short',dur:'1:12',pal:'dusk',sx:25,meta:'1080p · 24p · Last week'},
+  {name:'Birthday reel',kind:'Short',dur:'2:02',pal:'harb',sx:40,meta:'1080p · 30p · Last week'}
+];
+class Component extends DCLogic {
+  state = {fmt:'wide', filter:'All'};
+  renderVals(){
+    const s=this.state, up=(p)=>this.setState(p);
+    const picked=FORMATS.find(f=>f.k===s.fmt);
+    return {
+      formats:FORMATS.map(f=>({...f,on:s.fmt===f.k?'on':'',pressed:s.fmt===f.k,pick:()=>up({fmt:f.k})})),
+      pickedName:picked.short,
+      filters:['All','Films','Shorts','Shared'].map(f=>({name:f,on:s.filter===f?'on':'',pressed:s.filter===f,pick:()=>up({filter:f})})),
+      projects:PROJECTS.filter(p=>s.filter==='All'||(s.filter==='Films'&&p.kind==='Film')||(s.filter==='Shorts'&&p.kind==='Short')).map(p=>{ const c=PAL[p.pal]; return {
+        name:p.name,dur:p.dur,meta:p.meta,aria:'Open '+p.name,
+        bg:'linear-gradient(180deg,'+c.top+' 0%,'+c.mid+' 38%,'+c.hor+' 56%,'+c.s1+' 57%,'+c.s2+' 100%)',
+        sun:'radial-gradient(circle at '+p.sx+'% 55%,'+c.sun+' 0 5%,transparent 13%)' }; }),
+      quick:[
+        {name:'Cut to the beat',meta:'Drop a track — we place markers on every downbeat.',d:'M3 12h2l2-7 3 14 3-10 2 3h6',bg:'linear-gradient(135deg,#6C4C7F,#3a2748)'},
+        {name:'Auto-subtitle an interview',meta:'Speech to editable captions, synced to the timeline.',d:'M4 7h16M4 12h10M4 17h13',bg:'linear-gradient(135deg,#3F6D52,#25402f)'},
+        {name:'Vertical from widescreen',meta:'Reframe 16:9 footage with subject tracking.',d:'M8 3h8v18H8z',bg:'linear-gradient(135deg,#2e6670,#173a40)'},
+        {name:'Look from a reference',meta:'Match the colour of a still or another clip.',d:'M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z',bg:'linear-gradient(135deg,#a06a3a,#58361b)'}
+      ],
+      noop:()=>{},
+      keys:[{key:'Space',what:'Play / pause'},{key:'S',what:'Split at the playhead'},{key:'B',what:'Blade tool'},{key:'N',what:'Toggle snapping'},{key:'Ctrl K',what:'Command palette'}]
+    };
+  }
+}
+</script>
+</body>
+</html>

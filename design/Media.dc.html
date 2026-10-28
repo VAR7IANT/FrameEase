@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FrameEase — Media</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--void:#0E0F11;--p1:#14161A;--p2:#1B1E23;--p3:#262A30;--ln:#23272C;--ln2:#363B43;--tx:#ECE8E0;--tx2:#A9A69F;--tx3:#878A92;--paper:#F2E9D8;--acc-ink:#1A0C08;--ease:cubic-bezier(.22,.8,.2,1);--mono:'Geist Mono','JetBrains Mono',ui-monospace,monospace;--serif:'Instrument Serif',Georgia,serif}
+*{box-sizing:border-box}
+body{margin:0;background:#0E0F11}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:inherit}
+input{font:inherit}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--paper);outline-offset:2px}
+.ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.ib{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:7px;color:var(--tx2);transition:background .14s,color .14s}
+.ib:hover{background:var(--p3);color:var(--tx)}
+.ib.on{background:var(--paper);color:#17140F}
+.btn{height:30px;padding:0 12px;display:inline-flex;align-items:center;gap:7px;border-radius:7px;background:var(--p2);border:1px solid var(--ln2);color:var(--tx);font-weight:500;transition:background .14s,border-color .14s}
+.btn:hover{background:var(--p3);border-color:#4a505a}
+.btn.pri{background:var(--acc);border-color:transparent;color:var(--acc-ink);font-weight:600}
+.chip{height:24px;padding:0 10px;display:inline-flex;align-items:center;gap:6px;border-radius:12px;border:1px solid var(--ln2);color:var(--tx2);font-size:11.5px;white-space:nowrap;transition:all .14s var(--ease)}
+.chip:hover{color:var(--tx);border-color:#555b66}
+.chip.on{background:var(--paper);border-color:var(--paper);color:#17140F;font-weight:600}
+.kbd{font-family:var(--mono);font-size:11px;padding:1px 5px;border:1px solid var(--ln2);border-radius:4px;color:var(--tx3)}
+.nav{position:relative;height:32px;padding:0 13px;display:inline-flex;align-items:center;border-radius:8px;color:var(--tx2);font-weight:500;transition:color .14s,background .14s}
+.nav:hover{color:var(--tx);background:#181B1F}
+.nav.on{color:var(--tx);background:#1D2025}
+.nav.on::after{content:'';position:absolute;left:50%;bottom:3px;width:16px;height:5px;margin-left:-8px;border-bottom:2px solid var(--acc);border-radius:0 0 8px 8px}
+.bin{display:flex;align-items:center;gap:9px;height:30px;padding:0 10px;border-radius:7px;color:var(--tx2);width:100%;transition:background .12s,color .12s}
+.bin:hover{background:var(--p2);color:var(--tx)}
+.bin.on{background:var(--p3);color:var(--tx)}
+.bin .n{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--tx3)}
+.item{display:flex;flex-direction:column;gap:6px;min-width:0;border-radius:9px}
+.item .th{position:relative;aspect-ratio:16/10;border-radius:7px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07);transition:box-shadow .15s}
+.item:hover .th{box-shadow:inset 0 0 0 1px rgba(255,255,255,.28)}
+.item.on .th{box-shadow:0 0 0 2px var(--paper)}
+.rowi{display:flex;align-items:center;gap:14px;height:46px;padding:0 12px;border-radius:8px;width:100%;transition:background .12s}
+.rowi:hover{background:var(--p2)}
+.rowi.on{background:var(--p3);box-shadow:inset 0 0 0 1px var(--ln2)}
+input[type=range]{margin:0;height:18px;accent-color:var(--acc);background:transparent}
+.scroll::-webkit-scrollbar{width:8px}
+.scroll::-webkit-scrollbar-thumb{background:#2d3238;border-radius:4px}
+@media (max-width:1560px){.meta{width:340px!important}.bins{width:216px!important}}
+@media (max-width:1380px){.bins{display:none!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</helmet>
+
+<div style="--acc:#FF5B3A;width:100%;min-width:1100px;height:1080px;display:flex;flex-direction:column;background:var(--void);color:var(--tx);font-family:'Instrument Sans',system-ui,sans-serif;font-size:12.5px;overflow:hidden">
+
+<header style="height:48px;flex:none;display:flex;align-items:center;gap:14px;padding:0 12px 0 14px;border-bottom:1px solid var(--ln)">
+  <a href="Home.dc.html" aria-label="FrameEase home" style="display:flex;align-items:center;gap:9px">
+    <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="1.5" y="1.5" width="23" height="23" rx="7" fill="none" stroke="#ECE8E0" stroke-width="1.6"/><path d="M5.5 19.5C11 19.5 11 6.5 20.5 6.5" fill="none" stroke="#ECE8E0" stroke-width="1.8" stroke-linecap="round"/><circle cx="20.5" cy="6.5" r="2.6" fill="var(--acc)"/></svg>
+    <span style="font-weight:600;font-size:15px;letter-spacing:-.01em">Frame<span style="font-family:var(--serif);font-style:italic;font-weight:400;font-size:17px;margin-left:1px">Ease</span></span>
+  </a>
+  <span style="width:1px;height:20px;background:var(--ln2)"></span>
+  <span style="font-weight:600;font-size:13px">Coastal Light</span>
+  <nav aria-label="Workspaces" style="flex:1;display:flex;justify-content:center;gap:2px">
+    <sc-for list="{{nav}}" as="n" hint-placeholder-count="5"><a class="nav {{n.on}}" href="{{n.href}}" aria-current="{{n.cur}}">{{n.label}}</a></sc-for>
+  </nav>
+  <a class="btn pri" href="Export.dc.html" style="height:32px;padding:0 15px">Export<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+</header>
+
+<div style="flex:1;min-height:0;display:flex">
+
+<!-- Bins -->
+<aside class="bins" aria-label="Bins" style="width:252px;flex:none;background:var(--p1);border-right:1px solid var(--ln);display:flex;flex-direction:column;padding:16px 12px;gap:4px;min-height:0;overflow:auto">
+  <div style="padding:0 10px 6px;color:var(--tx3);font-size:11px;letter-spacing:.08em;text-transform:uppercase">Bins</div>
+  <sc-for list="{{bins}}" as="b" hint-placeholder-count="6">
+    <button class="bin {{b.on}}" aria-pressed="{{b.pressed}}" onClick="{{b.pick}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:15px;height:15px"><path d="{{b.d}}"/></svg>{{b.name}}<span class="n">{{b.n}}</span></button>
+  </sc-for>
+  <div style="padding:18px 10px 6px;color:var(--tx3);font-size:11px;letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:6px"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:12px;height:12px"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Smart collections</div>
+  <button class="bin"><span style="width:8px;height:8px;border-radius:50%;background:#ffc58a"></span>Golden hour<span class="n">7</span></button>
+  <button class="bin"><span style="width:8px;height:8px;border-radius:50%;background:#7FC08F"></span>Contains faces<span class="n">5</span></button>
+  <button class="bin"><span style="width:8px;height:8px;border-radius:50%;background:#F2E9D8"></span>Not used yet<span class="n">9</span></button>
+  <button class="bin"><span style="width:8px;height:8px;border-radius:50%;background:#F2C14E"></span>Offline<span class="n">1</span></button>
+  <span style="flex:1"></span>
+  <div style="padding:14px;border-radius:10px;background:var(--p2);border:1px solid var(--ln)">
+    <div style="display:flex;justify-content:space-between;font-size:12px"><span style="font-weight:500">Project media</span><span class="mono" style="color:var(--tx3)">12.4 / 40 GB</span></div>
+    <div style="margin-top:9px;height:6px;border-radius:3px;background:#0F1114;overflow:hidden;display:flex"><span style="width:22%;background:#5FB3BC"></span><span style="width:6%;background:#7FC08F"></span><span style="width:3%;background:#B795D0"></span></div>
+    <div style="margin-top:9px;color:var(--tx3);font-size:11.5px;line-height:1.4">Proxies for 4K clips are ready. Originals stay where they are.</div>
+  </div>
+</aside>
+
+<!-- Browser -->
+<main style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:0">
+  <div style="padding:18px 24px 12px;display:flex;align-items:center;gap:12px">
+    <h1 style="margin:0;font-family:var(--serif);font-weight:400;font-size:34px;letter-spacing:-.01em">{{binTitle}}</h1>
+    <span class="mono" style="color:var(--tx3);font-size:12px;margin-top:8px">{{shownCount}} clips</span>
+    <span style="flex:1"></span>
+    <button class="btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>New bin</button>
+    <button class="btn pri"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 16v4h16v-4"/></svg>Import media</button>
+  </div>
+
+  <div style="padding:0 24px 14px;display:flex;align-items:center;gap:12px">
+    <label style="flex:1;max-width:620px;display:flex;align-items:center;gap:10px;height:38px;padding:0 14px;border-radius:10px;background:#0F1114;border:1px solid var(--ln2);color:var(--tx3)">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>
+      <input type="text" value="" placeholder="Search by name, tag — or describe it: “boats at dusk”" aria-label="Search media" style="flex:1;background:none;border:0;outline:0;color:var(--tx);font-size:13px">
+      <span class="chip" style="height:22px;gap:5px"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:12px;height:12px"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Visual search</span>
+    </label>
+    <div style="display:flex;gap:6px">
+      <sc-for list="{{filters}}" as="f" hint-placeholder-count="4"><button class="chip {{f.on}}" aria-pressed="{{f.pressed}}" onClick="{{f.pick}}">{{f.name}}</button></sc-for>
+    </div>
+    <span style="flex:1"></span>
+    <div style="display:flex;align-items:center;gap:4px;padding:2px;border-radius:8px;background:#0F1114;border:1px solid var(--ln)">
+      <button class="ib {{gridOn}}" onClick="{{setGrid}}" aria-pressed="{{isGrid}}" aria-label="Grid view"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg></button>
+      <button class="ib {{listOn}}" onClick="{{setList}}" aria-pressed="{{isList}}" aria-label="List view"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    </div>
+    <input type="range" min="3" max="7" value="{{cols}}" onInput="{{setCols}}" aria-label="Thumbnail size" style="width:96px;direction:rtl">
+  </div>
+
+  <div class="scroll" style="flex:1;min-height:0;overflow:auto;padding:4px 24px 24px">
+    <sc-if value="{{isGrid}}" hint-placeholder-val="{{true}}">
+      <div style="display:grid;grid-template-columns:repeat({{cols}},minmax(0,1fr));gap:20px 16px">
+        <sc-for list="{{items}}" as="m" hint-placeholder-count="12">
+          <button class="item {{m.on}}" onClick="{{m.pick}}" aria-pressed="{{m.pressed}}" aria-label="{{m.aria}}">
+            <span class="th" style="display:block;background:{{m.bg}}" onMouseMove="{{m.skim}}" onMouseLeave="{{m.unskim}}">
+              <span style="position:absolute;inset:0;background:{{m.sunbg}}"></span>
+              <span style="{{m.offStyle}}"></span>
+              <span style="position:absolute;top:0;bottom:0;left:{{m.skimX}}%;width:2px;background:var(--paper);opacity:{{m.skimOp}};box-shadow:0 0 8px rgba(0,0,0,.6)"></span>
+              <span class="mono" style="position:absolute;right:5px;bottom:5px;padding:1px 6px;border-radius:4px;background:rgba(10,12,14,.75);font-size:11px;color:#fff">{{m.d}}</span>
+              <span style="position:absolute;left:5px;top:5px;display:flex;gap:4px">
+                <span style="{{m.usedStyle}}">Used</span><span style="{{m.proxyStyle}}">Proxy</span><span style="{{m.offBadge}}">Offline</span>
+              </span>
+            </span>
+            <span style="display:flex;align-items:center;gap:8px"><span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500">{{m.n}}</span><span class="mono" style="color:var(--tx3);font-size:11px">{{m.res}}</span></span>
+          </button>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{isList}}" hint-placeholder-val="{{false}}">
+      <div style="display:flex;align-items:center;gap:14px;height:30px;padding:0 12px;color:var(--tx3);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid var(--ln)">
+        <span style="width:72px"></span><span style="flex:2">Name</span><span style="width:70px">Length</span><span style="width:90px">Resolution</span><span style="width:60px">Rate</span><span style="width:90px">Codec</span><span style="width:70px">Size</span><span style="width:60px">Used</span>
+      </div>
+      <sc-for list="{{items}}" as="m" hint-placeholder-count="12">
+        <button class="rowi {{m.on}}" onClick="{{m.pick}}" aria-pressed="{{m.pressed}}">
+          <span style="width:72px;height:40px;border-radius:5px;background:{{m.bg}};position:relative;overflow:hidden;flex:none"><span style="position:absolute;inset:0;background:{{m.sunbg}}"></span></span>
+          <span style="flex:2;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500">{{m.n}}</span>
+          <span class="mono" style="width:70px">{{m.d}}</span><span class="mono" style="width:90px">{{m.res}}</span><span class="mono" style="width:60px">{{m.fps}}</span><span class="mono" style="width:90px">{{m.codec}}</span><span class="mono" style="width:70px">{{m.size}}</span><span class="mono" style="width:60px;color:var(--tx3)">{{m.usedWord}}</span>
+        </button>
+      </sc-for>
+    </sc-if>
+  </div>
+</main>
+
+<!-- Inspector of the asset -->
+<aside class="meta" aria-label="Clip details" style="width:408px;flex:none;background:var(--p1);border-left:1px solid var(--ln);display:flex;flex-direction:column;min-height:0">
+  <div style="padding:18px 20px 0">
+    <div style="position:relative;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:{{sel.bg}};box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)">
+      <div style="position:absolute;inset:0;background:{{sel.sunbg}}"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(6,8,10,.6))"></div>
+      <button aria-label="Play clip preview" style="position:absolute;left:50%;top:50%;margin:-24px 0 0 -24px;width:48px;height:48px;border-radius:50%;background:rgba(242,233,216,.95);display:flex;align-items:center;justify-content:center;transition:transform .18s var(--ease)"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="#17140F"/></svg></button>
+    </div>
+    <div style="position:relative;height:30px;margin-top:8px" aria-label="Clip range">
+      <div style="position:absolute;left:0;right:0;top:12px;height:6px;border-radius:3px;background:#0F1114"></div>
+      <div style="position:absolute;left:18%;right:26%;top:12px;height:6px;border-radius:3px;background:#5FB3BC"></div>
+      <div style="position:absolute;left:18%;top:6px;width:4px;height:18px;border-radius:2px;background:var(--paper)"></div>
+      <div style="position:absolute;right:26%;top:6px;width:4px;height:18px;border-radius:2px;background:var(--paper)"></div>
+      <div style="position:absolute;left:42%;top:0;width:2px;height:30px;background:var(--acc)"></div>
+    </div>
+    <div class="mono" style="display:flex;justify-content:space-between;color:var(--tx3);font-size:11.5px"><span>In 00:00:02:10</span><span>Out {{sel.outTc}}</span></div>
+  </div>
+
+  <div style="padding:16px 20px 0">
+    <div style="display:flex;align-items:center;gap:10px">
+      <h2 style="margin:0;font-size:16px;font-weight:600;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{sel.n}}</h2>
+      <span style="display:flex;gap:2px" role="img" aria-label="Rating {{sel.rating}} of 5">
+        <sc-for list="{{stars}}" as="st" hint-placeholder-count="5"><button onClick="{{st.pick}}" aria-label="Rate {{st.n}}" style="color:{{st.c}};line-height:0"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" fill="currentColor"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/></svg></button></sc-for>
+      </span>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button class="btn pri" style="flex:1;justify-content:center"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Insert</button>
+      <button class="btn" style="flex:1;justify-content:center">Overwrite</button>
+      <button class="btn" style="flex:1;justify-content:center">Append</button>
+    </div>
+    <div style="margin-top:10px;color:var(--tx3);font-size:11.5px">Or drag it onto any track — the playhead and snapping apply.</div>
+  </div>
+
+  <div class="scroll" style="flex:1;min-height:0;overflow:auto;padding:14px 20px 20px">
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <sc-for list="{{sel.tags}}" as="t" hint-placeholder-count="3"><span class="chip">{{t}}</span></sc-for>
+      <button class="chip" style="border-style:dashed">+ Tag</button>
+    </div>
+    <dl style="margin:16px 0 0;display:grid;grid-template-columns:110px 1fr;row-gap:0">
+      <sc-for list="{{sel.meta}}" as="r" hint-placeholder-count="7">
+        <dt style="padding:9px 0;color:var(--tx3);border-bottom:1px solid var(--ln)">{{r.k}}</dt>
+        <dd class="mono" style="margin:0;padding:9px 0;text-align:right;border-bottom:1px solid var(--ln)">{{r.v}}</dd>
+      </sc-for>
+    </dl>
+    <div style="margin-top:16px;padding:12px 14px;border-radius:10px;background:var(--p2);border:1px solid var(--ln);display:flex;align-items:center;gap:12px">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="color:var(--tx2)"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+      <span style="flex:1"><span style="display:block;font-weight:500">{{sel.usedWord}}</span><span style="display:block;color:var(--tx3);margin-top:2px;font-size:11.5px">Click to reveal in the timeline</span></span>
+      <a href="Main.dc.html" style="color:var(--acc);font-weight:500">Show →</a>
+    </div>
+  </div>
+</aside>
+</div>
+</div>
+</x-dc>
+
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+const PAL = {
+  sun:  {top:'#26365e',mid:'#d98c7a',hor:'#ffc58a',s1:'#6b86a0',s2:'#142230',sun:'#fff1d0'},
+  harb: {top:'#5d8fb3',mid:'#a9c8d6',hor:'#efe3cc',s1:'#4a7c8a',s2:'#14303a',sun:'#fffbea'},
+  fish: {top:'#3a4b52',mid:'#7e8f86',hor:'#d9c9a0',s1:'#5f6f66',s2:'#1d2a28',sun:'#f3e2b5'},
+  cliff:{top:'#2f6f9f',mid:'#7fb5d0',hor:'#e8f0e8',s1:'#2f7e8c',s2:'#0d3340',sun:'#ffffff'},
+  dusk: {top:'#1b1740',mid:'#7a3a72',hor:'#ff8a5c',s1:'#5a3a6a',s2:'#120c24',sun:'#ffd7a0'},
+  coda: {top:'#0f1217',mid:'#1a2230',hor:'#2b3a4d',s1:'#1f2c3a',s2:'#080b10',sun:'#6c86a6'}
+};
+const ITEMS = [
+  {n:'Sunrise_Drone_04',s:16,pal:'sun',sx:72,bin:'Harbour',used:2,codec:'ProRes 422',res:'3840×2160',fps:'24',size:'2.1 GB',tags:['Golden hour','Aerial','Establishing'],cam:'DJI Inspire 3',cs:'Rec.709',rating:5},
+  {n:'Harbour_Walk',s:22,pal:'harb',sx:30,bin:'Harbour',used:1,codec:'H.265',res:'3840×2160',fps:'24',size:'1.4 GB',tags:['Handheld','Morning'],cam:'Sony FX3',cs:'S-Log3',rating:4},
+  {n:'Fishermen_Cu',s:23,pal:'fish',sx:55,bin:'Harbour',used:1,codec:'H.265',res:'3840×2160',fps:'24',size:'1.5 GB',tags:['Faces','Close-up'],cam:'Sony FX3',cs:'S-Log3',rating:4},
+  {n:'Cliffs_Wide',s:27,pal:'cliff',sx:22,bin:'Cliffs',used:1,codec:'ProRes 422',res:'3840×2160',fps:'24',size:'3.0 GB',tags:['Aerial','Wide'],cam:'DJI Inspire 3',cs:'Rec.709',rating:5},
+  {n:'Dusk_Timelapse',s:32,pal:'dusk',sx:64,bin:'Cliffs',used:1,codec:'H.264',res:'3840×2160',fps:'24',size:'0.9 GB',tags:['Timelapse','Blue hour'],cam:'Sony A7 IV',cs:'S-Log3',rating:5},
+  {n:'Gulls_over_pier',s:8,pal:'harb',sx:80,bin:'Harbour',used:1,codec:'H.265',res:'1920×1080',fps:'48',size:'0.4 GB',tags:['Slow motion','Birds'],cam:'Sony FX3',cs:'S-Log3',rating:3},
+  {n:'Waves_macro',s:12,pal:'cliff',sx:45,bin:'Cliffs',used:1,codec:'H.265',res:'1920×1080',fps:'60',size:'0.6 GB',tags:['Macro','Water'],cam:'Sony FX3',cs:'S-Log3',rating:3},
+  {n:'Net_detail',s:9,pal:'fish',sx:35,bin:'Harbour',used:1,codec:'H.265',res:'3840×2160',fps:'24',size:'0.5 GB',tags:['Detail','Texture'],cam:'Sony FX3',cs:'S-Log3',rating:3},
+  {n:'Boat_wake',s:10,pal:'dusk',sx:58,bin:'Harbour',used:1,codec:'H.265',res:'3840×2160',fps:'24',size:'0.6 GB',tags:['Water','Dusk'],cam:'Sony FX3',cs:'S-Log3',rating:4},
+  {n:'Lighthouse_blue',s:19,pal:'coda',sx:36,bin:'Cliffs',used:0,codec:'ProRes 422',res:'3840×2160',fps:'24',size:'1.8 GB',tags:['Blue hour','Landmark'],cam:'Sony A7 IV',cs:'S-Log3',rating:4},
+  {n:'Kelp_underwater',s:14,pal:'fish',sx:50,bin:'Cliffs',used:0,off:true,codec:'H.265',res:'3840×2160',fps:'24',size:'1.1 GB',tags:['Underwater'],cam:'GoPro 12',cs:'Rec.709',rating:2},
+  {n:'Mara_Interview_A',s:2700,pal:'coda',sx:78,bin:'Interviews',used:1,codec:'ProRes 422',res:'3840×2160',fps:'24',size:'9.2 GB',tags:['Faces','Interview','Dialogue'],cam:'Sony FX6',cs:'S-Log3',rating:5},
+  {n:'Mara_Interview_B',s:2410,pal:'harb',sx:70,bin:'Interviews',used:0,codec:'ProRes 422',res:'3840×2160',fps:'24',size:'8.1 GB',tags:['Faces','Interview'],cam:'Sony FX6',cs:'S-Log3',rating:3},
+  {n:'Pier_sunset_alt',s:18,pal:'dusk',sx:30,bin:'Harbour',used:0,codec:'H.265',res:'3840×2160',fps:'24',size:'1.2 GB',tags:['Golden hour'],cam:'Sony FX3',cs:'S-Log3',rating:3},
+  {n:'Cove_birdseye',s:21,pal:'cliff',sx:62,bin:'Cliffs',used:0,codec:'ProRes 422',res:'3840×2160',fps:'24',size:'2.4 GB',tags:['Aerial'],cam:'DJI Inspire 3',cs:'Rec.709',rating:4},
+  {n:'Market_steam',s:11,pal:'fish',sx:44,bin:'Harbour',used:0,codec:'H.265',res:'1920×1080',fps:'24',size:'0.5 GB',tags:['Detail','Morning'],cam:'Sony FX3',cs:'S-Log3',rating:2}
+];
+const BINS = [
+  {k:'All',name:'All media',d:'M4 5h16v14H4zM4 9h16M8 5v14'},
+  {k:'Harbour',name:'Harbour',d:'M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z'},
+  {k:'Cliffs',name:'Cliffs',d:'M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z'},
+  {k:'Interviews',name:'Interviews',d:'M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z'}
+];
+const pad=(n)=>String(n).padStart(2,'0');
+const dur=(s)=> s>=60 ? Math.floor(s/60)+':'+pad(s%60) : '0:'+pad(s);
+const tc=(s)=> '00:'+pad(Math.floor(s/60)%60)+':'+pad(s%60)+':00';
+class Component extends DCLogic {
+  state = {sel:'Sunrise_Drone_04', bin:'All', filter:'All', view:'grid', cols:5, skim:null, rating:{}};
+  renderVals(){
+    const s=this.state, up=(p)=>this.setState(p);
+    const bg=(p)=>'linear-gradient(180deg,'+p.top+' 0%,'+p.mid+' 38%,'+p.hor+' 56%,'+p.s1+' 57%,'+p.s2+' 100%)';
+    const sunbg=(p,x)=>'radial-gradient(circle at '+x+'% 55%,'+p.sun+' 0 5%,transparent 12%)';
+    const list=ITEMS.filter(m=> (s.bin==='All'||m.bin===s.bin) && (s.filter==='All' || (s.filter==='Unused'&&m.used===0) || (s.filter==='Video'&&true) || (s.filter==='Audio'&&false) || (s.filter==='Stills'&&false)));
+    const pill=(bgc,fg)=>'padding:1px 6px;border-radius:4px;font-size:10.5px;font-weight:600;background:'+bgc+';color:'+fg;
+    const items=list.map(m=>{ const p=PAL[m.pal]; const sk=s.skim&&s.skim.n===m.n?s.skim.f:null; return {
+      n:m.n,d:dur(m.s),res:m.res.replace('3840×2160','4K').replace('1920×1080','HD'),fps:m.fps+'p',codec:m.codec,size:m.size,usedWord:m.used?('×'+m.used):'—',
+      aria:m.n+', '+dur(m.s), bg:bg(p), sunbg:sunbg(p, sk===null?m.sx:Math.round(20+sk*60)),
+      offStyle:m.off?'position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(14,15,17,.8) 0 6px,rgba(14,15,17,.62) 6px 12px)':'display:none',
+      usedStyle:m.used?pill('rgba(242,233,216,.92)','#17140F'):'display:none',
+      proxyStyle:m.res==='3840×2160'?pill('rgba(10,12,14,.72)','#E5E1D8'):'display:none',
+      offBadge:m.off?pill('#F2C14E','#1d1604'):'display:none',
+      skimX:sk===null?0:(sk*100).toFixed(1), skimOp:sk===null?0:0.95,
+      skim:(e)=>{ const r=e.currentTarget.getBoundingClientRect(); up({skim:{n:m.n,f:Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))}}); }, unskim:()=>up({skim:null}),
+      on:s.sel===m.n?'on':'', pressed:s.sel===m.n, pick:()=>up({sel:m.n})
+    };});
+    const cur=ITEMS.find(m=>m.n===s.sel)||ITEMS[0], cp=PAL[cur.pal]; const rate=s.rating[cur.n]??cur.rating;
+    return {
+      nav:[['Media','Media.dc.html'],['Edit','Main.dc.html'],['Color','Color.dc.html'],['Audio','Audio.dc.html'],['Text','Text.dc.html']].map(n=>({label:n[0],href:n[1],on:n[0]==='Media'?'on':'',cur:n[0]==='Media'?'page':'false'})),
+      bins:BINS.map(b=>({name:b.name,d:b.d,n:b.k==='All'?ITEMS.length:ITEMS.filter(m=>m.bin===b.k).length,on:s.bin===b.k?'on':'',pressed:s.bin===b.k,pick:()=>up({bin:b.k})})),
+      binTitle:s.bin==='All'?'All media':s.bin, shownCount:items.length,
+      filters:['All','Video','Audio','Stills','Unused'].map(f=>({name:f,on:s.filter===f?'on':'',pressed:s.filter===f,pick:()=>up({filter:f})})),
+      isGrid:s.view==='grid', isList:s.view==='list', gridOn:s.view==='grid'?'on':'', listOn:s.view==='list'?'on':'', setGrid:()=>up({view:'grid'}), setList:()=>up({view:'list'}),
+      cols:s.cols, setCols:(e)=>up({cols:+e.target.value}), items,
+      sel:{ n:cur.n, bg:bg(cp), sunbg:sunbg(cp,cur.sx), outTc:tc(cur.s-1), rating:rate, tags:cur.tags,
+        usedWord: cur.used? 'Used '+cur.used+(cur.used>1?' times':' time')+' in Coastal Light':'Not used yet',
+        meta:[{k:'Duration',v:dur(cur.s)},{k:'Resolution',v:cur.res},{k:'Frame rate',v:cur.fps+' fps'},{k:'Codec',v:cur.codec},{k:'Color space',v:cur.cs},{k:'Camera',v:cur.cam},{k:'File size',v:cur.size}] },
+      stars:[1,2,3,4,5].map(n=>({n,c:n<=rate?'#F2C14E':'#3a3f47',pick:()=>up({rating:{...s.rating,[cur.n]:n}})}))
+    };
+  }
+}
+</script>
+</body>
+</html>

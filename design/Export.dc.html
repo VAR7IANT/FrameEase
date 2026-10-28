@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FrameEase — Export</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--void:#0E0F11;--p1:#14161A;--p2:#1B1E23;--p3:#262A30;--ln:#23272C;--ln2:#363B43;--tx:#ECE8E0;--tx2:#A9A69F;--tx3:#878A92;--paper:#F2E9D8;--acc-ink:#1A0C08;--ease:cubic-bezier(.22,.8,.2,1);--mono:'Geist Mono','JetBrains Mono',ui-monospace,monospace;--serif:'Instrument Serif',Georgia,serif}
+*{box-sizing:border-box}
+body{margin:0;background:#0E0F11}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:inherit}
+input{font:inherit}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--paper);outline-offset:2px}
+.ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.ib{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:7px;color:var(--tx2)}
+.btn{height:30px;padding:0 12px;display:inline-flex;align-items:center;gap:7px;border-radius:7px;background:var(--p2);border:1px solid var(--ln2);color:var(--tx);font-weight:500;transition:background .14s,border-color .14s}
+.btn:hover{background:var(--p3);border-color:#4a505a}
+.btn.pri{background:var(--acc);border-color:transparent;color:var(--acc-ink);font-weight:600}
+.btn.pri:hover{filter:brightness(1.08)}
+.chip{height:28px;padding:0 12px;display:inline-flex;align-items:center;gap:6px;border-radius:14px;border:1px solid var(--ln2);color:var(--tx2);font-size:12px;white-space:nowrap;transition:all .14s var(--ease)}
+.chip:hover{color:var(--tx);border-color:#555b66}
+.chip.on{background:var(--paper);border-color:var(--paper);color:#17140F;font-weight:600}
+.kbd{font-family:var(--mono);font-size:11px;padding:1px 5px;border:1px solid var(--ln2);border-radius:4px;color:var(--tx3)}
+.nav{position:relative;height:32px;padding:0 13px;display:inline-flex;align-items:center;border-radius:8px;color:var(--tx2);font-weight:500;transition:color .14s,background .14s}
+.nav:hover{color:var(--tx);background:#181B1F}
+.nav.on{color:var(--tx);background:#1D2025}
+.dest{display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding:16px;border-radius:14px;background:var(--p1);border:1px solid var(--ln);min-height:150px;transition:all .16s var(--ease)}
+.dest:hover{background:var(--p2);border-color:var(--ln2);transform:translateY(-2px)}
+.dest.on{background:var(--p2);border-color:var(--paper);box-shadow:0 0 0 1px var(--paper)}
+.sh{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3)}
+input[type=range]{accent-color:var(--acc);margin:0;background:transparent;width:100%}
+.scroll::-webkit-scrollbar{width:8px}
+.scroll::-webkit-scrollbar-thumb{background:#2d3238;border-radius:4px}
+@media (max-width:1500px){.right{width:420px!important}.dests{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</helmet>
+
+<div style="--acc:#FF5B3A;width:100%;min-width:1100px;height:1080px;display:flex;flex-direction:column;background:var(--void);color:var(--tx);font-family:'Instrument Sans',system-ui,sans-serif;font-size:13px;overflow:hidden">
+
+<header style="height:48px;flex:none;display:flex;align-items:center;gap:14px;padding:0 12px 0 14px;border-bottom:1px solid var(--ln)">
+  <a href="Home.dc.html" aria-label="FrameEase home" style="display:flex;align-items:center;gap:9px">
+    <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="1.5" y="1.5" width="23" height="23" rx="7" fill="none" stroke="#ECE8E0" stroke-width="1.6"/><path d="M5.5 19.5C11 19.5 11 6.5 20.5 6.5" fill="none" stroke="#ECE8E0" stroke-width="1.8" stroke-linecap="round"/><circle cx="20.5" cy="6.5" r="2.6" fill="var(--acc)"/></svg>
+    <span style="font-weight:600;font-size:15px;letter-spacing:-.01em">Frame<span style="font-family:var(--serif);font-style:italic;font-weight:400;font-size:17px;margin-left:1px">Ease</span></span>
+  </a>
+  <span style="width:1px;height:20px;background:var(--ln2)"></span>
+  <span style="font-weight:600;font-size:13px">Coastal Light</span>
+  <nav aria-label="Workspaces" style="flex:1;display:flex;justify-content:center;gap:2px">
+    <sc-for list="{{nav}}" as="n" hint-placeholder-count="5"><a class="nav {{n.on}}" href="{{n.href}}" aria-current="{{n.cur}}">{{n.label}}</a></sc-for>
+  </nav>
+  <a class="btn" href="Main.dc.html" style="height:32px;padding:0 14px">← Back to edit</a>
+</header>
+
+<div style="flex:1;min-height:0;display:flex">
+
+<main class="scroll" style="flex:1;min-width:0;overflow:auto;padding:44px 56px 40px">
+  <div class="mono" style="color:var(--tx3);font-size:12px;letter-spacing:.08em;text-transform:uppercase">Step 1 of 2</div>
+  <h1 style="margin:8px 0 0;font-family:var(--serif);font-weight:400;font-size:60px;line-height:1;letter-spacing:-.015em">Where is this going?</h1>
+  <p style="margin:12px 0 0;color:var(--tx2);font-size:15px;max-width:640px;line-height:1.5">Pick a destination and FrameEase chooses sensible settings. Open <em>Fine-tune</em> any time for full control.</p>
+
+  <div class="dests" style="margin-top:28px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px">
+    <sc-for list="{{dests}}" as="d" hint-placeholder-count="5">
+      <button class="dest {{d.on}}" aria-pressed="{{d.pressed}}" onClick="{{d.pick}}">
+        <span style="width:40px;height:40px;border-radius:11px;background:{{d.bg}};display:flex;align-items:center;justify-content:center;color:#fff"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:20px;height:20px"><path d="{{d.icon}}"/></svg></span>
+        <span><span style="display:block;font-weight:600;font-size:15px">{{d.name}}</span><span style="display:block;margin-top:4px;color:var(--tx3);line-height:1.4">{{d.sub}}</span></span>
+      </button>
+    </sc-for>
+  </div>
+
+  <div style="margin-top:30px;display:flex;gap:28px;align-items:stretch">
+    <div style="width:520px;flex:none">
+      <div style="position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);background:linear-gradient(180deg,#26365e 0%,#d98c7a 52%,#ffc58a 62%,#6b86a0 63%,#142230 100%)">
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 66% 62%,#fff1d0 0 4%,transparent 11%)"></div>
+        <div style="position:absolute;left:5.5%;bottom:14%;font-family:var(--serif);font-style:italic;font-size:46px;color:#F8F1E4;text-shadow:0 2px 20px rgba(0,0,0,.35)">Coastal Light</div>
+        <div class="mono" style="position:absolute;right:10px;bottom:10px;padding:2px 7px;border-radius:5px;background:rgba(10,12,14,.72);font-size:11px;color:#fff">2:24</div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:10px;color:var(--tx2)"><span class="mono">00:00:00:00 → 00:02:24:00</span><span style="flex:1"></span><button style="color:var(--acc);font-weight:500">Set range…</button></div>
+    </div>
+    <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:14px">
+      <div><div class="sh">File name</div>
+        <label style="margin-top:8px;display:flex;align-items:center;height:40px;padding:0 14px;border-radius:9px;background:#0F1114;border:1px solid var(--ln2)"><input type="text" value="Coastal Light — {{destShort}}" aria-label="File name" style="flex:1;background:none;border:0;outline:0;color:var(--tx);font-size:14px"><span class="mono" style="color:var(--tx3)">{{ext}}</span></label></div>
+      <div><div class="sh">Save to</div>
+        <div style="margin-top:8px;display:flex;align-items:center;gap:10px;height:40px;padding:0 14px;border-radius:9px;background:#0F1114;border:1px solid var(--ln2)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="color:var(--tx3)"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg><span class="mono" style="flex:1;color:var(--tx2)">D:\Videos\Coastal Light\Exports</span><button style="color:var(--acc);font-weight:500">Change</button></div></div>
+    </div>
+  </div>
+</main>
+
+<aside class="right" aria-label="Export summary" style="width:500px;flex:none;background:var(--p1);border-left:1px solid var(--ln);display:flex;flex-direction:column;min-height:0">
+  <div class="scroll" style="flex:1;min-height:0;overflow:auto;padding:30px 28px 20px">
+    <div class="mono" style="color:var(--tx3);font-size:12px;letter-spacing:.08em;text-transform:uppercase">Step 2 of 2</div>
+    <div style="margin-top:8px;font-family:var(--serif);font-size:34px;line-height:1.05">{{destName}}</div>
+    <div style="margin-top:6px;color:var(--tx2);line-height:1.45">{{destNote}}</div>
+
+    <div style="margin-top:22px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+      <div style="padding:14px;border-radius:11px;background:var(--p2);border:1px solid var(--ln)"><div style="color:var(--tx3);font-size:11.5px">Format</div><div class="mono" style="margin-top:6px;font-size:15px;font-weight:500">{{resLabel}}</div><div class="mono" style="color:var(--tx3);font-size:11.5px;margin-top:2px">{{fps}} fps</div></div>
+      <div style="padding:14px;border-radius:11px;background:var(--p2);border:1px solid var(--ln)"><div style="color:var(--tx3);font-size:11.5px">File size</div><div class="mono" style="margin-top:6px;font-size:15px;font-weight:500">≈ {{sizeLabel}}</div><div class="mono" style="color:var(--tx3);font-size:11.5px;margin-top:2px">{{bitrate}} Mbps</div></div>
+      <div style="padding:14px;border-radius:11px;background:var(--p2);border:1px solid var(--ln)"><div style="color:var(--tx3);font-size:11.5px">Render time</div><div class="mono" style="margin-top:6px;font-size:15px;font-weight:500">≈ {{timeLabel}}</div><div class="mono" style="color:var(--tx3);font-size:11.5px;margin-top:2px">{{gpu}}</div></div>
+    </div>
+
+    <sc-if value="{{showReframe}}" hint-placeholder-val="{{false}}">
+      <div style="margin-top:14px;padding:12px 14px;border-radius:10px;background:rgba(242,193,78,.1);border:1px solid rgba(242,193,78,.4);display:flex;gap:10px;line-height:1.45"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="color:#F2C14E;margin-top:1px"><path d="M12 8v5M12 17h.01M10.3 3.9L2.4 18a2 2 0 001.7 3h15.8a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg><span>This project is 16:9. Vertical export will reframe automatically; review the crop in <a href="Main.dc.html" style="color:var(--acc);font-weight:500">Edit</a> first.</span></div>
+    </sc-if>
+
+    <button onClick="{{toggleAdv}}" aria-expanded="{{adv}}" style="margin-top:24px;width:100%;display:flex;align-items:center;gap:8px;height:40px;border-top:1px solid var(--ln);font-weight:600">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="transform:{{advRot}};transition:transform .2s var(--ease);color:var(--tx3)"><path d="M6 9l6 6 6-6"/></svg>Fine-tune<span style="flex:1"></span><span style="font-weight:400;color:var(--tx3)">Resolution · codec · quality · audio</span>
+    </button>
+
+    <sc-if value="{{adv}}" hint-placeholder-val="{{true}}">
+      <div class="sh" style="margin-top:6px">Resolution</div>
+      <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ress}}" as="r" hint-placeholder-count="4"><button class="chip {{r.on}}" aria-pressed="{{r.pressed}}" onClick="{{r.pick}}">{{r.name}}</button></sc-for></div>
+      <div class="sh" style="margin-top:18px">Frame rate</div>
+      <div style="margin-top:8px;display:flex;gap:6px"><sc-for list="{{fpss}}" as="r" hint-placeholder-count="4"><button class="chip {{r.on}}" aria-pressed="{{r.pressed}}" onClick="{{r.pick}}"><span class="mono">{{r.name}}</span></button></sc-for></div>
+      <div class="sh" style="margin-top:18px">Codec</div>
+      <div style="margin-top:8px;display:flex;gap:6px"><sc-for list="{{codecs}}" as="r" hint-placeholder-count="3"><button class="chip {{r.on}}" aria-pressed="{{r.pressed}}" onClick="{{r.pick}}">{{r.name}}</button></sc-for></div>
+      <sc-if value="{{lossy}}" hint-placeholder-val="{{true}}">
+        <div class="sh" style="margin-top:18px">Quality</div>
+        <div style="margin-top:8px;display:flex;align-items:center;gap:12px"><span style="color:var(--tx3)">Smaller</span><input type="range" min="1" max="100" value="{{q}}" onInput="{{setQ}}" aria-label="Quality"><span style="color:var(--tx3)">Sharper</span></div>
+      </sc-if>
+      <div class="sh" style="margin-top:18px">Audio</div>
+      <div style="margin-top:8px;display:flex;gap:6px"><span class="chip on">AAC 256 kbps</span><span class="chip">Stereo</span><span class="chip">−14 LUFS</span></div>
+      <div style="margin-top:18px;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;background:var(--p2);border:1px solid var(--ln)"><span style="flex:1"><span style="display:block;font-weight:500">Use GPU encoding</span><span style="display:block;color:var(--tx3);margin-top:2px;font-size:11.5px">NVENC detected · much faster, slightly larger files</span></span><span style="width:38px;height:22px;border-radius:11px;background:var(--acc);position:relative"><span style="position:absolute;top:2px;left:18px;width:18px;height:18px;border-radius:50%;background:#fff"></span></span></div>
+    </sc-if>
+  </div>
+
+  <!-- action / progress -->
+  <div style="border-top:1px solid var(--ln2);padding:18px 28px 22px;background:#111316">
+    <sc-if value="{{idle}}" hint-placeholder-val="{{true}}">
+      <button class="btn pri" onClick="{{start}}" style="width:100%;height:50px;justify-content:center;font-size:16px;border-radius:11px"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>Export {{destShort}}</button>
+      <div style="margin-top:10px;text-align:center;color:var(--tx3)">Keeps editing available while it renders in the background</div>
+    </sc-if>
+    <sc-if value="{{busy}}" hint-placeholder-val="{{false}}">
+      <div style="display:flex;align-items:center;gap:16px">
+        <svg width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="{{pct}} percent"><circle cx="32" cy="32" r="27" fill="none" stroke="#23272C" stroke-width="6"/><circle cx="32" cy="32" r="27" fill="none" stroke="var(--acc)" stroke-width="6" stroke-linecap="round" stroke-dasharray="169.6" stroke-dashoffset="{{dash}}" transform="rotate(-90 32 32)"/><text x="32" y="37" text-anchor="middle" font-family="Geist Mono, monospace" font-size="15" fill="#ECE8E0">{{pct}}</text></svg>
+        <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:15px">Rendering {{destShort}}</div><div class="mono" style="color:var(--tx3);margin-top:4px;font-size:11.5px">Frame {{frame}} of 3,456 · {{eta}} left</div></div>
+        <button class="btn" onClick="{{cancel}}">Cancel</button>
+      </div>
+    </sc-if>
+    <sc-if value="{{done}}" hint-placeholder-val="{{false}}">
+      <div style="display:flex;align-items:center;gap:14px">
+        <span style="width:44px;height:44px;border-radius:50%;background:#7BD389;display:flex;align-items:center;justify-content:center;color:#0d1a10"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:22px;height:22px;stroke-width:2.4"><path d="M5 12l5 5 9-10"/></svg></span>
+        <div style="flex:1"><div style="font-weight:600;font-size:15px">Exported</div><div class="mono" style="color:var(--tx3);margin-top:3px;font-size:11.5px">Coastal Light — {{destShort}}{{ext}} · {{sizeLabel}}</div></div>
+        <button class="btn">Show in folder</button><button class="btn" onClick="{{cancel}}">Again</button>
+      </div>
+    </sc-if>
+  </div>
+</aside>
+</div>
+</div>
+</x-dc>
+
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+const DUR = 144;
+const DESTS = [
+  {k:'yt',name:'YouTube',short:'YouTube',sub:'4K, efficient H.265. Ready to upload.',bg:'linear-gradient(135deg,#C94B3A,#7a2418)',icon:'M5 6h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2zM10 9.5v5l4.5-2.5z',res:'4K',fps:24,codec:'H.265',q:72,note:'Great quality at a modest size. Plays everywhere YouTube does.'},
+  {k:'ig',name:'Instagram Reel',short:'Reel',sub:'Vertical 1080×1920, 30 fps, H.264.',bg:'linear-gradient(135deg,#B04A8F,#5d2a74)',icon:'M8 3h8v18H8z',res:'1080v',fps:30,codec:'H.264',q:62,note:'Reframed to 9:16 with the subject kept in view.',reframe:true},
+  {k:'web',name:'Web preview',short:'Preview',sub:'Small 720p file to share for review.',bg:'linear-gradient(135deg,#2e6670,#173a40)',icon:'M3 12a9 9 0 1018 0 9 9 0 00-18 0zM3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18',res:'720',fps:24,codec:'H.264',q:45,note:'Light and quick, perfect for sending to a client.'},
+  {k:'master',name:'Master',short:'Master',sub:'ProRes 422 HQ. Lossless-grade archive.',bg:'linear-gradient(135deg,#8A6A2C,#4a3714)',icon:'M12 3l8 4v10l-8 4-8-4V7zM12 12l8-4M12 12v9M12 12L4 8',res:'4K',fps:24,codec:'ProRes',q:100,note:'For archiving and finishing in other software. Big files.'},
+  {k:'custom',name:'Custom',short:'Custom',sub:'Start from your own settings.',bg:'linear-gradient(135deg,#4a5560,#262c33)',icon:'M4 7h10M18 7h2M4 17h2M10 17h10M14 5v4M8 15v4',res:'1080',fps:24,codec:'H.264',q:70,note:'Every option is open. Save as a preset when you are done.'}
+];
+const RES = [{k:'720',name:'720p',w:1280,h:720,f:.15},{k:'1080',name:'1080p',w:1920,h:1080,f:.3},{k:'1080v',name:'1080×1920',w:1080,h:1920,f:.3},{k:'4K',name:'4K UHD',w:3840,h:2160,f:.9}];
+const CODECS = [{k:'H.264',ext:'.mp4',t:1,lossy:true},{k:'H.265',ext:'.mp4',t:1.5,lossy:true},{k:'ProRes',ext:'.mov',t:.7,lossy:false}];
+const FPS = [24,25,30,60];
+class Component extends DCLogic {
+  state = {dest:'yt', res:'4K', fps:24, codec:'H.265', q:72, adv:false, prog:null};
+  componentWillUnmount(){ clearInterval(this._iv); }
+  renderVals(){
+    const s=this.state, up=(p)=>this.setState(p);
+    const d=DESTS.find(x=>x.k===s.dest), r=RES.find(x=>x.k===s.res), c=CODECS.find(x=>x.k===s.codec);
+    const px=r.w*r.h/(1920*1080), fr=s.fps/24;
+    let mbps = c.k==='ProRes' ? Math.round(147*px*fr*1.0*(r.k==='4K'?1:1)) : Math.round((7*px*fr*(c.k==='H.265'?.65:1))*(0.4+s.q/100*1.2)*10)/10;
+    const mb = mbps*DUR/8 + 256/8/1000*DUR;
+    const size = mb>=1000 ? (mb/1000).toFixed(1)+' GB' : Math.round(mb)+' MB';
+    const secs = Math.max(8, Math.round(DUR*r.f*c.t*fr*.55));
+    const tl = secs>=60 ? Math.floor(secs/60)+' min '+String(secs%60).padStart(2,'0')+' s' : secs+' s';
+    const pickDest=(x)=>()=>up({dest:x.k,res:x.res,fps:x.fps,codec:x.codec,q:x.q});
+    const p=s.prog;
+    const start=()=>{ up({prog:0}); clearInterval(this._iv); this._iv=setInterval(()=>{ const n=(this.state.prog||0)+1.6; if(n>=100){ clearInterval(this._iv); up({prog:100}); } else up({prog:n}); },60); };
+    const pct=p===null?0:Math.min(100,Math.floor(p));
+    const remain=Math.max(0,Math.round(secs*(1-pct/100)));
+    return {
+      nav:[['Media','Media.dc.html'],['Edit','Main.dc.html'],['Color','Color.dc.html'],['Audio','Audio.dc.html'],['Text','Text.dc.html']].map(x=>({label:x[0],href:x[1],on:'',cur:'false'})),
+      dests:DESTS.map(x=>({...x,on:s.dest===x.k?'on':'',pressed:s.dest===x.k,pick:pickDest(x)})),
+      destName:d.name, destShort:d.short, destNote:d.note, ext:c.ext, showReframe:!!d.reframe,
+      resLabel:r.w+'×'+r.h, fps:s.fps, sizeLabel:size, bitrate:mbps, timeLabel:tl, gpu:'GPU encode',
+      adv:s.adv, advRot:s.adv?'rotate(0deg)':'rotate(-90deg)', toggleAdv:()=>up({adv:!s.adv}),
+      ress:RES.map(x=>({name:x.name,on:s.res===x.k?'on':'',pressed:s.res===x.k,pick:()=>up({res:x.k})})),
+      fpss:FPS.map(x=>({name:String(x),on:s.fps===x?'on':'',pressed:s.fps===x,pick:()=>up({fps:x})})),
+      codecs:CODECS.map(x=>({name:x.k,on:s.codec===x.k?'on':'',pressed:s.codec===x.k,pick:()=>up({codec:x.k})})),
+      lossy:c.lossy, q:s.q, setQ:(e)=>up({q:+e.target.value}),
+      idle:p===null, busy:p!==null&&p<100, done:p===100,
+      start, cancel:()=>{ clearInterval(this._iv); up({prog:null}); },
+      pct, dash:(169.6*(1-pct/100)).toFixed(1), frame:Math.round(3456*pct/100).toLocaleString('en-US'), eta:remain+' s'
+    };
+  }
+}
+</script>
+</body>
+</html>

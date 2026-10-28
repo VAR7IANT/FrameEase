@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FrameEase — Audio</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--void:#0E0F11;--p1:#14161A;--p2:#1B1E23;--p3:#262A30;--ln:#23272C;--ln2:#363B43;--tx:#ECE8E0;--tx2:#A9A69F;--tx3:#878A92;--paper:#F2E9D8;--acc-ink:#1A0C08;--ease:cubic-bezier(.22,.8,.2,1);--mono:'Geist Mono','JetBrains Mono',ui-monospace,monospace;--serif:'Instrument Serif',Georgia,serif}
+*{box-sizing:border-box}
+body{margin:0;background:#0E0F11}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:inherit}
+input{font:inherit}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--paper);outline-offset:2px}
+.ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.ib{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:7px;color:var(--tx2);transition:background .14s,color .14s}
+.ib:hover{background:var(--p3);color:var(--tx)}
+.btn{height:30px;padding:0 12px;display:inline-flex;align-items:center;gap:7px;border-radius:7px;background:var(--p2);border:1px solid var(--ln2);color:var(--tx);font-weight:500;transition:background .14s,border-color .14s}
+.btn:hover{background:var(--p3);border-color:#4a505a}
+.btn.pri{background:var(--acc);border-color:transparent;color:var(--acc-ink);font-weight:600}
+.chip{height:24px;padding:0 10px;display:inline-flex;align-items:center;gap:6px;border-radius:12px;border:1px solid var(--ln2);color:var(--tx2);font-size:11.5px;white-space:nowrap;transition:all .14s var(--ease)}
+.chip:hover{color:var(--tx);border-color:#555b66}
+.chip.on{background:var(--paper);border-color:var(--paper);color:#17140F;font-weight:600}
+.kbd{font-family:var(--mono);font-size:11px;padding:1px 5px;border:1px solid var(--ln2);border-radius:4px;color:var(--tx3)}
+.nav{position:relative;height:32px;padding:0 13px;display:inline-flex;align-items:center;border-radius:8px;color:var(--tx2);font-weight:500;transition:color .14s,background .14s}
+.nav:hover{color:var(--tx);background:#181B1F}
+.nav.on{color:var(--tx);background:#1D2025}
+.nav.on::after{content:'';position:absolute;left:50%;bottom:3px;width:16px;height:5px;margin-left:-8px;border-bottom:2px solid var(--acc);border-radius:0 0 8px 8px}
+.strip{width:156px;flex:none;display:flex;flex-direction:column;align-items:center;gap:12px;padding:14px 12px 16px;border-radius:14px;background:var(--p1);border:1px solid var(--ln)}
+.strip.master{width:176px;background:#17191D;border-color:var(--ln2)}
+.ms{width:34px;height:28px;border-radius:7px;border:1px solid var(--ln2);font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center;color:var(--tx2);transition:all .12s}
+.ms:hover{color:var(--tx);border-color:#5a606b}
+.ms.m.on{background:#F2C14E;border-color:#F2C14E;color:#1d1604}
+.ms.s.on{background:#6FD3C9;border-color:#6FD3C9;color:#06201d}
+.fader{writing-mode:vertical-lr;direction:rtl;width:24px;height:280px;margin:0;accent-color:var(--acc);background:transparent}
+input[type=range]{accent-color:var(--acc);margin:0;background:transparent}
+.issue{display:flex;gap:12px;padding:12px;border-radius:10px;background:var(--p2);border:1px solid var(--ln)}
+.scroll::-webkit-scrollbar{width:8px}
+.scroll::-webkit-scrollbar-thumb{background:#2d3238;border-radius:4px}
+@media (max-width:1560px){.left{display:none!important}.strip{width:132px}.strip.master{width:148px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</helmet>
+
+<div style="--acc:#FF5B3A;width:100%;min-width:1100px;height:1080px;display:flex;flex-direction:column;background:var(--void);color:var(--tx);font-family:'Instrument Sans',system-ui,sans-serif;font-size:12.5px;overflow:hidden">
+
+<header style="height:48px;flex:none;display:flex;align-items:center;gap:14px;padding:0 12px 0 14px;border-bottom:1px solid var(--ln)">
+  <a href="Home.dc.html" aria-label="FrameEase home" style="display:flex;align-items:center;gap:9px">
+    <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="1.5" y="1.5" width="23" height="23" rx="7" fill="none" stroke="#ECE8E0" stroke-width="1.6"/><path d="M5.5 19.5C11 19.5 11 6.5 20.5 6.5" fill="none" stroke="#ECE8E0" stroke-width="1.8" stroke-linecap="round"/><circle cx="20.5" cy="6.5" r="2.6" fill="var(--acc)"/></svg>
+    <span style="font-weight:600;font-size:15px;letter-spacing:-.01em">Frame<span style="font-family:var(--serif);font-style:italic;font-weight:400;font-size:17px;margin-left:1px">Ease</span></span>
+  </a>
+  <span style="width:1px;height:20px;background:var(--ln2)"></span>
+  <span style="font-weight:600;font-size:13px">Coastal Light</span>
+  <nav aria-label="Workspaces" style="flex:1;display:flex;justify-content:center;gap:2px">
+    <sc-for list="{{nav}}" as="n" hint-placeholder-count="5"><a class="nav {{n.on}}" href="{{n.href}}" aria-current="{{n.cur}}">{{n.label}}</a></sc-for>
+  </nav>
+  <a class="btn pri" href="Export.dc.html" style="height:32px;padding:0 15px">Export<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+</header>
+
+<div style="flex:1;min-height:0;display:flex">
+
+<!-- Assistant -->
+<aside class="left" aria-label="Audio assistant" style="width:360px;flex:none;background:var(--p1);border-right:1px solid var(--ln);padding:22px 20px;display:flex;flex-direction:column;gap:14px;overflow:auto">
+  <div><h2 style="margin:0;font-family:var(--serif);font-weight:400;font-size:30px;letter-spacing:-.01em">Sound check</h2><div style="margin-top:6px;color:var(--tx2);line-height:1.45">We listened to the whole timeline. Here is what deserves your ears.</div></div>
+  <sc-for list="{{issues}}" as="i" hint-placeholder-count="4">
+    <div class="issue">
+      <span style="width:28px;height:28px;flex:none;border-radius:50%;background:{{i.c}};display:flex;align-items:center;justify-content:center;color:#10130f"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:15px;height:15px"><path d="{{i.d}}"/></svg></span>
+      <span style="flex:1;min-width:0"><span style="display:block;font-weight:600">{{i.title}}</span><span style="display:block;color:var(--tx2);margin-top:3px;line-height:1.4">{{i.body}}</span>
+        <button class="chip {{i.on}}" onClick="{{i.fix}}" style="margin-top:9px" aria-pressed="{{i.done}}">{{i.cta}}</button></span>
+    </div>
+  </sc-for>
+  <div style="margin-top:auto;padding:14px;border-radius:10px;border:1px dashed var(--ln2);color:var(--tx3);line-height:1.5">Fixes are non-destructive. Every one is a node on the clip you can bypass or tweak.</div>
+</aside>
+
+<!-- Mixer -->
+<main style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:0">
+
+  <div style="padding:16px 24px 0;display:flex;align-items:center;gap:12px">
+    <span style="font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--tx2)">Mara_Interview_A</span>
+    <span class="mono" style="color:var(--tx3);font-size:11.5px">Dialogue · A1 · 0:45 · stereo 48 kHz</span>
+    <span style="flex:1"></span>
+    <button class="btn" onClick="{{trim}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M7 8l-3 4 3 4M17 8l3 4-3 4"/></svg>{{trimLabel}}</button>
+    <button class="ib" onClick="{{togglePlay}}" aria-label="{{playLabel}}" title="Audition (Space)" style="background:var(--paper);color:#17140F;width:34px;height:34px;border-radius:50%"><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="{{playD}}" fill="#17140F"/></svg></button>
+  </div>
+  <div style="margin:10px 24px 0;position:relative;height:150px;border-radius:12px;background:#0F1114;border:1px solid var(--ln);overflow:hidden">
+    <svg viewBox="0 0 1200 150" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%" role="img" aria-label="Waveform of the selected dialogue clip">
+      <path d="{{silences}}" fill="rgba(242,193,78,.16)" stroke="none"/>
+      <path d="{{wave}}" stroke="#7FC08F" stroke-width="2" fill="none"/>
+      <path d="M0 75H1200" stroke="#23272C"/>
+    </svg>
+    <div style="position:absolute;top:0;bottom:0;left:{{ph}}%;width:2px;background:var(--acc);box-shadow:0 0 10px rgba(255,91,58,.5)"></div>
+    <div class="mono" style="position:absolute;left:12px;top:8px;color:var(--tx3);font-size:11px">−6 dB</div>
+    <div class="mono" style="position:absolute;right:12px;bottom:8px;color:{{silColor}};font-size:11.5px">{{silNote}}</div>
+  </div>
+
+  <div class="scroll" style="flex:1;min-height:0;overflow:auto;padding:20px 24px 24px;display:flex;gap:14px;justify-content:center;align-items:flex-start">
+    <sc-for list="{{strips}}" as="c" hint-placeholder-count="3">
+      <section class="strip" aria-label="{{c.name}} channel">
+        <div style="width:100%;display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:2px;background:{{c.color}}"></span><span style="font-weight:600">{{c.name}}</span><span class="mono" style="margin-left:auto;color:var(--tx3);font-size:11px">{{c.id}}</span></div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:3px">
+          <div style="display:flex;justify-content:space-between;color:var(--tx3);font-size:11px"><span>Pan</span><span class="mono">{{c.panLabel}}</span></div>
+          <input type="range" min="-100" max="100" value="{{c.pan}}" onInput="{{c.onPan}}" aria-label="{{c.name}} pan" style="width:100%">
+        </div>
+        <div style="display:flex;gap:10px;align-items:stretch;height:290px">
+          <div style="display:flex;gap:3px;align-items:flex-end;width:24px" aria-hidden="true">
+            <div style="position:relative;flex:1;height:100%;border-radius:3px;background:#0B0C0E;overflow:hidden"><div style="position:absolute;left:0;right:0;bottom:0;height:{{c.mL}}%;background:linear-gradient(0deg,#7BD389 0%,#7BD389 62%,#F2C14E 82%,#FF5B3A 100%);background-size:100% 290px;background-position:bottom"></div></div>
+            <div style="position:relative;flex:1;height:100%;border-radius:3px;background:#0B0C0E;overflow:hidden"><div style="position:absolute;left:0;right:0;bottom:0;height:{{c.mR}}%;background:linear-gradient(0deg,#7BD389 0%,#7BD389 62%,#F2C14E 82%,#FF5B3A 100%);background-size:100% 290px;background-position:bottom"></div></div>
+          </div>
+          <input class="fader" type="range" min="-60" max="12" value="{{c.db}}" onInput="{{c.onDb}}" aria-label="{{c.name}} level" orient="vertical">
+          <div class="mono" style="display:flex;flex-direction:column;justify-content:space-between;color:var(--tx3);font-size:11px;padding:2px 0"><span>+12</span><span>0</span><span>−12</span><span>−24</span><span>−60</span></div>
+        </div>
+        <div class="mono" style="font-size:15px;font-weight:500">{{c.dbLabel}}<span style="color:var(--tx3);font-size:11px;margin-left:3px">dB</span></div>
+        <div style="display:flex;gap:6px">
+          <button class="ms m {{c.mOn}}" onClick="{{c.toggleM}}" aria-pressed="{{c.mutePressed}}" aria-label="Mute {{c.name}}">M</button>
+          <button class="ms s {{c.sOn}}" onClick="{{c.toggleS}}" aria-pressed="{{c.soloPressed}}" aria-label="Solo {{c.name}}">S</button>
+        </div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:6px">
+          <sc-for list="{{c.fx}}" as="f" hint-placeholder-count="2"><div style="height:26px;display:flex;align-items:center;padding:0 9px;border-radius:6px;background:var(--p3);color:var(--tx2);font-size:11.5px">{{f}}</div></sc-for>
+        </div>
+      </section>
+    </sc-for>
+
+    <section class="strip master" aria-label="Master">
+      <div style="width:100%;display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:2px;background:var(--paper)"></span><span style="font-weight:600">Master</span></div>
+      <div style="width:100%;padding:12px;border-radius:10px;background:#0B0C0E;border:1px solid var(--ln)">
+        <div style="color:var(--tx3);font-size:11px">Integrated loudness</div>
+        <div class="mono" style="font-size:30px;font-weight:500;line-height:1.1;margin-top:4px">{{lufs}}</div>
+        <div class="mono" style="color:var(--tx3);font-size:11px">LUFS · target {{targetLabel}}</div>
+        <div style="margin-top:10px;height:6px;border-radius:3px;background:#1c1f24;position:relative"><div style="position:absolute;top:-2px;bottom:-2px;left:{{targetPos}}%;width:2px;background:var(--paper)"></div><div style="position:absolute;top:0;bottom:0;left:0;width:{{lufsPos}}%;border-radius:3px;background:{{lufsColor}}"></div></div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:stretch;height:290px">
+        <div style="display:flex;gap:3px;width:24px" aria-hidden="true">
+          <div style="position:relative;flex:1;border-radius:3px;background:#0B0C0E;overflow:hidden"><div style="position:absolute;left:0;right:0;bottom:0;height:{{mstL}}%;background:linear-gradient(0deg,#7BD389 0%,#7BD389 62%,#F2C14E 82%,#FF5B3A 100%);background-size:100% 290px;background-position:bottom"></div></div>
+          <div style="position:relative;flex:1;border-radius:3px;background:#0B0C0E;overflow:hidden"><div style="position:absolute;left:0;right:0;bottom:0;height:{{mstR}}%;background:linear-gradient(0deg,#7BD389 0%,#7BD389 62%,#F2C14E 82%,#FF5B3A 100%);background-size:100% 290px;background-position:bottom"></div></div>
+        </div>
+        <input class="fader" type="range" min="-60" max="12" value="{{mst}}" onInput="{{onMst}}" aria-label="Master level" orient="vertical">
+      </div>
+      <div class="mono" style="font-size:15px;font-weight:500">{{mstLabel}}<span style="color:var(--tx3);font-size:11px;margin-left:3px">dB</span></div>
+      <div style="width:100%;display:flex;flex-direction:column;gap:6px">
+        <div style="color:var(--tx3);font-size:11px">Loudness target</div>
+        <sc-for list="{{targets}}" as="t" hint-placeholder-count="3"><button class="chip {{t.on}}" aria-pressed="{{t.pressed}}" onClick="{{t.pick}}" style="justify-content:space-between;width:100%">{{t.name}}<span class="mono">{{t.v}}</span></button></sc-for>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- Voice tools -->
+<aside aria-label="Voice tools" style="width:372px;flex:none;background:var(--p1);border-left:1px solid var(--ln);padding:22px 20px;display:flex;flex-direction:column;gap:18px;overflow:auto">
+  <div>
+    <div style="display:flex;align-items:center;gap:10px"><h2 style="margin:0;font-size:15px;font-weight:600;flex:1">Clean voice</h2>
+      <button onClick="{{toggleClean}}" aria-pressed="{{clean}}" aria-label="Clean voice" style="width:38px;height:22px;border-radius:11px;background:{{cleanBg}};position:relative;transition:background .18s"><span style="position:absolute;top:2px;left:{{cleanKnob}}px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .18s var(--ease)"></span></button></div>
+    <div style="color:var(--tx2);margin-top:6px;line-height:1.45">One control instead of five plug-ins: noise, room echo and breath, balanced for speech.</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:12px;opacity:{{cleanOp}}"><span style="width:62px;color:var(--tx2)">Strength</span><input type="range" min="0" max="100" value="{{strength}}" onInput="{{setStrength}}" aria-label="Clean voice strength" style="flex:1"><span class="mono" style="width:40px;text-align:right">{{strength}}%</span></div>
+  </div>
+
+  <div style="height:1px;background:var(--ln)"></div>
+
+  <div>
+    <div style="display:flex;align-items:center;gap:10px"><h2 style="margin:0;font-size:15px;font-weight:600;flex:1">Tone</h2><a href="#" style="color:var(--tx3);font-size:11.5px">Open 8-band EQ</a></div>
+    <svg viewBox="0 0 320 130" style="width:100%;height:auto;margin-top:10px;display:block;background:#0B0C0E;border-radius:10px;border:1px solid var(--ln)" role="img" aria-label="Equaliser curve: {{eqName}}">
+      <g stroke="#1f2328"><path d="M0 65H320M80 0V130M160 0V130M240 0V130"/></g>
+      <path d="{{eqD}}" stroke="#ECE8E0" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <path d="{{eqD}} L320 130 L0 130Z" fill="rgba(236,232,224,.07)"/>
+      <g font-family="Geist Mono, monospace" font-size="10" fill="#878A92"><text x="6" y="124">100</text><text x="86" y="124">1k</text><text x="166" y="124">5k</text><text x="286" y="124">16k</text></g>
+    </svg>
+    <div style="display:flex;gap:6px;margin-top:10px"><sc-for list="{{eqs}}" as="e" hint-placeholder-count="4"><button class="chip {{e.on}}" aria-pressed="{{e.pressed}}" onClick="{{e.pick}}">{{e.name}}</button></sc-for></div>
+  </div>
+
+  <div style="height:1px;background:var(--ln)"></div>
+
+  <div>
+    <div style="display:flex;align-items:center;gap:10px"><h2 style="margin:0;font-size:15px;font-weight:600;flex:1">Music ducking</h2><span class="mono" style="color:var(--acc)">−9 dB</span></div>
+    <div style="color:var(--tx2);margin-top:6px;line-height:1.45">Music dips under dialogue and swells back in the gaps. You’ll see it as a dashed line on the music clip.</div>
+    <svg viewBox="0 0 320 70" style="width:100%;margin-top:10px;display:block;background:#0B0C0E;border-radius:10px;border:1px solid var(--ln)" aria-hidden="true">
+      <path d="M0 52 H70 L84 20 H150 L166 52 H230 L244 20 H320" stroke="#B795D0" stroke-width="2" fill="none" transform="translate(0,-6)"/>
+      <path d="M70 8V62M166 8V62" stroke="#2b3036" stroke-dasharray="3 3"/>
+      <rect x="84" y="46" width="82" height="10" rx="3" fill="#7FC08F" opacity=".7"/>
+    </svg>
+    <div style="display:flex;gap:10px;margin-top:12px"><span style="flex:1;padding:10px 12px;border-radius:9px;background:var(--p2);border:1px solid var(--ln)"><span style="display:block;color:var(--tx3);font-size:11px">Attack</span><span class="mono">0.8 s</span></span><span style="flex:1;padding:10px 12px;border-radius:9px;background:var(--p2);border:1px solid var(--ln)"><span style="display:block;color:var(--tx3);font-size:11px">Release</span><span class="mono">1.2 s</span></span></div>
+  </div>
+</aside>
+</div>
+</div>
+</x-dc>
+
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+const CH = [
+  {k:'dia',id:'A1',name:'Dialogue',color:'#7FC08F',fx:['Clean voice','Compressor']},
+  {k:'mus',id:'A2',name:'Music',color:'#B795D0',fx:['Auto-duck','Low shelf −2 dB']},
+  {k:'sfx',id:'A3',name:'Sound FX',color:'#D6AE5E',fx:['Limiter']}
+];
+const EQS = [
+  {k:'flat',name:'Flat',d:'M0 65H320'},
+  {k:'voice',name:'Voice',d:'M0 108C30 108 50 84 80 70S130 46 170 52S240 56 270 46S310 40 320 42'},
+  {k:'warm',name:'Warm',d:'M0 40C40 40 70 52 110 62S200 70 250 82S300 100 320 104'},
+  {k:'bright',name:'Bright',d:'M0 86C60 86 120 74 170 62S260 34 320 26'}
+];
+const TARGETS = [{k:'yt',name:'Online',v:-14},{k:'pod',name:'Podcast',v:-16},{k:'br',name:'Broadcast',v:-23}];
+const sg=(n)=> (n>0?'+':n<0?'−':'')+Math.abs(n);
+class Component extends DCLogic {
+  state = {db:{dia:-4,mus:-14,sfx:-12}, mst:0, pan:{dia:0,mus:0,sfx:-20}, mute:{}, solo:{}, playing:false, tick:0, clean:true, strength:62, eq:'voice', target:'yt', silenceCut:false, fixed:{duck:true,peak:false,wind:false}};
+  componentDidMount(){ this._iv=setInterval(()=>{ if(this.state.playing) this.setState({tick:this.state.tick+1}); },90); }
+  componentWillUnmount(){ clearInterval(this._iv); }
+  renderVals(){
+    const s=this.state, up=(p)=>this.setState(p), n=s.tick, any=Object.values(s.solo).some(Boolean);
+    const level=(k,i)=>{ if(!s.playing) return 0; const muted=s.mute[k]||(any&&!s.solo[k]); if(muted) return 0; const base=k==='dia'?.78:k==='mus'?.55:.4; const wob=Math.abs(Math.sin(n*.9+i*1.7))*.5+Math.abs(Math.sin(n*.33+i))*.3; const lin=Math.min(1,base*(.4+wob)); const g=Math.pow(10,(s.db[k]+4)/40); return Math.min(100,Math.round(lin*g*100)); };
+    const strips=CH.map(c=>({ ...c, db:s.db[c.k], dbLabel:sg(s.db[c.k]), pan:s.pan[c.k], panLabel:s.pan[c.k]===0?'C':(s.pan[c.k]<0?'L'+(-s.pan[c.k]):'R'+s.pan[c.k]),
+      onDb:(e)=>up({db:{...s.db,[c.k]:+e.target.value}}), onPan:(e)=>up({pan:{...s.pan,[c.k]:+e.target.value}}),
+      mL:level(c.k,0), mR:level(c.k,1.3), mOn:s.mute[c.k]?'on':'', sOn:s.solo[c.k]?'on':'', mutePressed:!!s.mute[c.k], soloPressed:!!s.solo[c.k],
+      toggleM:()=>up({mute:{...s.mute,[c.k]:!s.mute[c.k]}}), toggleS:()=>up({solo:{...s.solo,[c.k]:!s.solo[c.k]}}) }));
+    const sum=Math.min(100,(level('dia',0)+level('mus',0)*.6+level('sfx',0)*.4)*Math.pow(10,s.mst/40));
+    const tgt=TARGETS.find(t=>t.k===s.target).v;
+    const lufs = Math.round((-17 + s.db.dia*.45 + s.db.mus*.15 + s.mst + (s.clean?0.6:0))*10)/10;
+    const clamp=(v)=>Math.max(0,Math.min(100,v));
+    const toPos=(l)=>clamp((l+36)/36*100);
+    let wave='', sil=''; const pauses=[[190,260],[470,560],[790,850]];
+    for(let x=0;x<1200;x+=4){ const t=x/1200; const inP=pauses.some(p=>x>=p[0]&&x<=p[1]); const g=inP?0.04:Math.max(.08,Math.abs(Math.sin(x*.043)*Math.sin(x*.0071+1)+.35)); const a=Math.min(1,g*(.55+.45*Math.abs(Math.sin(x*.31+1))))*60; wave+='M'+x+' '+(75-a).toFixed(1)+'V'+(75+a).toFixed(1); }
+    pauses.forEach(p=>{ sil+='M'+p[0]+' 0H'+p[1]+'V150H'+p[0]+'Z'; });
+    const eq=EQS.find(e=>e.k===s.eq);
+    const issues=[
+      {title:'Music masks the interview',body:'At 0:22 the score sits 4 dB above Mara. Auto-duck keeps her clear.',cta:s.fixed.duck?'Applied · −9 dB':'Apply auto-duck',done:s.fixed.duck,c:s.fixed.duck?'#7BD389':'#F2C14E',d:s.fixed.duck?'M5 12l5 5 9-10':'M12 8v5M12 17h.01',fix:()=>up({fixed:{...s.fixed,duck:!s.fixed.duck}})},
+      {title:'Wake_whoosh peaks at −0.3 dBFS',body:'Close to clipping. A limiter will protect it without changing the character.',cta:s.fixed.peak?'Limiter added':'Add limiter',done:s.fixed.peak,c:s.fixed.peak?'#7BD389':'#F2C14E',d:s.fixed.peak?'M5 12l5 5 9-10':'M12 8v5M12 17h.01',fix:()=>up({fixed:{...s.fixed,peak:!s.fixed.peak}})},
+      {title:'Wind noise in Harbour_Walk',body:'Low rumble below 120 Hz for 14 seconds.',cta:s.fixed.wind?'High-pass on':'Reduce wind',done:s.fixed.wind,c:s.fixed.wind?'#7BD389':'#6FD3C9',d:s.fixed.wind?'M5 12l5 5 9-10':'M4 12h10a3 3 0 100-3M4 17h14a3 3 0 110 3',fix:()=>up({fixed:{...s.fixed,wind:!s.fixed.wind}})}
+    ].map(i=>({...i,on:i.done?'on':''}));
+    return {
+      nav:[['Media','Media.dc.html'],['Edit','Main.dc.html'],['Color','Color.dc.html'],['Audio','Audio.dc.html'],['Text','Text.dc.html']].map(x=>({label:x[0],href:x[1],on:x[0]==='Audio'?'on':'',cur:x[0]==='Audio'?'page':'false'})),
+      issues, strips, mst:s.mst, mstLabel:sg(s.mst), onMst:(e)=>up({mst:+e.target.value}), mstL:Math.round(sum), mstR:Math.round(sum*.94),
+      lufs:s.playing||true?lufs.toFixed(1):'—', targetLabel:tgt, targetPos:toPos(tgt).toFixed(0), lufsPos:toPos(lufs).toFixed(0), lufsColor:Math.abs(lufs-tgt)<=1.5?'#7BD389':'#F2C14E',
+      targets:TARGETS.map(t=>({name:t.name,v:t.v,on:s.target===t.k?'on':'',pressed:s.target===t.k,pick:()=>up({target:t.k})})),
+      wave, silences:s.silenceCut?'':sil, showSilence:true, silColor:s.silenceCut?'#7BD389':'#F2C14E', silNote:s.silenceCut?'3 pauses trimmed · 4.1 s saved':'3 pauses longer than 1 s',
+      trim:()=>up({silenceCut:!s.silenceCut}), trimLabel:s.silenceCut?'Undo trim':'Trim silences',
+      ph:(10+(n*1.7)%80).toFixed(1), togglePlay:()=>up({playing:!s.playing}), playLabel:s.playing?'Pause':'Audition', playD:s.playing?'M5 4h5v16H5zM14 4h5v16h-5z':'M7 4v16l13-8z',
+      clean:s.clean, toggleClean:()=>up({clean:!s.clean}), cleanBg:s.clean?'#FF5B3A':'#363B43', cleanKnob:s.clean?18:2, cleanOp:s.clean?1:.4, strength:s.strength, setStrength:(e)=>up({strength:+e.target.value}),
+      eqs:EQS.map(e=>({name:e.name,on:s.eq===e.k?'on':'',pressed:s.eq===e.k,pick:()=>up({eq:e.k})})), eqD:eq.d, eqName:eq.name
+    };
+  }
+}
+</script>
+</body>
+</html>
