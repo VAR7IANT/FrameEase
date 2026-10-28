@@ -68,8 +68,8 @@ Item {
         // ================= LEFT: monitor, scopes, shots =================
         Item {
             Layout.fillWidth: true; Layout.fillHeight: true; Layout.minimumWidth: 300
-          ColumnLayout {
-            anchors.fill: parent; spacing: 0
+            ColumnLayout {
+                anchors.fill: parent; spacing: 0
 
             RowLayout {
                 Layout.fillWidth: true; Layout.preferredHeight: 44; Layout.leftMargin: 18; Layout.rightMargin: 18; spacing: 10

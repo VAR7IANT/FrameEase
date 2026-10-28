@@ -163,13 +163,14 @@ Item {
                         }
                     }
                 }
-          }
+            }
+        }
 
         // ================= Stage + subtitle track =================
         Item {
             Layout.fillWidth: true; Layout.fillHeight: true; Layout.minimumWidth: 300
-          ColumnLayout {
-            anchors.fill: parent; spacing: 0
+            ColumnLayout {
+                anchors.fill: parent; spacing: 0
 
             Item {
                 Layout.fillWidth: true; Layout.fillHeight: true
@@ -299,7 +300,6 @@ Item {
                 }
             }
         }
-          }
         }
 
         // ================= Style =================

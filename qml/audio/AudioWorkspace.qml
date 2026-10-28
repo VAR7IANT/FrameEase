@@ -113,13 +113,14 @@ Item {
                                text: "Fixes are non-destructive. Each one is a node on the clip that you can bypass or tweak." }
                     }
                 }
-          }
+            }
+        }
 
         // ================= Waveform + mixer =================
         Item {
             Layout.fillWidth: true; Layout.fillHeight: true; Layout.minimumWidth: 300
-          ColumnLayout {
-            anchors.fill: parent; spacing: 0
+            ColumnLayout {
+                anchors.fill: parent; spacing: 0
 
             RowLayout {
                 Layout.fillWidth: true; Layout.leftMargin: 24; Layout.rightMargin: 24; Layout.topMargin: 16; spacing: 12
@@ -195,7 +196,6 @@ Item {
                 }
             }
         }
-          }
         }
 
         // ================= Voice tools =================
