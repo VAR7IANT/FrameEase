@@ -22,6 +22,7 @@ qt_add_qml_module(FrameEase
         qml/Main.qml
         qml/Theme.qml
         qml/components/FEIcon.qml
+        qml/components/FEPlainSlider.qml
         qml/components/FEIconButton.qml
         qml/components/FEButton.qml
         qml/components/FEChip.qml

@@ -8,6 +8,7 @@ AbstractButton {
     property string iconPath
     property string tip
     property real iconSize: 16
+    property bool iconFilled: false
 
     implicitWidth: 28
     implicitHeight: 28
@@ -25,11 +26,14 @@ AbstractButton {
         border.color: Theme.paper
         Behavior on color { ColorAnimation { duration: Theme.durFast } }
     }
-    contentItem: FEIcon {
-        anchors.centerIn: parent
-        path: root.iconPath
-        size: root.iconSize
-        color: root.checked ? "#17140F" : (root.hovered ? Theme.tx : Theme.tx2)
+    contentItem: Item {
+        FEIcon {
+            anchors.centerIn: parent
+            path: root.iconPath
+            size: root.iconSize
+            filled: root.iconFilled
+            color: root.checked ? "#17140F" : (root.hovered ? Theme.tx : Theme.tx2)
+        }
     }
 
     ToolTip.visible: hovered && tip.length > 0

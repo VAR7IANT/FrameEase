@@ -66,8 +66,10 @@ Item {
         anchors.fill: parent; spacing: 0
 
         // ================= LEFT: monitor, scopes, shots =================
-        ColumnLayout {
-            Layout.fillWidth: true; Layout.fillHeight: true; spacing: 0
+        Item {
+            Layout.fillWidth: true; Layout.fillHeight: true; Layout.minimumWidth: 300
+          ColumnLayout {
+            anchors.fill: parent; spacing: 0
 
             RowLayout {
                 Layout.fillWidth: true; Layout.preferredHeight: 44; Layout.leftMargin: 18; Layout.rightMargin: 18; spacing: 10
@@ -104,7 +106,7 @@ Item {
                         Rectangle { anchors.fill: parent; color: root.grade.ti >= 0 ? "#E040C8" : "#40E070"; opacity: Math.abs(root.grade.ti) / 50 * 0.12 }
                         // wheel push
                         Rectangle { anchors.fill: parent; color: Qt.hsla(root.wheelPush.h, 0.8, 0.5, 1)
-                                    opacity: Math.min(0.5, root.wheelPush.avg * 0.9 + root.wheelPush.s * 0.25) }
+                                    opacity: Math.min(0.16, root.wheelPush.avg * 0.35 + root.wheelPush.s * 0.1) }
                     }
                     Item {
                         x: root.wipe ? frame.width * root.wipePos : 0
@@ -141,7 +143,7 @@ Item {
                 visible: root.wipe
                 Layout.fillWidth: true; Layout.leftMargin: 24; Layout.rightMargin: 24; Layout.preferredHeight: 28; spacing: 12
                 Text { text: "Original"; color: Theme.tx3; font.family: Theme.fontUI; font.pixelSize: Theme.sizeSmall + 0.5; Layout.preferredWidth: 56 }
-                Slider { Layout.fillWidth: true; from: 0; to: 1; value: root.wipePos; onMoved: root.wipePos = value; Accessible.name: "Before and after wipe position" }
+                FEPlainSlider { Layout.fillWidth: true; from: 0; to: 1; value: root.wipePos; onMoved: root.wipePos = value; Accessible.name: "Before and after wipe position" }
                 Text { text: "Graded"; color: Theme.tx3; font.family: Theme.fontUI; font.pixelSize: Theme.sizeSmall + 0.5; horizontalAlignment: Text.AlignRight; Layout.preferredWidth: 56 }
             }
 
@@ -168,11 +170,11 @@ Item {
                             Text { text: "Grade one, then copy to similar shots"; color: Theme.tx3; font.family: Theme.fontUI; font.pixelSize: Theme.sizeSmall + 0.5 }
                             Item { Layout.fillWidth: true }
                             FEButton { text: "Match to this shot"; implicitHeight: 26 } }
-                        Row {
-                            spacing: 12
-                            Repeater {
-                                model: root.shots
-                                delegate: AbstractButton {
+                        ListView {
+                            Layout.fillWidth: true; Layout.preferredHeight: 80; Layout.minimumWidth: 0
+                            orientation: ListView.Horizontal; spacing: 12; clip: true; boundsBehavior: Flickable.StopAtBounds
+                            model: root.shots
+                            delegate: AbstractButton {
                                     id: sh
                                     required property int index
                                     required property var modelData
@@ -192,11 +194,11 @@ Item {
                                                     border.color: root.shot === sh.index ? Theme.accent : Theme.paper }
                                     }
                                 }
-                            }
                         }
                     }
                 }
             }
+        }
         }
 
         // ================= RIGHT: grading panel =================
@@ -412,14 +414,15 @@ Item {
                             Text { text: "Corrections"; color: Theme.tx; font.family: Theme.fontUI; font.pixelSize: Theme.sizeBody - 0.5; font.weight: Font.DemiBold; width: parent.width / 2 }
                             Text { text: "Applied top to bottom"; color: Theme.tx3; font.family: Theme.fontUI; font.pixelSize: Theme.sizeSmall + 0.5; width: parent.width / 2; horizontalAlignment: Text.AlignRight } }
                         Row {
-                            spacing: 8
+                            id: nodeRow
+                            width: parent.width; spacing: 8
                             Repeater {
                                 model: [ { n: "01", t: "Primary", s: "Exposure · Colour" }, { n: "02", t: "Skin tones", s: "Qualifier · soft" }, { n: "03", t: "Look", s: "Teal Harbour · 24%" } ]
                                 delegate: AbstractButton {
                                     id: nd
                                     required property int index
                                     required property var modelData
-                                    width: (parent.width - 8 * 3 - 36) / 3; height: 54
+                                    width: (nodeRow.width - 8 * 3 - 36) / 3; height: 54
                                     focusPolicy: Qt.StrongFocus; hoverEnabled: true
                                     Accessible.role: Accessible.Button; Accessible.name: modelData.t
                                     onClicked: root.node = index

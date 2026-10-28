@@ -113,12 +113,13 @@ Item {
                                text: "Fixes are non-destructive. Each one is a node on the clip that you can bypass or tweak." }
                     }
                 }
-            }
-        }
+          }
 
         // ================= Waveform + mixer =================
-        ColumnLayout {
-            Layout.fillWidth: true; Layout.fillHeight: true; spacing: 0
+        Item {
+            Layout.fillWidth: true; Layout.fillHeight: true; Layout.minimumWidth: 300
+          ColumnLayout {
+            anchors.fill: parent; spacing: 0
 
             RowLayout {
                 Layout.fillWidth: true; Layout.leftMargin: 24; Layout.rightMargin: 24; Layout.topMargin: 16; spacing: 12
@@ -126,7 +127,7 @@ Item {
                 Text { text: "Dialogue · A1 · 0:45 · stereo 48 kHz"; color: Theme.tx3; font.family: Theme.fontMono; font.pixelSize: Theme.sizeSmall + 0.5 }
                 Item { Layout.fillWidth: true }
                 FEButton { text: root.silenceCut ? "Undo trim" : "Trim silences"; onClicked: root.silenceCut = !root.silenceCut }
-                FEIconButton { iconPath: root.playing ? "M7 5v14M17 5v14" : "M8 5l11 7-11 7z"; tip: root.playing ? "Pause" : "Audition (Space)"; checked: true
+                FEIconButton { iconPath: root.playing ? "M7 5v14M17 5v14" : "M8 5l11 7-11 7z"; tip: root.playing ? "Pause" : "Audition (Space)"; checked: true; iconFilled: !root.playing
                                implicitWidth: 34; implicitHeight: 34; onClicked: root.playing = !root.playing }
             }
 
@@ -193,6 +194,8 @@ Item {
                     }
                 }
             }
+        }
+          }
         }
 
         // ================= Voice tools =================

@@ -88,9 +88,12 @@ Rectangle {
                     background: Rectangle { radius: 21; color: Theme.paper; scale: play.down ? 0.94 : 1
                         border.width: play.visualFocus ? 3 : 0; border.color: Theme.accent
                         Behavior on scale { NumberAnimation { duration: Theme.durFast } } }
-                    contentItem: FEIcon {
-                        anchors.centerIn: parent; size: 16; color: "#17140F"; strokeWidth: 2.4
-                        path: root.playing ? "M7 5v14M17 5v14" : "M8 5l11 7-11 7z"
+                    contentItem: Item {
+                        FEIcon {
+                            anchors.centerIn: parent; size: 16; color: "#17140F"; strokeWidth: 2.4
+                            filled: !root.playing
+                            path: root.playing ? "M7 5v14M17 5v14" : "M8 5l11 7-11 7z"
+                        }
                     }
                 }
                 FEIconButton { iconPath: "M9 6l6 6-6 6"; tip: "Next frame (→)"; onClicked: root.seek(Math.min(MockProject.total, root.playhead + 1 / MockProject.fps)) }

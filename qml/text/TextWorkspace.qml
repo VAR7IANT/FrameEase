@@ -163,12 +163,13 @@ Item {
                         }
                     }
                 }
-            }
-        }
+          }
 
         // ================= Stage + subtitle track =================
-        ColumnLayout {
-            Layout.fillWidth: true; Layout.fillHeight: true; spacing: 0
+        Item {
+            Layout.fillWidth: true; Layout.fillHeight: true; Layout.minimumWidth: 300
+          ColumnLayout {
+            anchors.fill: parent; spacing: 0
 
             Item {
                 Layout.fillWidth: true; Layout.fillHeight: true
@@ -225,7 +226,7 @@ Item {
             RowLayout {
                 Layout.fillWidth: true; Layout.leftMargin: 28; Layout.rightMargin: 28; Layout.bottomMargin: 12; spacing: 12
                 FEIconButton { checked: true; implicitWidth: 38; implicitHeight: 38; iconPath: root.playing ? "M7 5v14M17 5v14" : "M8 5l11 7-11 7z"
-                               tip: root.playing ? "Pause (Space)" : "Play (Space)"; onClicked: root.playing = !root.playing }
+                               iconFilled: !root.playing; tip: root.playing ? "Pause (Space)" : "Play (Space)"; onClicked: root.playing = !root.playing }
                 Text { text: root.timecode(root.t); color: Theme.tx; font.family: Theme.fontMono; font.pixelSize: 20; font.weight: Font.Medium }
                 Item { Layout.fillWidth: true }
                 Text { text: "Click a block, or anywhere on the track, to jump there"; color: Theme.tx3; font.family: Theme.fontUI; font.pixelSize: Theme.sizeBody - 0.5 }
@@ -297,6 +298,8 @@ Item {
                     Rectangle { x: lane.px(root.t) - 1; width: 2; height: parent.height; color: Theme.accent; z: 5 }
                 }
             }
+        }
+          }
         }
 
         // ================= Style =================

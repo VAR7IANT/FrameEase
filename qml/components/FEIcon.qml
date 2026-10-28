@@ -9,6 +9,7 @@ Item {
     property color color: Theme.tx2
     property real size: 16
     property real strokeWidth: 1.7
+    property bool filled: false
 
     implicitWidth: size
     implicitHeight: size
@@ -22,7 +23,7 @@ Item {
         ShapePath {
             strokeColor: root.color
             strokeWidth: root.strokeWidth
-            fillColor: "transparent"
+            fillColor: root.filled ? root.color : "transparent"
             capStyle: ShapePath.RoundCap
             joinStyle: ShapePath.RoundJoin
             PathSvg { path: root.path }

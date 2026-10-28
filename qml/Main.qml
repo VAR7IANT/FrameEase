@@ -99,8 +99,8 @@ ApplicationWindow {
 
                 Item { Layout.fillWidth: true }
 
-                FEIconButton { iconPath: "M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-3"; tip: "Undo (Ctrl+Z)" }
-                FEIconButton { iconPath: "M15 14l5-5-5-5M20 9H10a6 6 0 000 12h3"; tip: "Redo (Ctrl+Shift+Z)" }
+                FEIconButton { iconPath: "M9 14L4 9l5-5M4 9h10a 6 6 0 0 1 0 12h-3"; tip: "Undo (Ctrl+Z)" }
+                FEIconButton { iconPath: "M15 14l5-5-5-5M20 9H10a 6 6 0 0 0 0 12h3"; tip: "Redo (Ctrl+Shift+Z)" }
                 FEButton { text: "Export  →"; primary: true; implicitHeight: 32; implicitWidth: 104
                            onClicked: win.current = 5 }
             }

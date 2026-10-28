@@ -151,9 +151,9 @@ Rectangle {
             RowLayout {
                 anchors.fill: parent; anchors.leftMargin: 10; anchors.rightMargin: 10; spacing: 4
                 FEIconButton { iconPath: "M6 4l12 7-5.2 1.6L11 18z"; tip: "Select (V)"; checked: root.tool === "select"; onClicked: root.toolRequested("select") }
-                FEIconButton { iconPath: "M6 7m-2.5 0a2.5 2.5 0 105 0 2.5 2.5 0 10-5 0M6 17m-2.5 0a2.5 2.5 0 105 0 2.5 2.5 0 10-5 0M8 8.5L20 18M8 15.5L20 6"; tip: "Blade (B): click a clip to cut"; checked: root.tool === "blade"; onClicked: root.toolRequested("blade") }
+                FEIconButton { iconPath: "M6 7m-2.5 0a 2.5 2.5 0 1 0 5 0 2.5 2.5 0 1 0 -5 0M6 17m-2.5 0a 2.5 2.5 0 1 0 5 0 2.5 2.5 0 1 0 -5 0M8 8.5L20 18M8 15.5L20 6"; tip: "Blade (B): click a clip to cut"; checked: root.tool === "blade"; onClicked: root.toolRequested("blade") }
                 Rectangle { Layout.preferredWidth: 1; Layout.preferredHeight: 18; Layout.leftMargin: 6; Layout.rightMargin: 6; color: Theme.line2 }
-                FEIconButton { iconPath: "M6 4v8a6 6 0 0012 0V4h-4v8a2 2 0 01-4 0V4zM6 8h4M14 8h4"; tip: "Snapping (N)"; checked: root.snapping; onClicked: root.snapping = !root.snapping }
+                FEIconButton { iconPath: "M6 4v8a 6 6 0 0 0 12 0V4h-4v8a 2 2 0 0 1 -4 0V4zM6 8h4M14 8h4"; tip: "Snapping (N)"; checked: root.snapping; onClicked: root.snapping = !root.snapping }
                 FEIconButton { iconPath: "M4 7h9M4 17h9M16 5l4 2-4 2M16 15l4 2-4 2"; tip: "Ripple edit: close gaps on delete"; checked: root.ripple; onClicked: root.ripple = !root.ripple }
 
                 Item { Layout.fillWidth: true; Layout.preferredHeight: 30
@@ -178,7 +178,7 @@ Rectangle {
                 }
 
                 FEIconButton { iconPath: "M5 12h14"; tip: "Zoom out"; onClicked: root.zoom(1 / 1.25) }
-                Slider { id: zoomSlider; Layout.preferredWidth: 110; from: 6; to: 120; value: root.pps; onMoved: root.pps = value; Accessible.name: "Timeline zoom" }
+                FEPlainSlider { id: zoomSlider; Layout.preferredWidth: 110; from: 6; to: 120; value: root.pps; onMoved: root.pps = value; Accessible.name: "Timeline zoom" }
                 FEIconButton { iconPath: "M12 5v14M5 12h14"; tip: "Zoom in"; onClicked: root.zoom(1.25) }
                 FEButton { text: "Fit"; implicitHeight: 26; onClicked: root.fit() }
             }
@@ -240,9 +240,9 @@ Rectangle {
                             Text { anchors.verticalCenter: parent.verticalCenter; text: modelData.name; color: Theme.tx; width: 80; elide: Text.ElideRight
                                    font.family: Theme.fontUI; font.pixelSize: Theme.sizeBody - 0.5 }
                             FEIconButton { anchors.verticalCenter: parent.verticalCenter; width: 22; height: 22; iconSize: 13; tip: "Lock " + modelData.name
-                                           iconPath: "M7 11h10v9H7zM9 11V8a3 3 0 016 0v3" }
+                                           iconPath: "M7 11h10v9H7zM9 11V8a 3 3 0 0 1 6 0v3" }
                             FEIconButton { anchors.verticalCenter: parent.verticalCenter; width: 22; height: 22; iconSize: 13; tip: (modelData.video ? "Hide " : "Mute ") + modelData.name
-                                           iconPath: modelData.video ? "M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12zM12 9a3 3 0 100 6 3 3 0 000-6z" : "M5 9v6h3l5 4V5L8 9zM16.5 9a4 4 0 010 6" }
+                                           iconPath: modelData.video ? "M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12zM12 9a 3 3 0 1 0 0 6 3 3 0 0 0 0 -6z" : "M5 9v6h3l5 4V5L8 9zM16.5 9a 4 4 0 0 1 0 6" }
                         }
                     }
                 }
@@ -338,7 +338,7 @@ Rectangle {
                         Shape {
                             x: -7; width: 14; height: 18
                             ShapePath { fillColor: Theme.accent; strokeColor: "transparent"
-                                PathSvg { path: "M1 0h12a1 1 0 011 1v7l-7 9-7-9V1a1 1 0 011-1z" } }
+                                PathSvg { path: "M1 0h12a 1 1 0 0 1 1 1v7l-7 9-7-9V1a 1 1 0 0 1 1 -1z" } }
                         }
                     }
                 }
