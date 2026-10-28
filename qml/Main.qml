@@ -2,14 +2,29 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import FrameEase
+import "home"
 
 ApplicationWindow {
     id: win
     width: 1600; height: 900
     minimumWidth: 1180; minimumHeight: 700
     visible: true
-    title: "FrameEase · Coastal Light"
+    title: atHome || !project ? "FrameEase" : "FrameEase · " + project.name
     color: Theme.void_
+
+    // Home is the launch screen, not a workspace: while `atHome` it owns the whole window.
+    property bool atHome: true
+    property string projectId: ""
+    readonly property var project: MockLibrary.byId(projectId)
+
+    // Opens a (mock) project in the given workspace index. Every project shows the same demo timeline for now.
+    function enterProject(id, workspace) {
+        MockLibrary.touch(id)
+        projectId = id
+        current = workspace
+        atHome = false
+    }
+    function goHome() { atHome = true }
 
     readonly property var workspaces: [
         { name: "Media", tip: "Browse & organise",  summary: "Search by name or by describing the shot, skim thumbnails on hover, rate and tag, and see exactly where each clip is used. Smart collections do the sorting for you." },
@@ -20,15 +35,30 @@ ApplicationWindow {
     ]
     property int current: 1   // opens on Edit
 
-    // Ctrl+1..5 jumps between workspaces
+    // Ctrl+1..5 jumps between workspaces; Ctrl+0 goes back to Home. Only active inside a project.
     Repeater {
         model: win.workspaces.length
         Item { required property int index
-            Shortcut { sequence: "Ctrl+" + (index + 1); onActivated: win.current = index } }
+            Shortcut { sequence: "Ctrl+" + (index + 1); enabled: !win.atHome; onActivated: win.current = index } }
     }
+    Shortcut { sequence: "Ctrl+0"; enabled: !win.atHome; onActivated: win.goHome() }
 
     ColumnLayout {
         anchors.fill: parent; spacing: 0
+
+        StackLayout {
+            Layout.fillWidth: true; Layout.fillHeight: true
+            currentIndex: win.atHome ? 0 : 1
+
+            HomeScreen {
+                id: home
+                onOpenProject: (id, workspace) => win.enterProject(id, workspace)
+                onCreateProject: (formatKey, workspace) => win.enterProject(MockLibrary.create(formatKey), workspace)
+            }
+
+            // ---- editor shell: top bar + workspaces ----
+            ColumnLayout {
+                spacing: 0
 
         // ---- top bar ----
         Rectangle {
@@ -37,24 +67,33 @@ ApplicationWindow {
             RowLayout {
                 anchors.fill: parent; anchors.leftMargin: 14; anchors.rightMargin: 12; spacing: 14
 
-                // Brand: a frame with an ease curve ending in the accent dot
-                Row {
-                    spacing: 9
-                    Item {
-                        width: 26; height: 26
-                        Rectangle { anchors.fill: parent; anchors.margins: 1.5; radius: 7; color: "transparent"; border.color: Theme.tx; border.width: 1.6 }
-                        FEIcon { anchors.centerIn: parent; size: 26; path: "M5.5 19.5C11 19.5 11 6.5 20.5 6.5"; color: Theme.tx; strokeWidth: 1.8 }
-                        Rectangle { x: 18; y: 4; width: 5.2; height: 5.2; radius: 2.6; color: Theme.accent }
+                // Brand doubles as the "back to Home" button
+                AbstractButton {
+                    id: homeBrand
+                    objectName: "brandHome"
+                    leftPadding: 8; rightPadding: 8; topPadding: 4; bottomPadding: 4
+                    focusPolicy: Qt.StrongFocus; hoverEnabled: true
+                    Accessible.role: Accessible.Button; Accessible.name: "FrameEase, back to Home"
+                    ToolTip.visible: hovered; ToolTip.delay: 600; ToolTip.text: "Back to Home  (Ctrl+0)"
+                    onClicked: win.goHome()
+                    background: Rectangle {
+                        radius: Theme.radiusM
+                        color: homeBrand.hovered ? "#181B1F" : "transparent"
+                        border.width: homeBrand.visualFocus ? 2 : 0; border.color: Theme.paper
                     }
-                    Row {
-                        anchors.verticalCenter: parent.verticalCenter
-                        Text { text: "Frame"; color: Theme.tx; font.family: Theme.fontUI; font.pixelSize: 15; font.weight: Font.DemiBold }
-                        Text { text: "Ease"; color: Theme.tx; font.family: Theme.fontDisplay; font.italic: true; font.pixelSize: 17 }
-                    }
+                    contentItem: BrandMark { }
+                }
+                FEButton {
+                    objectName: "homeButton"
+                    text: "←  Projects"; implicitHeight: 28
+                    Accessible.name: "Back to Home"
+                    onClicked: win.goHome()
                 }
                 Rectangle { Layout.preferredWidth: 1; Layout.preferredHeight: 20; color: Theme.line2 }
-                Text { text: "Coastal Light"; color: Theme.tx; font.family: Theme.fontUI; font.pixelSize: 13; font.weight: Font.DemiBold }
-                Text { text: "v3 · 4K · 24p"; color: Theme.tx3; font.family: Theme.fontUI; font.pixelSize: Theme.sizeSmall + 0.5; visible: win.width > 1380 }
+                Text { text: win.project ? win.project.name : ""; color: Theme.tx; font.family: Theme.fontUI; font.pixelSize: 13; font.weight: Font.DemiBold
+                       Layout.maximumWidth: 220; elide: Text.ElideRight }
+                FETag { visible: !!win.project && win.project.unsaved; text: "Not saved" }
+                Text { text: win.project ? win.project.version + " · " + win.project.spec : ""; color: Theme.tx3; font.family: Theme.fontUI; font.pixelSize: Theme.sizeSmall + 0.5; visible: win.width > 1380 }
 
                 Item { Layout.fillWidth: true }
 
@@ -65,6 +104,7 @@ ApplicationWindow {
                         model: win.workspaces
                         delegate: AbstractButton {
                             id: tab
+                            objectName: "tab." + modelData.name
                             required property int index
                             required property var modelData
                             readonly property bool on: win.current === index
@@ -119,6 +159,9 @@ ApplicationWindow {
             WorkspacePlaceholder { title: "Export"; summary: "Choose a destination and FrameEase picks sensible settings. Fine-tune resolution, codec, quality and audio only when you want to." }
         }
 
+            }   // editor shell
+        }       // home / editor pages
+
         // ---- status bar ----
         Rectangle {
             Layout.fillWidth: true; Layout.preferredHeight: 26; color: "#0B0C0E"
@@ -127,7 +170,7 @@ ApplicationWindow {
                 anchors.verticalCenter: parent.verticalCenter; x: 14; spacing: 16
                 Row { spacing: 6
                     Rectangle { anchors.verticalCenter: parent.verticalCenter; width: 6; height: 6; radius: 3; color: Theme.ok }
-                    Text { text: "Mock engine · UI prototype"; color: Theme.tx3; font.family: Theme.fontUI; font.pixelSize: Theme.sizeSmall + 0.5 } }
+                    Text { text: "Mock engine · UI prototype · sample projects, nothing is saved, every project opens the same demo timeline"; color: Theme.tx3; font.family: Theme.fontUI; font.pixelSize: Theme.sizeSmall + 0.5 } }
             }
         }
     }

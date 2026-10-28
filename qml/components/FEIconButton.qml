@@ -12,6 +12,7 @@ AbstractButton {
 
     implicitWidth: 28
     implicitHeight: 28
+    opacity: enabled ? 1 : 0.4
     checkable: false
     focusPolicy: Qt.StrongFocus
     hoverEnabled: true

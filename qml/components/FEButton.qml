@@ -6,9 +6,10 @@ import FrameEase
 AbstractButton {
     id: root
     property bool primary: false
+    property real hPadding: 12     // horizontal padding each side; larger CTAs use 18
 
     implicitHeight: 30
-    implicitWidth: label.implicitWidth + 24
+    implicitWidth: label.implicitWidth + 2 * hPadding
     focusPolicy: Qt.StrongFocus
     hoverEnabled: true
     Accessible.role: Accessible.Button
@@ -16,16 +17,16 @@ AbstractButton {
 
     background: Rectangle {
         radius: Theme.radiusM - 1
-        color: root.primary ? Theme.accent : (root.hovered ? Theme.p3 : Theme.p2)
+        color: !root.enabled ? Theme.p1 : (root.primary ? Theme.accent : (root.hovered ? Theme.p3 : Theme.p2))
         border.width: root.visualFocus ? 2 : 1
-        border.color: root.visualFocus ? Theme.paper : (root.primary ? "transparent" : Theme.line2)
+        border.color: root.visualFocus ? Theme.paper : (!root.enabled ? Theme.line : (root.primary ? "transparent" : Theme.line2))
         opacity: root.down ? 0.85 : 1
         Behavior on color { ColorAnimation { duration: Theme.durFast } }
     }
     contentItem: Text {
         id: label
         text: root.text
-        color: root.primary ? Theme.accentInk : Theme.tx
+        color: !root.enabled ? Theme.tx3 : (root.primary ? Theme.accentInk : Theme.tx)
         font.family: Theme.fontUI
         font.pixelSize: Theme.sizeBody - 0.5
         font.weight: root.primary ? Font.DemiBold : Font.Medium
