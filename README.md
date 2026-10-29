@@ -21,11 +21,18 @@ Home launch screen and the Edit, Color, Audio and Text workspaces, all on mock d
 ### CI (Windows)
 
 `.github/workflows/windows.yml` runs on every push to `main` and every pull request:
-Qt 6.8 (`win64_msvc2022_64`) + MSVC 2022 + CMake + Ninja, Release build, `windeployqt`, the startup smoke test,
-and uploads three artifacts:
+Qt 6.8 (`win64_msvc2022_64`) + MSVC 2022 + CMake + Ninja, Release build, `windeployqt`, then:
+
+1. **Set the desktop to 1920x1080** (`tools/ci/Set-DisplayResolution.ps1`). The hosted runner starts on 1024x768 and Windows will not make a window larger than the desktop, which is why earlier runs asked for 1366x768 / 1600x900 and got about 1180x749. The step fails if the desktop does not reach the requested size.
+2. **Smoke test on the real `windows` platform** (Direct3D 11) with `--exact-sizes`. Gating.
+3. **Smoke test on Qt's `offscreen` platform** (software renderer). Non-gating, a layout cross-check in a second renderer; its files and captions say so.
+4. A run summary, and a step that prints the key real-platform frames into the job log as base64 JPEG (artifact downloads need a login; the log does not).
+
+and uploads four artifacts:
 
 - `FrameEase-windows-x64`: `FrameEase.exe` plus the Qt runtime (about 120 MB, unzip and run)
-- `smoke-test-evidence`: `smoke-report.txt`, `qt-messages.log` and the screenshots the test takes (Home flows, each workspace, and Home / Edit at 1180x749, 1366x768 and 1600x900)
+- `smoke-test-evidence`: the **real Windows** report (`smoke-report.txt`), `qt-messages.log` and PNGs named `windows--<view>--<WxH>.png`
+- `smoke-test-evidence-offscreen`: the same from the offscreen pass, PNGs named `offscreen--<view>--<WxH>.png`
 - `qmllint-log`: informational lint output (not a gate)
 
 ### Local (Windows, Qt 6.8)
@@ -42,8 +49,10 @@ Run from a "x64 Native Tools" prompt so Ninja finds MSVC.
 ## Verification
 
 ```powershell
-dist/FrameEase.exe --smoke-test --out smoke-out
+dist/FrameEase.exe --smoke-test --exact-sizes --out smoke-out
 ```
+
+`--exact-sizes` turns a window size the platform does not grant into a failure. Without it the run continues, reports the size it really got, and files the capture under that size with `--CLAMPED-from-<requested>` in the name.
 
 The exe is a GUI-subsystem program, so run it with `Start-Process -Wait` (as CI does) and read `smoke-out/smoke-report.txt`.
 Exit code 0 means every check passed. All Qt messages are written to `smoke-out/qt-messages.log`; the PNGs are in the same folder.
@@ -51,41 +60,47 @@ Exit code 0 means every check passed. All Qt messages are written to `smoke-out/
 The test drives the real UI. It finds controls by `objectName`, then delivers mouse and key events to the window, so hit-testing,
 focus and signal wiring are exercised the way a user would. In order, it checks:
 
-1. **Startup**: the root object loads, the window is visible, the app launches into Home, the featured card and all eight recent cards exist, and the featured card and thumbnails contain real imagery (not a flat fill).
-2. **Format presets**: selecting one updates the create button.
-3. **Filters and search**: Films / Shorts / Shared / All counts; typing narrows the grid; search plus filter combine; the empty state and its "Clear" button; the × button; Escape.
-4. **Selection**: a click selects (and does not open); selecting moves; filtering the selected card away clears it.
-5. **Navigation**: featured card -> Edit; the brand mark and "← Projects" -> Home; select + Open; double-click; hover then the Open pill; the window title follows the project; Recent re-sorts by last opened.
-6. **Create / import (mock)**: Create adds an in-memory "Not saved" project and opens it; "Import media first" opens the Media placeholder; "Open from disk…" is disabled.
-7. **Workspaces through the tab bar**: Edit, Color, Audio, Text each reached by clicking its tab, rendered, with Home not showing through.
-8. **Responsive captures**: Home (top and scrolled to the bottom) and Edit at 1180x749, 1366x768 and 1600x900, plus a geometry audit of the named Home controls (none crosses the window edge, none overlaps its neighbour) and the side-panel breakpoint (1500 px).
+0. **Environment**: Qt version, platform, scene-graph API, screen size, and that the three bundled font families registered and are what the headline, UI text and numbers actually render in.
+1. **Responsive matrix, first, while the app is in its default state**: at 1180x749, 1366x768 and 1600x900, Home (top and bottom), each of Media / Edit / Color / Audio / Text, and Export are captured. At each size: the side panel appears only above 1500 px; no named control crosses the window edge or overlaps a neighbour; the featured card's title, button and clip strip do not collide; **no visible Text is elided or wider than its box** (the audit was checked to fail at an unsupported 760 px width); "← Projects" returns Home from every workspace.
+2. **Startup**: the app launches into Home, the featured card and all eight recent cards exist and contain real imagery, the checked preset has the paper selection edge **in the rendered frame**.
+3. **Format presets**, **filters and search** (counts, combination, empty state, ×, Escape), **selection** (a click selects and does not open; the selected card carries the paper ring in the frame and its neighbour does not).
+4. **Navigation**: featured card -> Edit; brand mark and "← Projects" -> Home; select + Open; double-click opens it; hover then the Open pill; the title follows the project; Recent re-sorts by last opened; opening a project does not relabel it "edited"; Undo / Redo are visibly unavailable.
+5. **Leaving a project stops playback** in Edit, Audio and Text.
+6. **Create / import (mock)**: Create adds an in-memory "Not saved" project (also marked on the featured card) and opens it; "Import media first" opens the Media placeholder; "Open from disk…" and Settings are disabled.
+7. **Nothing is persisted**: no file appears under the app's data/config folders and no `QSettings` key is written.
 
-After every step it requires that no QML warning or error was logged, and again for the whole run.
-If the platform refuses a requested window size, the report says so (`INFO`) and the captures use the size actually obtained.
+After every step it requires that no QML warning or error was logged, and again for the whole run. The report ends with a **coverage table** saying, per requested size, how many frames were captured at exactly that size on which platform and renderer, or that the size was not captured. Every PNG has a caption strip under the image with platform, scene-graph API and the real window size (amber = offscreen, not Windows pixels; red = size not granted).
 
 Locally on macOS or Linux you can run the same test against a desktop session: `FrameEase --smoke-test --out smoke-out`.
 `QT_QPA_PLATFORM=offscreen QSG_RHI_BACKEND=software` also works, but that software renderer ignores scroll clipping for some vector items, so use CI or a real GPU for visual review.
 
 **What a pass does not prove**
 
-- Anything about drag, trim, snapping, sliders, wheels or playback in the workspaces. Only Home is interaction-tested.
-- Anything about other machines. CI renders with Direct3D 11 on the *Microsoft Basic Render Driver* (software WARP): no real GPU, no 4K, no high-DPI scaling. Window sizes larger than the runner's display may be clamped.
-- Pixel correctness or typography. Screenshots are reviewed by eye; no image comparison runs in CI. The geometry audit only catches overflow and overlap of the named controls.
-- Real file drops, tooltips, hover animation timing or screen-reader output. Those are implemented but not asserted.
+- Anything about drag, trim, snapping, sliders, wheels or playback inside the workspaces. Only Home and navigation are interaction-tested.
+- Anything about other machines. CI renders with Direct3D 11 on the *Microsoft Basic Render Driver* (software WARP): no real GPU, no 4K, no high-DPI scaling (devicePixelRatio is 1).
+- Pixel correctness. No image comparison runs in CI; screenshots are reviewed by eye. The automated checks are structural (geometry, text fit, the selection edge sampled in the frame, regions that are not flat colour).
+- Keyboard shortcuts. A synthetic `QKeyEvent` bypasses Qt's shortcut map, so `Ctrl+0`, `Ctrl+K` and `Space` are not asserted (Escape and the Tab / Enter handlers are).
+- Real file drops, tooltips, hover animation timing or screen-reader output. Implemented, not asserted.
 - Media and Export, which are placeholders.
 
 ## Known issues
 
 - `qmllint` reports about 145 "unqualified access" style notices (delegates reading ids and model roles from enclosing scopes). They work at runtime and are not fixed. Adding `pragma ComponentBehavior: Bound` to the affected files would clear them.
-- In the CI screenshots the top-bar "Color" tab keeps its highlight after switching to Audio or Text, while the new tab's label turns bright. The smoke test sets `current` from C++ and then calls `grabWindow`, so this may be a harness artifact (animations paused around the grab), but it has not been reproduced or ruled out on a real desktop.
-- Fonts (Instrument Sans / Serif, Geist Mono) are not bundled yet; the CI screenshots show the fallback stack. The Home headline is set in a serif fallback, so its line breaks may differ from the design.
+- Every project opens the same demo timeline, and edits made to it in one project are visible in every other (it is one shared singleton).
+- The offscreen software renderer paints the Edit timeline's waveform shapes outside their clip and leaves them behind along the status bar after the workspace hides. That is a property of that renderer (it is why the offscreen pass is non-gating), not seen in the real-platform pass.
 - Home recent cards are not arrow-key navigable (Tab moves between them). Reduced-motion is not read by the QML hover and lift animations.
 - Windows CI uses a floating `6.8.*` Qt version; pin it if reproducibility matters.
 
 ## Fonts
 
-Bundle Instrument Sans, Instrument Serif and Geist Mono (all OFL) and register them with
-`QFontDatabase::addApplicationFont` before the engine loads. Until then `Theme` falls back to Segoe UI Variable.
+Instrument Sans, Instrument Serif and Geist Mono (all SIL OFL 1.1, redistributable) are embedded in the executable
+from `resources/fonts` and registered in `src/main.cpp` before the engine loads. Licences, provenance and the one
+modification (static weights cut from the variable fonts) are in [`resources/fonts/README.md`](resources/fonts/README.md).
+
+`Theme.fontUI / fontMono / fontDisplay` are single family names on purpose: QML's `font.family` does not accept a
+CSS-style list, so the earlier `"Instrument Sans, Segoe UI Variable, ..."` strings were looked up as one non-existent family
+and silently fell back to the default font. The fallback chain now lives in `main.cpp` (`QFont::insertSubstitutions`) and
+is only used if a bundled font fails to load.
 
 ## Design rationale
 
@@ -124,9 +139,11 @@ CMakeLists.txt
 src/main.cpp                      engine bootstrap (Basic style, loads module FrameEase/Main)
 qml/Theme.qml                     design tokens (singleton)
 qml/Main.qml                      window shell: Home / editor pages, top bar, workspace pager, Ctrl+0 (Home), Ctrl+1..5
-qml/components/                   FEIcon, FEIconButton, FEButton, FEChip, FESlider, FESegmented, FESection, FETag, FESearchField, FERoundClip,
-                                  FEDisabledTip, FEUnavailableButton, BrandMark, CoastalScene, WorkspacePlaceholder
-qml/home/                         HomeScreen, ContinueHero, ProjectCard, FormatCard, ProjectThumb, MockLibrary (singleton)
+qml/components/                   FEIcon, FEIconButton, FEButton, FEChip, FESlider, FESegmented, FESection, FETag, FEKeyCap, FESearchField, FERoundClip,
+                                  FEDisabledTip, FEUnavailableButton, FEUnavailableIconButton, BrandMark, CoastalScene, WorkspacePlaceholder
+qml/home/                         HomeScreen, ContinueHero, ProjectCard, FormatCard, ProjectThumb, SunGlow, MockLibrary (singleton)
+resources/fonts/                  bundled OFL fonts + licences
+tools/                            ci/Set-DisplayResolution.ps1 (CI desktop size), make-static-fonts.py (font weights)
 qml/color/                        ColorWorkspace, ColorWheel, ParadeScope
 qml/audio/                        AudioWorkspace, ChannelStrip, FEFader, LevelMeter
 qml/text/                         TextWorkspace
@@ -149,16 +166,16 @@ The app starts on Home. All data comes from `qml/home/MockLibrary.qml`, eight ha
 | "Create ... project" | Adds an in-memory **"Not saved"** project for this session and opens it in Edit |
 | "Import media first" | Starts a mock project in the **Media placeholder**. No file is imported |
 | Drop zone | Accepts a drop so it is discoverable, then says that importing is not built and that nothing was read |
-| Back to Home (from any workspace) | The FrameEase mark, the "← Projects" button, or `Ctrl+0` |
+| Back to Home (from any workspace) | The FrameEase mark, the "← Projects" button, or `Ctrl+0`. Playback is stopped when you leave |
 
 **Explicitly not real**
 
 - Nothing is saved or loaded. Created projects disappear when the app closes.
 - Every project, including a new one, opens the same demo timeline (Coastal Light). Only the name, format and "Not saved" tag in the top bar change.
-- "Open from disk…", "Show in folder", "Duplicate" and Settings are visibly disabled and explain why on hover. The Quick starts panel (windows 1500 px and wider) is labelled "Needs engine" and is not interactive.
+- "Open from disk…", "Show in folder", "Duplicate", Settings, and the editor's Undo and Redo are visibly disabled and explain why on hover. The Quick starts panel (windows 1500 px and wider) is labelled "Needs engine" and is not interactive.
 - `Ctrl+K` only searches projects. There is no command palette yet.
 
-**Responsive:** below 1500 px the side panel is hidden and Recent shows three columns; at 1500 px and wider it shows the panel and four columns.
+**Responsive:** at 1500 px and below the side panel is hidden and Recent shows three columns; above 1500 px it shows the panel and four columns (the design's `max-width: 1500px` breakpoint).
 
 **Integration seam:** replace `MockLibrary` with a C++ model that exposes the same fields (`id, name, kind, shared, dur, pal, sx, spec, edited, version, resume, segments, unsaved`) and the same `touch()` / `create()` calls; `HomeScreen` does not change.
 

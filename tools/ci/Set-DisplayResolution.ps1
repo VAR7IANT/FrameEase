@@ -8,8 +8,8 @@
   1600x900 capture. This script lists the modes the display driver offers, tries to switch to the requested one, and
   prints the result either way, so the CI log shows what the smoke test actually ran on.
 
-  It never fails the job: the smoke test measures the real window size itself and refuses to label a capture with a
-  size it did not get.
+  With -Width/-Height it exits non-zero if the primary display did not end up at that size, so the evidence the smoke
+  test produces is never silently taken on a smaller desktop than the job asked for.
 #>
 param(
     [int]$Width = 0,
@@ -34,6 +34,7 @@ public static class FeDisplay {
         public int dmReserved1; public int dmReserved2; public int dmPanningWidth; public int dmPanningHeight;
     }
     [DllImport("user32.dll", CharSet = CharSet.Ansi)] public static extern bool EnumDisplaySettings(string device, int mode, ref DEVMODE dm);
+    public static bool EnumMode(int mode, ref DEVMODE dm) { return EnumDisplaySettings(null, mode, ref dm); }   // PowerShell would pass "" for $null, which means "no such device"
     [DllImport("user32.dll", CharSet = CharSet.Ansi)] public static extern int ChangeDisplaySettings(ref DEVMODE dm, int flags);
 
     public static DEVMODE Blank() { var d = new DEVMODE(); d.dmSize = (short)Marshal.SizeOf(typeof(DEVMODE)); return d; }
@@ -43,7 +44,7 @@ Add-Type -AssemblyName System.Windows.Forms
 
 function Show-State([string]$label) {
     $dm = [FeDisplay]::Blank()
-    [void][FeDisplay]::EnumDisplaySettings($null, -1, [ref]$dm)
+    [void][FeDisplay]::EnumMode(-1, [ref]$dm)
     $s = [System.Windows.Forms.Screen]::PrimaryScreen
     Write-Host ("{0}: mode {1}x{2} @{3} Hz {4} bpp | bounds {5}x{6} | working area {7}x{8}" -f $label,
         $dm.dmPelsWidth, $dm.dmPelsHeight, $dm.dmDisplayFrequency, $dm.dmBitsPerPel,
@@ -55,7 +56,7 @@ Show-State "display before"
 $modes = New-Object System.Collections.Generic.SortedSet[string]
 $i = 0
 $dm = [FeDisplay]::Blank()
-while ([FeDisplay]::EnumDisplaySettings($null, $i, [ref]$dm)) {
+while ([FeDisplay]::EnumMode($i, [ref]$dm)) {
     [void]$modes.Add(("{0}x{1}" -f $dm.dmPelsWidth, $dm.dmPelsHeight))
     $i++
     $dm = [FeDisplay]::Blank()
@@ -64,7 +65,7 @@ Write-Host ("driver offers {0} mode entries, {1} distinct sizes: {2}" -f $i, $mo
 
 if ($Width -gt 0 -and $Height -gt 0) {
     $want = [FeDisplay]::Blank()
-    [void][FeDisplay]::EnumDisplaySettings($null, -1, [ref]$want)
+    [void][FeDisplay]::EnumMode(-1, [ref]$want)
     $want.dmPelsWidth = $Width
     $want.dmPelsHeight = $Height
     $want.dmFields = 0x80000 -bor 0x100000      # DM_PELSWIDTH | DM_PELSHEIGHT
@@ -73,5 +74,10 @@ if ($Width -gt 0 -and $Height -gt 0) {
     Write-Host ("ChangeDisplaySettings {0}x{1} -> {2} ({3})" -f $Width, $Height, $rc, $names[[int]$rc])
     Start-Sleep -Seconds 2
     Show-State "display after"
+    $now = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+    if ($now.Width -ne $Width -or $now.Height -ne $Height) {
+        Write-Host ("::error::display is {0}x{1}, not the requested {2}x{3}" -f $now.Width, $now.Height, $Width, $Height)
+        exit 1
+    }
 }
 exit 0
