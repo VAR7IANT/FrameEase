@@ -1,0 +1,26 @@
+# TEMPORARY: finds out what the hosted Windows display can do, without a Qt build. Removed before merge.
+name: Display probe
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/display-probe.yml"
+      - "tools/ci/Set-DisplayResolution.ps1"
+jobs:
+  probe:
+    runs-on: windows-2022
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Report modes
+        shell: pwsh
+        run: ./tools/ci/Set-DisplayResolution.ps1
+      - name: Try 1920x1080
+        shell: pwsh
+        run: ./tools/ci/Set-DisplayResolution.ps1 -Width 1920 -Height 1080
+      - name: Try 1600x900
+        shell: pwsh
+        run: ./tools/ci/Set-DisplayResolution.ps1 -Width 1600 -Height 900
+      - name: Try 1366x768
+        shell: pwsh
+        run: ./tools/ci/Set-DisplayResolution.ps1 -Width 1366 -Height 768
