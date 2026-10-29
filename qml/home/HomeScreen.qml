@@ -20,7 +20,7 @@ Rectangle {
     property string selectedId: ""
     readonly property string query: searchField.text.trim().toLowerCase()
 
-    readonly property bool wide: width >= 1500      // side panel + 4 columns, as in the design
+    readonly property bool wide: width > 1500       // side panel + 4 columns; the design hides the panel at max-width 1500
     readonly property int cols: wide ? 4 : 3
     readonly property int padX: 72
 
@@ -65,26 +65,25 @@ Rectangle {
                     hint: "Ctrl K"
                     Layout.preferredWidth: 230
                 }
-                Item {
-                    Layout.preferredWidth: 28; Layout.preferredHeight: 28
-                    FEIconButton {
-                        anchors.fill: parent; enabled: false
-                        tip: "Settings"
-                        iconPath: "M15 12a3 3 0 1 1 -6 0a3 3 0 1 1 6 0 M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"
-                    }
-                    FEDisabledTip { anchors.fill: parent; text: "Settings are not built yet" }
+                FEUnavailableIconButton {
+                    objectName: "settingsButton"
+                    tip: "Settings"
+                    reason: "settings are not built yet."
+                    iconPath: "M15 12a3 3 0 1 1 -6 0a3 3 0 1 1 6 0 M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"
                 }
             }
         }
 
-        RowLayout {
-            Layout.fillWidth: true; Layout.fillHeight: true; spacing: 0
+        // Plain anchors rather than a RowLayout: the side panel appears and disappears with the window width, and anchors
+        // re-evaluate the same way in every Qt version, where a layout can hold on to the hidden panel's width after a resize.
+        Item {
+            Layout.fillWidth: true; Layout.fillHeight: true
 
             // ---- main column ----
             Flickable {
                 id: scroller
                 objectName: "homeScroll"
-                Layout.fillWidth: true; Layout.fillHeight: true
+                anchors.left: parent.left; anchors.right: side.left; anchors.top: parent.top; anchors.bottom: parent.bottom
                 clip: true
                 contentWidth: width
                 contentHeight: page.height + 52 + 56
@@ -103,11 +102,16 @@ Rectangle {
                         font.letterSpacing: 1; font.capitalization: Font.AllUppercase
                     }
                     Text {
+                        objectName: "homeHeadline"
                         Layout.topMargin: 10
                         Layout.preferredWidth: Math.min(900, page.width)
                         text: "Pick up where the <i>light</i> left off."
                         textFormat: Text.StyledText
                         wrapMode: Text.WordWrap
+                        // CSS line-height 1 = a 68px box with the glyphs centred in it. (Rich text ignores a fixed lineHeight, and the font's
+                        // natural line is ~89px tall, which would push everything below down by 21px.) Grows if it ever wraps.
+                        verticalAlignment: Text.AlignVCenter
+                        Layout.preferredHeight: lineCount > 1 ? contentHeight : 68
                         color: Theme.tx; font.family: Theme.fontDisplay; font.pixelSize: 68; font.letterSpacing: -1
                         Accessible.role: Accessible.Heading
                     }
@@ -190,7 +194,7 @@ Rectangle {
                                 }
                                 Text {
                                     Layout.fillWidth: true
-                                    wrapMode: Text.WordWrap; lineHeight: 1.3
+                                    wrapMode: Text.WordWrap; lineHeightMode: Text.FixedHeight; lineHeight: 19     // 13px x 1.45
                                     text: dropZone.note.length ? dropZone.note
                                         : "We’ll read the frame rate and size, and build a " + MockLibrary.format(root.fmt).short + " project around it."
                                     color: dropZone.note.length ? Theme.warn : Theme.tx2
@@ -339,7 +343,8 @@ Rectangle {
                 id: side
                 objectName: "homeSide"
                 visible: root.wide
-                Layout.preferredWidth: 392; Layout.fillHeight: true
+                anchors.right: parent.right; anchors.top: parent.top; anchors.bottom: parent.bottom
+                width: root.wide ? 392 : 0
                 color: Theme.p1
                 Rectangle { anchors.left: parent.left; width: 1; height: parent.height; color: Theme.line }
                 Flickable {
@@ -355,7 +360,7 @@ Rectangle {
                                font.letterSpacing: 1; font.capitalization: Font.AllUppercase; Accessible.role: Accessible.Heading }
                         Text { Layout.topMargin: 6; Layout.fillWidth: true; wrapMode: Text.WordWrap
                                text: "Previews of guided starts. They need the editing engine, so they can’t be launched yet."
-                               color: Theme.tx3; font.family: Theme.fontUI; font.pixelSize: Theme.sizeBody; lineHeight: 1.3 }
+                               color: Theme.tx3; font.family: Theme.fontUI; font.pixelSize: Theme.sizeBody; lineHeightMode: Text.FixedHeight; lineHeight: 17 }
                         ColumnLayout {
                             Layout.topMargin: 14; Layout.fillWidth: true; spacing: 6
                             Repeater {
@@ -381,7 +386,7 @@ Rectangle {
                                             Text { Layout.fillWidth: true; elide: Text.ElideRight; text: qs.modelData.name
                                                    color: Theme.tx2; font.family: Theme.fontUI; font.pixelSize: Theme.sizeBody; font.weight: Font.DemiBold }
                                             Text { Layout.fillWidth: true; wrapMode: Text.WordWrap; maximumLineCount: 2; elide: Text.ElideRight
-                                                   text: qs.modelData.meta; color: Theme.tx3; font.family: Theme.fontUI; font.pixelSize: Theme.sizeBody; lineHeight: 1.2 }
+                                                   text: qs.modelData.meta; color: Theme.tx3; font.family: Theme.fontUI; font.pixelSize: Theme.sizeBody; lineHeightMode: Text.FixedHeight; lineHeight: 17.5 }   // 13px x 1.35
                                             FETag { Layout.topMargin: 3; implicitHeight: 18; text: "Needs engine" }
                                         }
                                     }
@@ -402,12 +407,7 @@ Rectangle {
                                     Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: Theme.line }
                                     RowLayout {
                                         anchors.fill: parent; spacing: 12
-                                        Rectangle {
-                                            Layout.preferredWidth: Math.max(52, keyText.implicitWidth + 16); Layout.preferredHeight: 22
-                                            radius: 4; color: "transparent"; border.color: "#4A505A"
-                                            Text { id: keyText; anchors.centerIn: parent; text: kr.modelData.key; color: Theme.tx
-                                                   font.family: Theme.fontMono; font.pixelSize: Theme.sizeSmall }
-                                        }
+                                        FEKeyCap { text: kr.modelData.key; bright: true; minWidth: 52; Layout.preferredWidth: Math.max(52, implicitWidth + 4) }
                                         Text { Layout.fillWidth: true; elide: Text.ElideRight; text: kr.modelData.what
                                                color: Theme.tx2; font.family: Theme.fontUI; font.pixelSize: Theme.sizeBody }
                                     }
@@ -422,10 +422,27 @@ Rectangle {
                             ColumnLayout {
                                 id: tipCol
                                 anchors.fill: parent; anchors.margins: 18; spacing: 8
-                                Text { Layout.fillWidth: true; wrapMode: Text.WordWrap; textFormat: Text.StyledText
-                                       text: "Press <b>Ctrl K</b> and say what you want."
-                                       color: Theme.tx; font.family: Theme.fontDisplay; font.italic: true; font.pixelSize: 22 }
-                                Text { Layout.fillWidth: true; wrapMode: Text.WordWrap; lineHeight: 1.35
+                                // "Press [Ctrl K] and say what you want." in the display italic, with the key as a real key cap
+                                Flow {
+                                    Layout.fillWidth: true; spacing: 0     // Flow's spacing is also the row gap, so word gaps are padding
+                                    Accessible.role: Accessible.StaticText
+                                    Accessible.name: "Press Ctrl K and say what you want."
+                                    Repeater {
+                                        model: ["Press"]
+                                        Text { required property string modelData; text: modelData; color: Theme.tx; rightPadding: 6
+                                               font.family: Theme.fontDisplay; font.italic: true; font.pixelSize: 22; lineHeightMode: Text.FixedHeight; lineHeight: 25 }
+                                    }
+                                    Item {
+                                        width: capTip.implicitWidth + 6; height: 25
+                                        FEKeyCap { id: capTip; anchors.verticalCenter: parent.verticalCenter; text: "Ctrl K"; bright: true; fontSize: 12 }
+                                    }
+                                    Repeater {
+                                        model: ["and", "say", "what", "you", "want."]
+                                        Text { required property string modelData; text: modelData; color: Theme.tx; rightPadding: 6
+                                               font.family: Theme.fontDisplay; font.italic: true; font.pixelSize: 22; lineHeightMode: Text.FixedHeight; lineHeight: 25 }
+                                    }
+                                }
+                                Text { Layout.fillWidth: true; wrapMode: Text.WordWrap; lineHeightMode: Text.FixedHeight; lineHeight: 19.5     // 13px x 1.5
                                        text: "Today it searches your projects. Sentence commands — “Add a cross dissolve”, “Export for Instagram” — come with the editing engine."
                                        color: Theme.tx2; font.family: Theme.fontUI; font.pixelSize: Theme.sizeBody }
                             }

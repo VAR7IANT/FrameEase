@@ -41,13 +41,16 @@ qt_add_qml_module(FrameEase
         qml/components/FERoundClip.qml
         qml/components/FEDisabledTip.qml
         qml/components/FEUnavailableButton.qml
+        qml/components/FEUnavailableIconButton.qml
         qml/components/FESearchField.qml
+        qml/components/FEKeyCap.qml
         qml/home/HomeScreen.qml
         qml/home/MockLibrary.qml
         qml/home/ContinueHero.qml
         qml/home/ProjectCard.qml
         qml/home/ProjectThumb.qml
         qml/home/FormatCard.qml
+        qml/home/SunGlow.qml
         qml/color/ColorWorkspace.qml
         qml/color/ColorWheel.qml
         qml/color/ParadeScope.qml
@@ -63,6 +66,21 @@ qt_add_qml_module(FrameEase
         qml/edit/Inspector.qml
         qml/edit/Timeline.qml
         qml/edit/TimelineClip.qml
+)
+
+# Design fonts (SIL OFL, see resources/fonts/README.md), embedded so every machine renders the same typography.
+# Registered at startup in src/main.cpp from :/FrameEase/fonts.
+qt_add_resources(FrameEase fonts
+    PREFIX "/FrameEase/fonts"
+    BASE resources/fonts
+    FILES
+        resources/fonts/InstrumentSans-Regular.ttf
+        resources/fonts/InstrumentSans-Medium.ttf
+        resources/fonts/InstrumentSans-SemiBold.ttf
+        resources/fonts/GeistMono-Regular.ttf
+        resources/fonts/GeistMono-Medium.ttf
+        resources/fonts/InstrumentSerif-Regular.ttf
+        resources/fonts/InstrumentSerif-Italic.ttf
 )
 
 target_link_libraries(FrameEase PRIVATE Qt6::Quick Qt6::QuickControls2)

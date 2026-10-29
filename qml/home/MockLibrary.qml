@@ -4,7 +4,8 @@ import QtQuick
 // MOCK project library for the Home screen. Nothing here touches the disk:
 //  - the eight projects below are hard-coded sample data,
 //  - "creating" a project only adds an entry to this in-memory list for the current session,
-//  - opening a project only reorders the list ("last opened") and always shows the same demo timeline.
+//  - opening a project only reorders the list ("last opened") and always shows the same demo timeline
+//    (edits made to it in one project are visible in every other, because the demo timeline is one shared singleton).
 // When the project format and C++ core land, this singleton is replaced by a QAbstractListModel
 // with the same roles, so HomeScreen does not change.
 QtObject {
@@ -51,12 +52,11 @@ QtObject {
         return formats[0]
     }
 
-    // "Last opened" bookkeeping only. No file is read.
+    // "Last opened" bookkeeping only: moves the project to the front. Opening is not editing, so `edited` is left alone.
     function touch(id) {
         const p = byId(id)
         if (!p) return
-        const moved = Object.assign({}, p, { edited: "Just now" })
-        projects = [moved].concat(projects.filter(q => q.id !== id))
+        projects = [p].concat(projects.filter(q => q.id !== id))
     }
 
     // Adds an in-memory, unsaved entry and returns its id.

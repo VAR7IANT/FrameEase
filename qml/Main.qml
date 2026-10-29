@@ -24,7 +24,16 @@ ApplicationWindow {
         current = workspace
         atHome = false
     }
-    function goHome() { atHome = true }
+    readonly property bool anyPlaying: editWorkspace.playing || audioWorkspace.playing || textWorkspace.playing
+
+    // Leaving a project stops playback: the editor shell stays alive behind Home, and each workspace's playback
+    // timer is bound only to its own `playing` flag, so without this it would keep advancing, unseen, under Home.
+    function goHome() {
+        editWorkspace.playing = false
+        audioWorkspace.playing = false
+        textWorkspace.playing = false
+        atHome = true
+    }
 
     readonly property var workspaces: [
         { name: "Media", tip: "Browse & organise",  summary: "Search by name or by describing the shot, skim thumbnails on hover, rate and tag, and see exactly where each clip is used. Smart collections do the sorting for you." },
@@ -62,6 +71,7 @@ ApplicationWindow {
 
         // ---- top bar ----
         Rectangle {
+            objectName: "editorTopBar"
             Layout.fillWidth: true; Layout.preferredHeight: 48; color: Theme.void_
             Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: Theme.line }
             RowLayout {
@@ -139,9 +149,12 @@ ApplicationWindow {
 
                 Item { Layout.fillWidth: true }
 
-                FEIconButton { iconPath: "M9 14L4 9l5-5M4 9h10a 6 6 0 0 1 0 12h-3"; tip: "Undo (Ctrl+Z)" }
-                FEIconButton { iconPath: "M15 14l5-5-5-5M20 9H10a 6 6 0 0 0 0 12h3"; tip: "Redo (Ctrl+Shift+Z)" }
-                FEButton { text: "Export  →"; primary: true; implicitHeight: 32; implicitWidth: 104
+                // Edits are not tracked yet (no command stack), so these are shown as unavailable instead of doing nothing.
+                FEUnavailableIconButton { objectName: "undoButton"; iconPath: "M9 14L4 9l5-5M4 9h10a 6 6 0 0 1 0 12h-3"; tip: "Undo"
+                                          reason: "edits aren’t tracked until the editing engine lands." }
+                FEUnavailableIconButton { objectName: "redoButton"; iconPath: "M15 14l5-5-5-5M20 9H10a 6 6 0 0 0 0 12h3"; tip: "Redo"
+                                          reason: "edits aren’t tracked until the editing engine lands." }
+                FEButton { objectName: "exportButton"; text: "Export  →"; primary: true; implicitHeight: 32; implicitWidth: 104
                            onClicked: win.current = 5 }
             }
         }
@@ -152,10 +165,10 @@ ApplicationWindow {
             currentIndex: win.current
 
             WorkspacePlaceholder { title: win.workspaces[0].name; summary: win.workspaces[0].summary }
-            EditWorkspace { }
+            EditWorkspace { id: editWorkspace; objectName: "workspace.edit" }
             ColorWorkspace { }
-            AudioWorkspace { }
-            TextWorkspace { }
+            AudioWorkspace { id: audioWorkspace; objectName: "workspace.audio" }
+            TextWorkspace { id: textWorkspace; objectName: "workspace.text" }
             WorkspacePlaceholder { title: "Export"; summary: "Choose a destination and FrameEase picks sensible settings. Fine-tune resolution, codec, quality and audio only when you want to." }
         }
 

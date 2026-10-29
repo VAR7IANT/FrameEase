@@ -20,13 +20,14 @@ Item {
         y: root.height * 0.57; width: root.width; height: root.height - y
         gradient: Gradient { GradientStop { position: 0; color: root.p.s1 } GradientStop { position: 1; color: root.p.s2 } }
     }
-    Repeater {
-        model: [{ d: 0.26, o: 0.10 }, { d: 0.16, o: 0.20 }, { d: 0.085, o: 1.0 }]
-        Rectangle {
-            required property var modelData
-            width: root.width * modelData.d; height: width; radius: width / 2
-            x: root.width * root.sunX - width / 2; y: root.height * 0.55 - height / 2
-            color: root.p.sun; opacity: modelData.o
-        }
+    // The design paints `radial-gradient(circle at <sx>% 55%, sun 0 5%, transparent 13%)`. For a circle gradient the
+    // 100% radius is the distance to the farthest corner, so the glow scales with where the sun sits.
+    SunGlow {
+        readonly property real reach: Math.hypot(Math.max(root.sunX, 1 - root.sunX) * root.width, 0.55 * root.height)
+        x: root.width * root.sunX; y: root.height * 0.55
+        color: root.p.sun
+        coreRadius: reach * 0.05
+        glowRadius: reach * 0.13
+        steps: 12
     }
 }

@@ -8,6 +8,8 @@ AbstractButton {
     id: root
     property var project
     readonly property var pal: MockProject.pal[project ? project.pal : "sun"]
+    // Cards say "2 min ago"; the featured line spells it out, as the design does.
+    readonly property string editedLong: project ? project.edited.replace(/\bmin ago$/, "minutes ago") : ""
 
     objectName: "heroContinue"
     implicitHeight: 300
@@ -40,15 +42,8 @@ AbstractButton {
                         GradientStop { position: 0.6; color: root.pal.mid }
                         GradientStop { position: 1;   color: root.pal.hor }
                     } }
-                Repeater {
-                    model: [{ r: 200, o: 0.10 }, { r: 130, o: 0.16 }, { r: 80, o: 0.24 }]
-                    Rectangle {
-                        required property var modelData
-                        width: modelData.r * 2; height: width; radius: modelData.r
-                        x: 1180 - modelData.r; y: 172 - modelData.r
-                        color: root.pal.sun; opacity: modelData.o
-                    }
-                }
+                // the design's `hg` gradient: sun colour at 85% alpha in the centre, fading to nothing at r = 200
+                SunGlow { x: 1180; y: 170; color: root.pal.sun; glowRadius: 200; peak: 0.85; steps: 48 }
                 Rectangle { x: 1180 - 34; y: 172 - 34; width: 68; height: 68; radius: 34; color: root.pal.sun }
                 Rectangle { y: 190; width: 1600; height: 110
                     gradient: Gradient { GradientStop { position: 0; color: root.pal.s1 } GradientStop { position: 1; color: root.pal.s2 } } }
@@ -76,6 +71,7 @@ AbstractButton {
             }
             // clip strip: relative lengths of the project's clips
             Row {
+                objectName: "heroStrip"
                 anchors.left: parent.left; anchors.right: parent.right; anchors.bottom: parent.bottom
                 anchors.leftMargin: 36; anchors.rightMargin: 36; anchors.bottomMargin: 16
                 height: 8; spacing: 2; opacity: 0.9
@@ -98,30 +94,42 @@ AbstractButton {
             Behavior on border.color { ColorAnimation { duration: Theme.durMed } }
         }
         Column {
+            objectName: "heroTitleBlock"
             x: 36; y: 32
             width: Math.min(520, parent.width - 72)
             spacing: 0
-            FETag { text: "Continue"; tone: "glass" }
+            Row {
+                spacing: 6
+                FETag { text: "Continue"; tone: "glass"; implicitHeight: 24 }
+                FETag { visible: !!root.project && root.project.unsaved; text: "Not saved"; tone: "glass"; implicitHeight: 24 }
+            }
             Text {
                 topPadding: 14; width: parent.width; elide: Text.ElideRight
                 text: root.project ? root.project.name : ""
+                lineHeightMode: Text.FixedHeight; lineHeight: 47      // CSS line-height 1.02
                 color: "#FFFFFF"; font.family: Theme.fontDisplay; font.pixelSize: 46
             }
             Text {
                 topPadding: 8; width: parent.width; elide: Text.ElideRight
-                text: root.project ? root.project.version + " · " + root.project.dur + " · " + root.project.spec.replace(" · ", " ") + " · edited " + root.project.edited : ""
+                text: root.project ? root.project.version + " · " + root.project.dur + " · " + root.project.spec.replace(" · ", " ") + " · edited " + root.editedLong : ""
                 color: "#D8D4CC"; font.family: Theme.fontMono; font.pixelSize: 12
             }
         }
         Row {
-            x: 36; anchors.bottom: parent.bottom; anchors.bottomMargin: 44
+            x: 36; anchors.bottom: parent.bottom; anchors.bottomMargin: 32
             spacing: 14
             Rectangle {
-                height: 38; width: ctaText.implicitWidth + 38; radius: Theme.radiusM
+                objectName: "heroCta"
+                height: 38; width: ctaRow.implicitWidth + 36; radius: Theme.radiusM
                 color: Theme.accent
                 opacity: root.down ? 0.85 : 1
-                Text { id: ctaText; anchors.centerIn: parent; text: "Continue editing  →"; color: Theme.accentInk
-                       font.family: Theme.fontUI; font.pixelSize: Theme.sizeBody; font.weight: Font.DemiBold }
+                Row {
+                    id: ctaRow
+                    anchors.centerIn: parent; spacing: 8
+                    Text { anchors.verticalCenter: parent.verticalCenter; text: "Continue editing"; color: Theme.accentInk
+                           font.family: Theme.fontUI; font.pixelSize: Theme.sizeBody; font.weight: Font.DemiBold }
+                    FEIcon { anchors.verticalCenter: parent.verticalCenter; size: 16; path: "M5 12h14M13 6l6 6-6 6"; color: Theme.accentInk }
+                }
             }
             Text {
                 anchors.verticalCenter: parent.verticalCenter
