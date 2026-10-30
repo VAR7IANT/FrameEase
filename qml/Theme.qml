@@ -38,11 +38,13 @@ QtObject {
     readonly property int gap: 8
     readonly property int pad: 14
 
-    // Type. Instrument Sans / Geist Mono are bundled in resources/fonts (see README);
-    // Segoe UI Variable is the native Windows 11 fallback.
-    readonly property string fontUI: "Instrument Sans, Segoe UI Variable, Segoe UI, sans-serif"
-    readonly property string fontMono: "Geist Mono, Cascadia Mono, Consolas, monospace"
-    readonly property string fontDisplay: "Instrument Serif, Georgia, serif"
+    // Type. These are single family names on purpose: QML's font.family does NOT accept a CSS-style list
+    // ("A, B, serif" is looked up as one family called that and silently falls back to the default font).
+    // The fonts are bundled in resources/fonts and registered in main.cpp, which also installs the fallback
+    // chain (Segoe UI Variable / Cascadia Mono / Georgia) with QFont::insertSubstitutions in case one fails to load.
+    readonly property string fontUI: "Instrument Sans"
+    readonly property string fontMono: "Geist Mono"
+    readonly property string fontDisplay: "Instrument Serif"
     readonly property int sizeBody: 13
     readonly property int sizeSmall: 11
 

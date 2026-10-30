@@ -57,15 +57,102 @@ jobs:
           windeployqt --release --no-translations --qmldir qml --dir dist dist/FrameEase.exe
           Get-ChildItem dist | Select-Object -First 40 | Format-Table Name, Length
 
-      - name: Startup smoke test
+      # Hosted Windows starts on a 1024x768 desktop, and Windows will not make a window bigger than the desktop: a window
+      # that asks for 1366x768 or 1600x900 silently comes back about 1180x749, and a screenshot of it is not a screenshot
+      # of the size it is filed under. So raise the desktop first. The step fails if the desktop does not get there.
+      - name: Set desktop to 1920x1080
+        shell: pwsh
+        run: ./tools/ci/Set-DisplayResolution.ps1 -Width 1920 -Height 1080
+
+      # Gating pass: the real windows platform (Direct3D 11 on the runner's software adapter). --exact-sizes makes a window
+      # size the platform does not grant a failure instead of a footnote.
+      - name: Smoke test (real Windows platform, exact window sizes)
         shell: pwsh
         run: |
           $env:QSG_INFO = "1"
-          $p = Start-Process -FilePath "$PWD/dist/FrameEase.exe" -ArgumentList "--smoke-test","--out","$PWD/smoke-out" -PassThru
-          if (-not $p.WaitForExit(180000)) { $p.Kill(); Write-Error "smoke test timed out after 180 s"; exit 1 }
+          $p = Start-Process -FilePath "$PWD/dist/FrameEase.exe" -ArgumentList "--smoke-test","--exact-sizes","--out","$PWD/smoke-out" -PassThru
+          if (-not $p.WaitForExit(420000)) { $p.Kill(); Write-Error "smoke test timed out after 420 s"; exit 1 }
           Write-Host "exit code: $($p.ExitCode)"
           if (Test-Path smoke-out/smoke-report.txt) { Get-Content smoke-out/smoke-report.txt } else { Write-Host "no report was written" }
           if ($p.ExitCode -ne 0) { exit 1 }
+
+      # Second pass on Qt's offscreen platform with the software scene graph: NON-GATING and labelled as such in every file
+      # name and caption. It is a cross-check of layout in another renderer, not a picture of what Windows draws (that
+      # renderer has no shader effects and ignores some scroll clipping).
+      - name: Smoke test (offscreen software renderer, non-gating)
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          New-Item -ItemType Directory -Force dist/platforms | Out-Null
+          Copy-Item "$env:QT_ROOT_DIR/plugins/platforms/qoffscreen.dll" dist/platforms/
+          $env:QT_QPA_PLATFORM = "offscreen"
+          $env:QSG_RHI_BACKEND = "software"
+          $env:QT_QPA_FONTDIR = "C:\Windows\Fonts"   # the offscreen platform has no font database of its own (needed for glyphs the bundled fonts lack)
+          $p = Start-Process -FilePath "$PWD/dist/FrameEase.exe" -ArgumentList "--smoke-test","--exact-sizes","--out","$PWD/smoke-out-offscreen" -PassThru
+          if (-not $p.WaitForExit(420000)) { $p.Kill(); Write-Error "offscreen smoke test timed out"; exit 1 }
+          Write-Host "exit code: $($p.ExitCode)"
+          if (Test-Path smoke-out-offscreen/smoke-report.txt) { Get-Content smoke-out-offscreen/smoke-report.txt }
+          Remove-Item -Recurse -Force dist/platforms/qoffscreen.dll
+          if ($p.ExitCode -ne 0) { exit 1 }
+
+      - name: Summarise evidence
+        if: always()
+        shell: pwsh
+        run: |
+          $md = New-Object System.Collections.Generic.List[string]
+          foreach ($d in @(@("smoke-out", "Real Windows platform (gating)"), @("smoke-out-offscreen", "Offscreen software renderer (non-gating, layout cross-check only)"))) {
+            $r = Join-Path $d[0] "smoke-report.txt"
+            $md.Add("### " + $d[1])
+            if (-not (Test-Path $r)) { $md.Add("_no report was written_"); continue }
+            $lines = Get-Content $r
+            $md.Add('```')
+            $lines | Where-Object { $_ -match '^(RESULT|COVER|INFO  (Qt |screen|window at launch|window asked))' } | ForEach-Object { $md.Add($_) }
+            $lines | Where-Object { $_ -match '^FAIL' } | ForEach-Object { $md.Add($_) }
+            $md.Add('```')
+          }
+          $log = "smoke-out/qt-messages.log"
+          if (Test-Path $log) {
+            $md.Add("### Scene graph (from the real-platform run)")
+            $md.Add('```')
+            Get-Content $log | Where-Object { $_ -match 'adapter|Direct3D|RHI|renderer|backend' } | Select-Object -First 12 | ForEach-Object { $md.Add($_) }
+            $md.Add('```')
+          }
+          $md | Out-File -Append -Encoding utf8 $env:GITHUB_STEP_SUMMARY
+
+      # Artifact downloads need a login; this prints a handful of the real-platform frames into the log as base64 JPEG so they
+      # can be recovered from the log alone (decode the text between FE-FRAME-BEGIN <name> and FE-FRAME-END).
+      - name: Real-platform frames in the log (base64 JPEG)
+        if: always()
+        shell: pwsh
+        run: |
+          Add-Type -AssemblyName System.Drawing
+          $want = 'home-top--1180x749','home-top--1366x768','home-top--1600x900','home-bottom--1180x749','home-selected-card--1180x749',
+                  'home-empty-state--1180x749','workspace-edit--1180x749','workspace-edit--1366x768','workspace-edit--1600x900',
+                  'workspace-color--1180x749','workspace-audio--1180x749','workspace-text--1180x749'
+          $enc = [System.Drawing.Imaging.ImageCodecInfo]::GetImageEncoders() | Where-Object { $_.MimeType -eq 'image/jpeg' }
+          $q = New-Object System.Drawing.Imaging.EncoderParameters(1)
+          $q.Param[0] = New-Object System.Drawing.Imaging.EncoderParameter([System.Drawing.Imaging.Encoder]::Quality, [long]80)
+          Write-Host "::group::Real-platform frames (base64 JPEG)"
+          foreach ($w in $want) {
+            $f = Get-ChildItem smoke-out -Filter "windows--$w*.png" -ErrorAction SilentlyContinue | Select-Object -First 1
+            if (-not $f) { Write-Host "FE-FRAME-MISSING windows--$w"; continue }
+            $img = [System.Drawing.Image]::FromFile($f.FullName)
+            $ms = New-Object System.IO.MemoryStream
+            $img.Save($ms, $enc, $q); $img.Dispose()
+            $b64 = [Convert]::ToBase64String($ms.ToArray())
+            Write-Host "FE-FRAME-BEGIN $($f.Name)"
+            for ($i = 0; $i -lt $b64.Length; $i += 3000) { Write-Host $b64.Substring($i, [Math]::Min(3000, $b64.Length - $i)) }
+            Write-Host "FE-FRAME-END"
+          }
+          Write-Host "::endgroup::"
+
+      - name: Upload offscreen evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-test-evidence-offscreen
+          path: smoke-out-offscreen/
+          if-no-files-found: ignore
 
       - name: Upload smoke-test evidence
         if: always()
